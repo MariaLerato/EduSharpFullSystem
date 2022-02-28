@@ -32,55 +32,44 @@ export const Signin = () => {
     // navigate('/home')
   };
   return (
-    <div className="section group">
-      <div >
-        <div class="col span_1_of_2"></div>
-        <div class="col span_1_of_2"></div>
+    <div className="container">
+    <form className="RegisterForm" onSubmit={onSubmit}>
+      <div className="sub">
+        <img src={logo} alt="logo" />
+        <h2 className="heading">Sign In</h2>
       </div>
-      <div className="login-container">
-        <div className="header">
-          <div
-            className="semiheader"
-            style={{ paddingRight: "2%", display: "flex" }}
-          >
-            <h1 className="head">Edu</h1>
-            <h1 className="sharp">Sharp</h1>
-          </div>
-          <h1 className="admin">Admin System</h1>
+      <div>
+   
+        
+        <input
+          type={"email"}
+          placeholder={"Enter Email"}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <br />{" "}
+        <input
+          type={"password"}
+          placeholder={"Enter Password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />{" "}
+     
+     
+        <div className="signin">
+          <a className="signin" href="reset">Forgot Password?</a>
         </div>
-        <div className="login-content-container">
-          <img src={logo} alt="image" className="images" />
-          <div className="login-content">
-            <form className="login-Input">
-              <h2>Sign In</h2>
-              <input
-                type={"email"}
-                placeholder="Email Address"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                type={"password"}
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </form>
-            <h3> Forgot Password ? </h3>
-            <button type={"submit"} onClick={onSubmit} className="button-log">
-              Sign In
-            </button>
-            <div className="link">
-              <h4>Don't have an account?</h4>
-              <Link to={"/"}>
-                {" "}
-                <h4 style={{ color: "red" }}>Register</h4>
-              </Link>
-            </div>
+        <button type="submit" className="submit">
+          Sign In
+        </button>
+        <div className="links">
+            <p className="sign">Dont Have An Account?<a className="in" href="signUp"> Sign Up</a> </p>
+       
           </div>
-        </div>
-        <footer className="footer">
-          <h2></h2>
-        </footer>
+        
       </div>
-    </div>
+    </form>
+  </div>
   );
 };

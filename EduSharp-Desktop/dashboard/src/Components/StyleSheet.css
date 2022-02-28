@@ -39,8 +39,10 @@
 }
 
 .container{
-    position: fixed;
-    height: 100%;
+  height: 100vh;
+  overflow: hidden;
+   width: 100%;
+   justify-content: center;
     background-color: #F4F4F4;
 }
 .content-container{
@@ -59,16 +61,19 @@
     text-align: center;
 }
 input{
-    width: 50%;
-   padding: 1%;
+  
+    width: 100%;
+   padding: 4%;
     margin:1%;
-    border-right:rgb(209, 209, 209)  0.8px solid ;
-    border-bottom:rgb(209, 209, 209) 0.8px solid  ;
+    border-right:rgb(209, 209, 209)  0.2px solid ;
+    border-bottom:rgb(209, 209, 209) 0.2px solid  ;
+    border-radius: 8px;
     outline: none;
-    font-size: 24px;
+    margin: 2%;
+  
     font-weight: 100;
-    border-left: rgb(209, 209, 209)  0.8px solid;
-    border-top:rgb(209, 209, 209)  0.8px solid ;
+    border-left: rgb(209, 209, 209)  0.2px solid;
+    border-top:rgb(209, 209, 209)  0.2px solid ;
 }
 .button{
     background-color: #4B7BE8;
@@ -359,4 +364,78 @@ i{
 .active i{
     color: white;
     margin-top: 1%;
+}
+.SignUp{
+    padding: auto;
+    margin:auto;
+    width: 50%;
+    margin-top: 8%;
+    align-items: center;
+}
+.RegisterForm{
+    padding: auto;
+    margin:auto;
+    width: 25%;
+    margin-top: 8%;
+    align-items: center;
+    
+}
+.heading{
+    color:#6a7efc;
+    padding-left: 8%;
+    font-size: 35px;
+    font-weight: 400;
+}
+.sub{
+    text-align: center;
+    display: flex;
+    margin-bottom: 4%;
+    justify-self: center;
+}
+.sub img{
+    width: 20%;
+}
+.submit{
+    background-color: #5566d3;
+    width: 110%;
+    padding: 3%;
+    border-color: #F4F4F4;
+    border:none;
+    border-radius: 8px;
+    color:white;
+    align-items: center;
+    font-size: 25px;
+    margin-left: 2%;
+  
+}
+.forgot{
+  align-content: flex-end;
+  color:#4B7BE8
+
+}
+.links{
+    display: flex;
+    /* padding-left: 1em; */
+    /* background-color: #3a3a3c; */
+    align-content: center;
+    justify-content: center;
+}
+.sign{
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: center;
+    font-size: 18px;
+
+}
+.in{
+    color:#4B7BE8;
+    font-size: 18px;
+}
+.signin {
+    text-align:end;
+    justify-content:end;
+margin-bottom: 2%;
+    font-size: 18px;
+
+   
 }
