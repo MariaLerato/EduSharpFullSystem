@@ -1,0 +1,117 @@
+
+.grey{
+    padding: 10px;
+   width: 86%;
+    background-color: #F4F4F4;
+    align-content: center;
+    justify-content: center;
+    padding-top: 2%;
+}
+.username2{
+    float: right;
+    display: flex;
+    margin-right: 5px;
+    text-align: center;
+    padding: 20px;
+}
+
+.image{
+    width: 25%;
+    margin-top: 6%;
+    height: 10%;
+    margin-left: 8%;
+}
+
+.MyData{
+    position:fixed;
+    margin-left: 12%;
+    width: 100%;
+    
+}
+h1{
+    color:rgb(21, 9, 184); 
+    margin-left: 5%;
+}
+.Menu{
+    text-align: start;
+  padding-left: 30px;
+  margin-left: 4%;
+
+
+}
+.menu2{
+    height: 10px;
+    position:absolute;
+    width: 10%;
+    padding:2%;
+    margin-top: -2%;
+    border-right: #4B7BE8 0.5px solid;
+    height: 95vh;
+    background-color: white;
+    margin-left: -2%;
+}.head-container2{
+    margin-top: 0;
+}
+.Info{
+    border:2px solid #A1A1A1;
+    padding-left: 5%;
+    padding-top: 5%;
+    height: 60vh;
+
+}
+.Info select{
+    margin-left: 35%;
+    width: 250%;
+  
+}
+.Info input{
+    margin-left: 35%;
+    width: 250%;
+}
+.Curent{
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    color:rgb(21, 9, 184);
+    border: 1px solid black;
+}
+li{
+ padding: 5px;
+    text-align: center;
+display: inline-block;
+}
+.First{
+    padding-right: 60px;
+    font-size: 25px;
+    color:#A1A1A1;
+    font-weight: 400;
+}
+.file{
+    font-size: 15px;
+    width: 200%;
+    padding: 2%;
+    height: 40px;
+    text-decoration: none;
+    border: none;
+    background-color: white;
+}
+
+
+.select{
+    text-align: center;
+    width: 200%;
+    height: 40px;
+    border: none;
+}
+.Btn{
+    color: #fff;
+    text-decoration: none;
+    height: 50px;
+    border: none;
+    width: 180px;
+    background: #4B7BE8;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 20px;
+    margin-left: 225%;
+}

@@ -1,0 +1,149 @@
+.grey{
+    padding: 10px;
+   width: 86%;
+    background-color: #F4F4F4;
+    align-content: center;
+    justify-content: center;
+    margin-top: 2%;
+ 
+}
+.username2{
+    float: right;
+    display: flex;
+    margin-right: 5px;
+    text-align: center;
+    padding: 20px;
+    color:black;
+}
+.image{
+    width: 25%;
+    margin-top: 6%;
+    height: 10%;
+    margin-left: 8%;
+}
+
+.MyData{
+    position:fixed; 
+    width: 100%;
+
+}
+h1{
+    color:rgb(21, 9, 184); 
+    margin-left: 5%;
+}
+.Menu{
+    
+text-align: start;
+  padding-left: 30px;
+  margin-left: 4%;
+  
+}
+
+.menu2{
+    height: 10px;
+    position:absolute;
+    width: 10%;
+    padding:2%;
+    margin-top: -2%;
+    border-right: #4B7BE8 0.5px solid;
+    height: 95vh;
+    background-color: white;
+    margin-left: -2%;
+}
+.head-container2{
+    margin-top: 0;
+}
+.Info{
+    border: 1px solid black;
+    padding-left: 60px;
+    padding-top: 20px;
+    height: 60vh;
+    margin-left: 4%;
+}
+.Curent{
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    color:rgb(21, 9, 184);
+    border: 1px solid black;
+}
+li{
+ padding: 5px;
+ text-align: center;
+ display:inline-block;
+}
+.First{
+    padding-right: 60px;
+}
+.username {
+    margin-top: 4%;
+    margin-left: 12%;
+    color:grey
+}
+
+.file{
+    font-size: 15px;
+    width: 100%;
+    text-decoration: none;
+    border: none;
+}
+
+.row{
+    height: 60px;
+    width: 100%;
+}
+.select{
+    text-align: center;
+    width: 200%;
+    height: 35px;
+}
+.Btn{
+    color: #fff;
+    text-decoration: none;
+    height: 35px;
+    border: none;
+    width: 200px;
+    background: rgb(80, 19, 248);
+}
+
+.subject{
+    background: #fff;
+    width: 40%;
+    margin: 0px;
+    border: 1px solid #000;
+    display:inline;
+    margin-left: 5px;
+    text-align: center;
+    font-weight: bold;
+
+}
+.subject h3{
+    width: 100%;
+    background: #4B7BE8;
+    color: #fff;
+    margin-top:0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: smaller;
+}
+.rows{
+display: flex; 
+}
+
+.subject img{
+    width: 40%;
+}
+
+.btnView{
+    margin-bottom: 10px;
+    background: #4B7BE8;
+    color: #fff;
+    
+    border: none;
+    width: 40%;
+    height: 20px;
+
+    border-radius: 5;
+    border-color: #4B7BE8;
+    
+}
