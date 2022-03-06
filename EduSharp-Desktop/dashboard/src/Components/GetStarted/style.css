@@ -1,0 +1,238 @@
+.ContainerLanding{
+    background-image: url('../images/lilies.webp');
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size:cover;
+    background-attachment: fixed;
+}
+.head{
+    display: flex;
+    justify-content: space-between;
+    opacity: 1.2;
+}
+.headBar{
+    background:rgba(44, 44, 44, 0.5);  
+}
+.Bar{
+   display: flex;
+   background-size:cover;
+   justify-content: space-between;
+    background:rgba(134, 134, 134, 0.5);
+    height: 85px;
+}
+.ContentContainer{
+width: 100%;
+}
+.logoBar{
+    padding:2%;
+    margin-top: -1%;
+    display: flex;
+    color:grey
+}
+.logoBar h2{
+    color:white;
+    padding-top: -2px;
+    font-size: 18px;
+}
+.body{
+    display: flex;
+    justify-content: space-between;
+}
+.logo{
+    display: flex;
+    margin-left: -12%;
+    padding:2%;
+    margin-top: -1%;
+}
+.logo h3{
+    color:'black';
+    font-size: 20px;
+}
+.ContainerRegister{
+    background-image: url('../images/white-phone.jpeg');
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size:cover;
+    background-attachment: fixed;
+}
+.Register{
+    align-items: center;
+    text-align: center;
+}
+.headings{
+    text-align: center;
+}
+.headings h1{
+    color:beige
+}
+.headings p{
+    color:rgb(184, 184, 178);
+    font-size: 17px;
+}
+.signBody{
+margin-top: -2%;
+margin-left: 50%;
+}
+.input-icons i{
+    color:rgb(88, 88, 88)
+}
+
+.backBody{
+    background:rgba(44, 44, 44, 0.5);
+    height: 100vh;  
+}
+.buttons{
+    padding: 1%;
+    margin-left: -5%;
+}
+
+.forgotButton{
+    margin:1%;
+    padding:2% 5%;
+    border-color:rgb(199, 46, 46);
+    border-radius: 5px;
+    color:rgb(199, 46, 46);
+    font-weight: 700;
+    font-size: 15px;
+    background-color: transparent;
+}
+
+
+.create{
+    margin:1%;
+    padding:2% 16%;
+    border-color:rgb(199, 46, 46);
+    border-radius: 5px;
+    color:rgb(199, 46, 46);
+    font-weight: 700;
+    font-size: 20px;
+    background-color: transparent;
+    
+}
+
+.logButton{
+    margin:1%;
+    padding:2% 3%;
+    border-color:rgb(199, 46, 46);
+    border-radius: 5px;
+    color:white;
+    font-weight: 700;
+    font-size: 15px;
+    background-color:rgb(199, 46, 46) ;
+}
+.Register input{
+    width: 360px;
+    margin-left: -1%;
+padding: 2%;
+}
+input{
+    width: 40%;
+    height:20px;
+}
+.body h2{
+    color:rgb(92, 91, 91);
+    width: 55%;
+    padding:2%;
+    font-size: 45px;
+    margin-top: -5%;
+    font-weight: 700;
+    /* font-family: 'Roboto', sans-serif; */
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.navBar ul{
+    margin-top: 6%;
+    font-weight: 600;
+    color:white
+}
+.questions{
+    margin:2%;
+}
+
+.questionCard{
+    /* background-color: rgb(18, 102, 102) ; */
+    width: 380px;
+    height: 200px;
+    margin:2%;
+    padding-top: 4%;
+    text-align: center;
+    box-shadow: 5px 5px 5px  #888888;
+    justify-items: center ;
+}
+
+.questionCard h3{
+    font-size: 25px;
+    font-weight: 400;
+}
+.lessonCard h3{
+    font-size: 25px;
+    font-weight: 400;
+}
+.booksCard h3{
+   
+        font-size: 25px;
+        font-weight: 400;
+    
+}
+.bodyContent h2{
+    text-align: center;
+    font-size: 30px;
+    color:rgb(49, 49, 49);
+    font-weight: 400;
+   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.lessonCard{
+    width: 380px;
+    height: 200px;
+    margin:2%;
+    text-align: center;
+    padding-top: 4%;
+    justify-items: center ;
+    box-shadow: 5px 5px 5px  #888888;
+}
+.booksCard{
+    width: 380px;
+    height: 200px;
+    margin:2%;
+    text-align: center;
+    padding-top: 4%;
+    justify-items: center ;
+    box-shadow: 5px 5px 5px  #888888;
+}
+.sub{
+    align-items: flex-end;
+    /* text-align: left; */
+    width: 40%;
+    margin-top: 15%;
+    font-size: 16px;
+    padding-right: 3%;
+
+}
+.subtitle{
+
+}
+.click{
+    padding:4% 15%;
+    border:none;
+    background-color:rgb(77, 77, 167);
+    color:white;
+    font-weight: 700;
+    font-size: 20px;
+    border-radius: 8px;
+}
+.bodyContent h1{
+    text-align: center;
+    font-size: 40px;
+    color:rgb(236, 157, 157);
+   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.CardResourses{
+    width: 80%;
+    margin: auto;
+    padding: auto;
+    flex:1;
+    justify-content: center;
+    display: flex;
+    margin-top: 5%;
+    
+}
