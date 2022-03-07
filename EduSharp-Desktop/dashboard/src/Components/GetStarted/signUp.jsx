@@ -1,12 +1,18 @@
 import React,{useState} from 'react'
 import './style.css'
 import logo from '../images/image.png'
-
+import Users from '../Authentication-firebase/reuse'
 const Register = () => {
     const [firstname,setName] = useState()
     const [lastname,setLastName] = useState()
     const [email,setEmail] = useState()
     const [password,setPassword] = useState()
+
+    const SignUp =(e)=>{
+        e.preventDefault()
+        Users.signUp(email,password,firstname,lastname)
+        console.log('sent')
+    }
   return (
     <div className='ContainerRegister'>
         <div className='backBody'>
@@ -23,10 +29,10 @@ const Register = () => {
                 <h1>
                     Create new account.
                 </h1>
-                <p>Already have an account? <a href='signIn'>Log in</a></p>   
+               
                 </div>
   
-                <form className='Register'>
+                <form className='Register' onSubmit={SignUp}>
                     <div>
                     <div className='input-icons'>
                    {/* <i className='fa fa-id-card fa-2x'></i> */}
@@ -57,8 +63,9 @@ const Register = () => {
                    </div>
                    <div className='buttons'>
                        {/* <button className='forgotButton'>Forgot Password</button> */}
-                       <button className='create'>Create Account</button>
+                       <button className='create' onClick={SignUp} type={'submit'}>Create Account</button>
                    </div>
+                    <p>Already have an account? <a href='signIn'>Sign in</a></p>   
                 </form>
             </div>
         </div>

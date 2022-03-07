@@ -9,13 +9,15 @@ const _db = firebase.ref('/users')
 const auth = firebase.app.auth()
 
 class Users {
-    signUp(email, password, name ){
+    signUp(email, password, firstname,lastname ){
         return firebase.app.auth().createUserWithEmailAndPassword(email, password).then(res => {
             res.user.sendEmailVerification().then( action => {
-                console.log('Verification email sent')
+                alert('An email has been sent with the verification link, please check your emails and verify the link and then come and sign in')
                 firebase.ref(`/user`).child(res.user.uid).set({
-                    name : name,
+                    name : firstname,
+                    lastname:lastname,
                     email: email,
+                    password:password,
                     uid: res.user.uid
                 })
             }).catch( err => {
@@ -28,12 +30,11 @@ class Users {
         login(email, password,navigate) {
             firebase.app.auth().signInWithEmailAndPassword(email,password).then(res => {
                 if(res.user.emailVerified){
-                    console.log('email verified')
+                    alert('Successfully logged in. Email verified')
                     navigate('/home')
                     localStorage.setItem('userid', res.user.uid)
                     console.log('userid',res.user.uid)
                 }else {
-                    
                     console.log('please verify your email address')
                     res.user.sendEmailVerification().then(res => {
                         console.log('we send you an email again, please verify your email')
@@ -43,9 +44,10 @@ class Users {
                 }
             })
          }
-    resetPassword(email){
+    resetPassword(email,navigate){
         auth.sendPasswordResetEmail(email).then(()=>{
-            console.log('password reset')
+            alert('password reset')
+            navigate('/signIn')
         }).catch(err=>{
             console.log(err.message)
         })

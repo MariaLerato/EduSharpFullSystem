@@ -12,9 +12,9 @@ const Landing = ()=>{
                       <img src={logo} alt={'edusharp'} width={50} height={50}/>
                 <h3>EduSharp</h3>
                 </div>
-
-                    <h3>Administration
-                        </h3>
+                    <h3>
+                        Administration
+                    </h3>
             </div>
             <div className='body'>
                 <div>
@@ -32,11 +32,7 @@ const Landing = ()=>{
                     <div className='getStarted'>
                        
                     </div>
-                   
                     </div>
-                   
-                
-
             </div>
         </div>
     )

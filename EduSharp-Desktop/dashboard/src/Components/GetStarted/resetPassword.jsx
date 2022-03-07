@@ -5,16 +5,16 @@ import { useNavigate } from 'react-router-dom'
 import Users from '../Authentication-firebase/reuse'
 
 
-const LogIn = () => {
+const ResetPassword = () => {
    
     const [email,setEmail] = useState()
-    const [password,setPassword] = useState()
+  
     const navigate = useNavigate()
 
     const SignIn = (e)=>{
         e.preventDefault()
-        Users.login(email,password,navigate)
-        console.log('logged in')
+        Users.resetPassword(email,navigate)
+        console.log('reset password')
     }
     return (
   
@@ -28,14 +28,14 @@ const LogIn = () => {
                     <h3>Administration
                         </h3>
             </div>
-            <div className='signBody' style={{marginTop:'5%'}}>
-                <div className='headings'>
+            <div className='signBody' style={{marginTop:'8%'}}>
+                <div className='headings' >
                 <h1>
-                Sign In To Your Account.
-                </h1>
+                    Reset Your Password
+                    </h1>
              </div>
   
-                <form className='Register' onSubmit={SignIn} >
+                <form className='Register' onSubmit={SignIn} style={{marginTop:'-2%'}} >
                     <div>
                     </div>
                     {/* other inputs */}
@@ -45,18 +45,12 @@ const LogIn = () => {
                     className='input-field' value={email} onChange={(e)=>setEmail(e.target.value)} 
                     />
                    </div>
-                   <div className='input-icons'>
-                   {/* <i className='fa fa-eye fa-2x'></i> */}
-                    <input type='password' placeholder='Enter Password'
-                    className='input-field' value={password} onChange={(e)=>setPassword(e.target.value)} 
-                    />
-                   </div>
-                   <button className='forgotButton' onClick={()=>navigate('/resetPassword')} >Forgot Password?</button>
+               
                    <div className='buttons'>
                        
-                       <button className='logButton' onClick={SignIn}  type={'submit'}>Log In To Account</button>
+                       <button className='logButton' style={{marginTop:'1%',}} onClick={SignIn}  type={'submit'}>Reset Password</button>
                    </div>
-                   <p>Don't have an account? <a href='signUp'>Register Account</a></p>   
+                   <p>Remember Your Password? <a href='signUp'>Sign In</a></p>   
               
                 </form>
             </div>
@@ -66,4 +60,4 @@ const LogIn = () => {
   )
 }
 
-export default LogIn
+export default ResetPassword

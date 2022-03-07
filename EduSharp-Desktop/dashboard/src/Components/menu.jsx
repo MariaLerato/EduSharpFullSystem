@@ -5,14 +5,14 @@ import { AddLesson } from "./AddLesson";
 import { AddQuestion } from "./AddQuestion";
 import HomePage from "./GetStarted/home";
 import Landing from "./GetStarted/landingPage";
+import ResetPassword from "./GetStarted/resetPassword";
 import LogIn from "./GetStarted/signIn";
 import Register from "./GetStarted/signUp";
 import { Home } from "./home";
 import { LessonPage } from "./LessonPage";
 import { OverView } from "./OverView";
 import { PaperReport } from "./PaperReport";
-import { Signin } from "./signIn";
-import { SignUp } from "./signUp";
+
 
 
 
@@ -27,7 +27,7 @@ const Menu = ()=>{
             <Routes>
                 <Route path="/" element={<Landing/>}/>
                 <Route path={'/signIn'} element={<LogIn setEmail={setEmail} setPassword={setPassword}/>}/>
-                {/* <Route path={'/'} element={<SignUp setEmail={setEmail} setPassword={setPassword} />}/> */}
+                <Route path={'/resetPassword'} element={<ResetPassword setEmail={setEmail} setPassword={setPassword} />}/>
                 <Route path="/signUp" element={<Register/>}/>
                 
                 <Route path={'/home'} element={<HomePage/>}/>
