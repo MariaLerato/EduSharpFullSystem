@@ -13,10 +13,12 @@ export const SignUp = () => {
   const [confirm, setConfirm] = useState();
 
   const onSubmit = (e) => {
+
     e.preventDefault();
     Users.signUp(email, password, name);
     console.log(email, "user created");
-    navigate("/home");
+   
+
   };
   return (
     <div className="container">

@@ -31,9 +31,7 @@ const Menu = ()=>{
                 <Route path={'/LessonPage'} element={<LessonPage/>}/>
                 <Route path={'/OverView'} element={<OverView/>}/>
                 <Route path={'/PaperReport'} element={<PaperReport/>}/>
-                {/* <Route path={'/'} element={<SignUp/>}/>
-                <Route path={'/'} element={<SignUp/>}/>
-                <Route path={'/'} element={<SignUp/>}/> */}
+             
             </Routes>
         </BrowserRouter>
         </>

@@ -424,12 +424,13 @@ i{
     justify-content: flex-end;
     align-items: flex-end;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
 
 }
 .in{
     color:#4B7BE8;
     font-size: 18px;
+    font-weight: 600;
 }
 .signin {
     text-align:end;
