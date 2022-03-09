@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import './style.css'
 import logo from '../images/image.png'
 import Users from '../Authentication-firebase/reuse'
+
 const Register = () => {
     const [firstname,setName] = useState()
     const [lastname,setLastName] = useState()

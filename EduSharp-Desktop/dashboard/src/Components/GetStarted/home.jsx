@@ -1,8 +1,11 @@
 import React from 'react'
+import { Sidemenu } from '../navigation/sidemenu'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <>
+    <Sidemenu/>
+    </>
   )
 }
 

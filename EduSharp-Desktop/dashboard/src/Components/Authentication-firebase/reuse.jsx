@@ -27,21 +27,26 @@ class Users {
             console.log(err.message)
         })
     }  
-        login(email, password,navigate) {
+        login(email, password,navigate,setLoad) {
+            
             firebase.app.auth().signInWithEmailAndPassword(email,password).then(res => {
+                
                 if(res.user.emailVerified){
+                    setLoad(false)
                     alert('Successfully logged in. Email verified')
                     navigate('/home')
                     localStorage.setItem('userid', res.user.uid)
                     console.log('userid',res.user.uid)
                 }else {
-                    console.log('please verify your email address')
+                    setLoad(true)
+                    alert('please verify your email address')
                     res.user.sendEmailVerification().then(res => {
-                        console.log('we send you an email again, please verify your email')
+                        alert('we send you an email again, please verify your email')
                     }).catch(err => {
-                        console.log(err.message)
+                        alert(err.message)
                     })
                 }
+                
             })
          }
     resetPassword(email,navigate){
@@ -52,6 +57,7 @@ class Users {
             console.log(err.message)
         })
     }
+    
     getLoggedData(id){
         return firebase.ref(`/user/${id}`)
     }
