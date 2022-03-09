@@ -8,7 +8,8 @@
 .head{
     display: flex;
     justify-content: space-between;
-
+    background-color: white;
+    height: 80px;
 }
 .headBar{
     background:rgba(44, 44, 44, 0.5);  
@@ -51,16 +52,31 @@ width: 100%;
 .head h3{
     color:rgb(180, 180, 178)
 }
+.imgContainer{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+.imgContainer img{
+ width: 100%;
+ height: 100%;
+}
 .ContainerRegister{
-    background-image: url('../images/white-phone.jpeg');
+    /* background-image: url('../images/white-phone.jpeg');
     background-repeat: no-repeat;
-    height: 100vh;
-    background-size:cover;
-    background-attachment: fixed;
+    height: 100vh; */
+    /* background-size:cover;
+    background-attachment: fixed; */
+    /* object-fit: contain; */
+    position: relative;
+    background-color: gray;
 }
 .Register{
     align-items: center;
     text-align: center;
+    z-index: 999;
 }
 .headings{
     text-align: center;
@@ -82,7 +98,7 @@ margin-left: 50%;
 }
 
 .backBody{
-    background:rgba(44, 44, 44, 0.5);
+    /* background:rgba(44, 44, 44, 0.5); */
     height: 100vh;  
 }
 .buttons{
@@ -105,15 +121,19 @@ margin-left: 50%;
 .create{
     margin-left:2%;
     padding:2% 14%;
-    border-color:rgb(199, 46, 46);
+    /* border-color:rgb(199, 46, 46); */
     border-radius: 5px;
-    color:rgb(199, 46, 46);
+    /* color:rgb(199, 46, 46); */
     font-weight: 700;
     font-size: 20px;
     background-color: transparent;
-    
+    cursor: pointer;
+    border: 1px solid white;
+    color: white;
 }
-
+.create:hover{
+    box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+}
 .logButton{
     margin-top:-2%;
     padding:2% 13%;
