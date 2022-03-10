@@ -25,6 +25,9 @@
 .span_1_of_2 {
 	width: 49.2%;
 }
+button,a{
+    cursor: pointer;
+}
 
 /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
 

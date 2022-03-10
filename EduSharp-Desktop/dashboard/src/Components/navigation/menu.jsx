@@ -26,18 +26,20 @@ import  Register  from"../GetStarted/signUp";
 import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
+import reuse from "../Authentication-firebase/reuse";
+
 const Menu = () => {
 
-  const [email, setEmail] = useState(false);
-  const [password, setPassword] = useState()
-   
+ 
   
     return (
         <BrowserRouter>
-          {email ? (
+          {reuse.isLogIn() ? (
             <div className="appMainContainer">
               <Routes>
-            <Route path="/" element={<Navigate to={'/sidemenu'} replace={true}/>}/>
+                <Route path="/" element={<Navigate to={'/home'} replace={true}/>}/>
+                <Route path="/signIn" element={<Navigate to={'/home'} replace={true}/>}/>
+                <Route path="/signUp" element={<Navigate to={'/home'} replace={true}/>}/>
                 <Route path={"/home"} element={<Home />} />
                 <Route path={"/AddBook"} element={<AddBook />} />
                 <Route path={"/AddLesson"} element={<AddLesson/>} />
@@ -47,8 +49,8 @@ const Menu = () => {
             </div>
           ) : (
             <Routes>
-                <Route path={'/signIn'} element={<LogIn setEmail={setEmail} setPassword={setPassword}/>}/>
-                <Route path={'/signUp'} element={<Register setEmail={setEmail} setPassword={setPassword} />}/>
+                <Route path={'/signIn'} element={<LogIn />}/>
+                <Route path={'/signUp'} element={<Register />}/>
                 <Route path="/" element={<Landing/>}/>
                 <Route path={'/home'} element={<Home/>}/>
 
