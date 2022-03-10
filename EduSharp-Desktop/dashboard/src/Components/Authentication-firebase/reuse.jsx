@@ -1,4 +1,4 @@
-import { auth, firestore } from "./firebase";
+import { auth, firestore ,storage} from "./firebase";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 // const _db = firebase.ref('/users')
 // const auth = firebase.app.auth()
 const admin = firestore.collection("admin");
+const storageref=storage.ref('files') 
 
 class Users {
  async signUp(email, password, firstname, lastname) {
@@ -79,6 +80,56 @@ class Users {
   signOut(){
     localStorage.removeItem('userid')
     auth.signOut();
+  }
+  isLogIn(){
+    const id=localStorage.getItem('userid')
+
+    if(id)return true;
+
+    return false;
+  }
+  addItem(subject,grade,description,topic,file,filename,item){
+      //item=>{lessons,question paper,books}
+      const id=localStorage.getItem('userid')
+     
+
+      console.log('llllll')
+      if(!subject||!grade||!description||!topic||file||item||filename)return {
+        'status':'Error',
+        'message':'Please enter all the information!'
+      }
+      console.log(id,'------=-=---------========---------=---------=',item)
+     
+      if(!id){
+        return{
+          'status':'Error',
+          'message':'Please log in!'
+        }
+      }
+      var uploadTask= storageref.child(`${item}/${id}/${filename}`).put(file)
+      uploadTask.on('state_changed',
+      (snapshot)=>{
+
+      },(error)=>{
+
+      },()=>{
+        const url=uploadTask.snapshot.ref.getDownloadURL().then((downloadURL)=>{
+          firestore.collection(item).doc(id).set({
+              createdAt:new Date(),
+              description:description,
+              downloadURL,
+              downloadable:true,
+              grade:grade,
+              illustrationURL:null,
+              status:true,
+              subject:subject,
+              topic:topic,
+              isAdmin:true,
+              userID:id
+          })
+          console.log('File available at', downloadURL);
+        })
+      })
   }
   // getLoggedData(id){
   //     return firebase.ref(`/user/${id}`)

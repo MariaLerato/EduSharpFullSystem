@@ -26,47 +26,40 @@ import  Register  from"../GetStarted/signUp";
 import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
+import reuse from "../Authentication-firebase/reuse";
+
 const Menu = () => {
 
-  const [email, setEmail] = useState(true);
-  const [password, setPassword] = useState()
-   
+ 
   
     return (
         <BrowserRouter>
-          {email ? (
+          {reuse.isLogIn() ? (
             <div className="appMainContainer">
               <Routes>
-            <Route path="/" element={<Navigate to={'/sidemenu'} replace={true}/>}/>
+                <Route path="/" element={<Navigate to={'/home'} replace={true}/>}/>
+                <Route path="/signIn" element={<Navigate to={'/home'} replace={true}/>}/>
+                <Route path="/signUp" element={<Navigate to={'/home'} replace={true}/>}/>
                 <Route path={"/home"} element={<Home />} />
                 <Route path={"/home/AddBook"} element={<AddBook />} />
                 <Route path={"/home/AddLesson"} element={<AddLesson />} />
                 <Route path={"/home/AddQuestion"} element={<AddQuestion />} />
-             
+              {/* 
+                <Route path={'./ViewBooks'} element={<ViewBooks/>}/>
+                <Route path={'./ReportBooks'} element={<ReportBooks/>}/>
+                <Route path={'./viewLesson'} element={<ViewLesson/>}/>
+                <Route path={'./ReportLesson'} element={<ReportLesson/>}/>
+                <Route path={'./ViewPaper'} element={<ViewPaper/>}/>
+                <Route path={'./ReportPaper'} element={<ReportPaper/>}/>
+                <Route path={'./ViewBooks'} element={<ViewBooks/>}/>
+                 */}
               </Routes>
             </div>
           ) : (
             <Routes>
                 <Route path={'/signIn'} element={<LogIn setEmail={setEmail} setPassword={setPassword}/>}/>
                 <Route path={'/signUp'} element={<Register setEmail={setEmail} setPassword={setPassword} />}/>
-                <Route path="/" element={<Landing/>}/>
-                <Route path={'/home'} element={<Home/>}/>
-
-                <Route path={'/AddBook'} element={<AddBook/>}/>
-                <Route path={'./ViewBooks'} element={<ViewBooks/>}/>
-                <Route path={'./ReportBooks'} element={<ReportBooks/>}/>
-
-                <Route path={'/AddLesson'} element={<AddLesson/>}/>
-                <Route path={'./viewLesson'} element={<ViewLesson/>}/>
-                <Route path={'./ReportLesson'} element={<ReportLesson/>}/>
-                
-                <Route path={'/AddQuestion'} element={<AddQuestion/>}/>
-                <Route path={'./ViewPaper'} element={<ViewPaper/>}/>
-                <Route path={'./ReportPaper'} element={<ReportPaper/>}/>
-                <Route path={'./ViewBooks'} element={<ViewBooks/>}/>
-                <Route path={'./'}/>
-
-             
+                <Route path="/" element={<Landing/>}/> 
             </Routes>
           )}
     </BrowserRouter>
