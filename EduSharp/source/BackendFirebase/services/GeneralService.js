@@ -4,20 +4,22 @@ import { firestore } from "../configue/Firebase";
 class GeneralService {
 
     async post(table, data, navigation) {
-        let obj = {};
+        let obj = [];
         
         return await firestore.collection(table).doc().set(data).then((res) => {
-            obj = { status: 'Success', details: res };
+            const object =  { status: 'Success', details: res };
+            obj.push(object);
             console.log(res, "==>>");
         }).catch((err) => {
-            obj = { status: 'Failed', details: err };
+            const object = { status: 'Failed', details: err };
+            obj.push(object);
             console.log(err, "======>>>>>>>");
         });
     }
 
     async indiPost(table,id,object,data,navigation){
-        return await firestore.collection(table).doc(id).doc(object).doc().set(data).then(res=>{
-            
+        return await firestore.collection(table).doc(id).set(data).then(res=>{
+            console.log(res);
         }).catch(err=>{
             console.log(err);
         })

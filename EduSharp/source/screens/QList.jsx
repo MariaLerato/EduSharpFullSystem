@@ -11,6 +11,7 @@ import GeneralService from "../BackendFirebase/services/GeneralService";
 import Auth from "../BackendFirebase/services/Auth";
 import { auth, firestore } from "../BackendFirebase/configue/Firebase";
 import { Snackbar } from 'react-native-paper';
+import QAComponent from "../components/qacomponent";
 
 
 const QList = ({ navigation }) => {
@@ -27,15 +28,16 @@ const QList = ({ navigation }) => {
     const [alert, setalert] = useState(false);
     const [alertColor, setalertColor] = useState('');
     const [alertMessage, setalertMessage] = useState('');
-    const [post, setpost] = useState([])
+    const [post, setpost] = useState([]);
 
 
     const handleLike = (key) => {
-        const data ={
-            user:auth.currentUser.uid,
-            createdAt:new Date()
+        const data = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            createdAt: new Date()
         }
-        GeneralService.indiPost("questionAndAnswers",key,"likes",data,navigation).then(res => {
+        GeneralService.post("likes", data, navigation).then(res => {
             setalert(true);
             setalertMessage("Liked");
         })
@@ -84,18 +86,22 @@ const QList = ({ navigation }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("questionAndAnswers").get().then(async(querySnapshot) => {
+        await firestore.collection("questionAndAnswers").get().then(async (querySnapshot) => {
             console.log('Total users: ', querySnapshot.size);
             const data = [];
-           await querySnapshot.forEach(async(documentSnapshot) => {
-               
+            await querySnapshot.forEach(async (documentSnapshot) => {
+
+                console.log('====================================');
+                    console.log(documentSnapshot.data().userID);
+                    console.log('====================================');
                 await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(res => {
+                    
                     let dataset = {
                         key: documentSnapshot.id,
                         createdAt: documentSnapshot.data().createdAt,
                         description: documentSnapshot.data().description,
                         grade: documentSnapshot.data().grade,
-                        illustrationURL: documentSnapshot.data().illustrationURL,
+                        downloadUrl: documentSnapshot.data().downloadUrl,
                         status: documentSnapshot.data().status,
                         subject: documentSnapshot.data().subject,
                         topic: documentSnapshot.data().topic,
@@ -103,16 +109,17 @@ const QList = ({ navigation }) => {
                         email: res.data().email,
                         location: res.data().location,
                         name: res.data().name,
+                        image: res.data().profileUrl?res.data().profileUrl:null,
                         phonenumber: res.data().phonenumber,
                     }
                     data.push(dataset);
-                    
+
                 })
                 setpost(data);
                 console.log(data);
             });
 
-            
+
         }).catch(err => {
             console.log('====================================');
             console.log(err, "==>>==>");
@@ -120,58 +127,7 @@ const QList = ({ navigation }) => {
         });
     }
 
-    const Postcard = () => {
-        return (
-            <View >
-                <FlatList data={post} renderItem={( data, index ) => (
-                    <Card key={"data.id"} containerStyle={{ borderRadius: 7, }} >
-                        <Card.FeaturedTitle style={Styles.cardHeader}>
-                            <View style={Styles.headerContainer}>
-                                <Card.Image source={"data.pic"} style={Styles.profile} />
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#4545ede', width: '100%' }}>
-                                    <View>
-                                        <Text style={Styles.headertext}>{data.item.name}</Text>
-                                        <Text style={{ marginLeft: 20 }}>{data.item.createdAt}</Text>
-                                    </View>
-                                        <Icon name={'ellipsis-v'} type={'font-awesome'} onPress={() => setIsVisible(true)} style={{ marginBottom: 20, width: 8, height: 24 }} />
-                                    
-                                </View>
-                            </View>
-                        </Card.FeaturedTitle>
-                        <Card.FeaturedTitle style={Styles.post} >
-                            <View style={{width:'100%', backgroundColor:COLORS.Danger}}>
-                                <Text style={Styles.question} >
-                                    {data.item.description}
-                                </Text>
-
-                            </View>
-                        </Card.FeaturedTitle>
-                        <Divider style={{ height: 5, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                        <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto', backgroundColor: COLORS.Danger }}>
-                            <View style={[Styles.iconContainer, { width: '100%', flexDirection: 'row', justifyContent: 'space-between' }]}>
-                                <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row' }}>
-                                    <Icon name={'thumb-up'} type={'material-community'} size={26} color={'#3D93D1'} onPress={()=>{handleLike(data.item.key)}} />
-                                    <Text>{9}</Text>
-                                </View>
-                                <View>
-                                    <Icon name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
-                                </View>
-                                <View >
-                                    <Icon name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
-                                </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("data.location")} >
-                                    <Icon name={'comment'} type={'material-community'} size={26} color={'#3D93D1'} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Card>
-                )}
-                />
-
-            </View>
-        )
-    }
-
+   
     useEffect(() => {
         getPost();
     }, [])
@@ -194,10 +150,15 @@ const QList = ({ navigation }) => {
             <ScrollView>
                 <View>
                     <View style={Styles.subtitle}>
-                        <Text style={Styles.text}>View only the content that is relevent to my course</Text>
+                        <Text style={[Styles.text,{}]}>View only the content that is relevent to my course</Text>
 
                     </View>
-                    <Postcard />
+                    <FlatList data={post} renderItem={(data, index) => (
+                        <QAComponent data={data} onPress={()=>{}}  profilePress={()=>{}} menuPress={()=>{setIsVisible(true)}} 
+                        likePress={()=>{handleLike(data.item.key)}} sterePress={()=>{}} sharePress={()=>{}} commentsPress={()=>{}} />
+                    )}
+                    />
+
                 </View>
             </ScrollView >
             <TouchableOpacity onPress={() => setVisible(true)} style={{ width: 60, height: 60, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', alignSelf: 'flex-end', marginTop: '-16%', marginBottom: '1%' }}>
@@ -386,7 +347,7 @@ const Styles = StyleSheet.create({
     question: {
         padding: 3,
         fontSize: SIZES.body4,
-        width:'100%'
+        width: '100%'
     },
     iconContainer: {
         display: 'flex',
@@ -492,7 +453,7 @@ const Styles = StyleSheet.create({
         width: '85%'
     },
     headerContainer: {
-        padding:0,
+        padding: 0,
         display: 'flex',
         flexDirection: 'row',
         width: 250
