@@ -57,62 +57,34 @@ class Users {
     return await res
   }
 
-  // signUp(email, password, firstname,lastname ){
-  //     return firebase.app.auth().createUserWithEmailAndPassword(email, password).then(res => {
-  //         res.user.sendEmailVerification().then( action => {
-  //             alert('An email has been sent with the verification link, please check your emails and verify the link and then come and sign in')
-  //             firebase.ref(`/user`).child(res.user.uid).set({
-  //                 name : firstname,
-  //                 lastname:lastname,
-  //                 email: email,
-  //                 password:password,
-  //                 uid: res.user.uid
-  //             })
-  //         }).catch( err => {
-  //             console.log(err)
-  //         })
-  //     }).catch(err => {
-  //         console.log(err.message)
-  //     })
-  // }
-  //     login(email, password,navigate) {
-  //         firebase.app.auth().signInWithEmailAndPassword(email,password).then(res => {
-  //             if(res.user.emailVerified){
-  //                 alert('Successfully logged in. Email verified')
-  //                 navigate('/home')
-  //                 localStorage.setItem('userid', res.user.uid)
-  //                 console.log('userid',res.user.uid)
-  //             }else {
-  //                 console.log('please verify your email address')
-  //                 res.user.sendEmailVerification().then(res => {
-  //                     console.log('we send you an email again, please verify your email')
-  //                 }).catch(err => {
-  //                     console.log(err.message)
-  //                 })
-  //             }
-  //         })
-  //      }
-  // resetPassword(email,navigate){
-  //     auth.sendPasswordResetEmail(email).then(()=>{
-  //         alert('password reset')
-  //         navigate('/signIn')
-  //     }).catch(err=>{
-  //         console.log(err.message)
-  //     })
-  // }
+  async login(email, password,navigate){
+      auth.signInWithEmailAndPassword(email,password)
+      .then((res)=>{
+        navigate('/home')
+        localStorage.setItem('userid', res.user.uid)
+      })
+      .catch((error)=>{
+        console.log('login error: ',error)
+      })
+  }
+  resetPassword(email,navigate){
+    auth.sendPasswordResetEmail(email)
+    .then((res)=>{
+      navigate('/signIn')
+    })
+    .catch((error)=>{
+      console.log("reset password error:"+error)
+    })
+  }
+  signOut(){
+    localStorage.removeItem('userid')
+    auth.signOut();
+  }
   // getLoggedData(id){
   //     return firebase.ref(`/user/${id}`)
   // }
 
-  // logOut(navigation){
-  //     firebase.app.auth().signOut().then(() => {
-  //         console.log('logged out')
-  //         localStorage.removeItem('userid')
-  //         navigation.goBack()
-  //     }).catch(err => {
-  //         console.log(err.message)
-  //     })
-  // }
+  
   // getData(){
   //     return db
   // }
@@ -126,15 +98,7 @@ class Users {
   //     console.log(value)
   //     return db.child(key).update(value)
   // }
-  // signOut(navigation){
-  //     auth.signOut().then(()=>{
-  //         localStorage.removeItem('userid')
-  //         console.log('logged out')
-  //         navigation.goBack()
-  //     }).catch(err=>{
-  //         console.log(err.message)
-  //     })
-  // }
+  
   // upDateBio(ref,info){
   //     firebase.ref('/user').child(ref).update({
   //         dsc:info
@@ -144,8 +108,6 @@ class Users {
   //         console.log(err.message)
   //     })
   // }
-  // GoogleLogin(){
-  //     auth.fetchSignInMethodsForEmail()
-  // }
+  
 }
 export default new Users();
