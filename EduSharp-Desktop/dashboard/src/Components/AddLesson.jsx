@@ -7,9 +7,19 @@ import styled from "styled-components";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 import Image from "./images/video.png";
 import {useNavigate} from 'react-router-dom'
+import Users from './Authentication-firebase/reuse'
 
 const AddLesson = () => {
   const navigate = useNavigate()
+  const [subject,setSubject] = useState()
+  const [grade,setGrade] =useState()
+  const [topic,setTop] = useState()
+  const [file,setFile] = useState()
+  const [description,setDescription ] = useState()
+
+  const onSubmit = ()=>{
+    Users.addItem(subject,grade,description,topic,file,'lesson')
+  }
   return (
     <div className="Cont">
       <div className="sidenav">
@@ -30,13 +40,15 @@ const AddLesson = () => {
         <h3>Add Lessons</h3>
         {/* <div className="form"> */}
         {/* <h4  style={{marginLeft:'2%'}}>Edit Lesson</h4> */}
-        <form className="form">
+        <form className="form" onSubmit={onSubmit}>
           <div className="select">
             <label>Subject</label>
             <select
               class="form-select"
               aria-label="Default select example"
               style={{ width: "50%" }}
+              value={subject}
+              onChange={(t)=>setSubject(t)}
             >
               <option selected>Select Subjects</option>
               <option value="1">Physical Science</option>
@@ -61,6 +73,9 @@ const AddLesson = () => {
               class="form-select"
               aria-label="Default select example"
               style={{ width: "50%" }}
+              value={grade}
+              onChange={(t)=>setGrade(t)}
+
             >
               <option selected>Select Grade</option>
               <option value="1">08</option>
@@ -79,6 +94,9 @@ const AddLesson = () => {
               class="form-control"
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
+              value={topic}
+              onChange={(t)=>setTop(t)}
+
             />
           </div>
           <div class="mb-3">
@@ -89,6 +107,8 @@ const AddLesson = () => {
               class="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
+              value={description}
+              onChange={(t)=>setDescription(t)}
             ></textarea>
           </div>
           <label className="upload">Upload Lesson</label>

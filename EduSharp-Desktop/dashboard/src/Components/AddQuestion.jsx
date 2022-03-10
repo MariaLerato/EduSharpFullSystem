@@ -7,9 +7,19 @@ import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "./images/video.png";
 import {useNavigate} from 'react-router-dom'
-
+import Users from './Authentication-firebase/reuse'
 
 const AddQuestion = () => {
+
+  const [subject,setSubject] = useState()
+  const [grade,setGrade] =useState()
+  const [topic,setTop] = useState()
+  const [file,setFile] = useState()
+  const [description,setDescription ] = useState()
+
+  const onSubmit = ()=>{
+    Users.addItem(subject,grade,description,topic,file,'question')
+  }
   const navigate = useNavigate()
   return (
     <div className="Cont">
@@ -31,13 +41,15 @@ const AddQuestion = () => {
         <h3>Add Question Paper</h3>
         {/* <div className="form"> */}
         {/* <h4  style={{marginLeft:'2%'}}>Edit Lesson</h4> */}
-        <form className="form">
+        <form className="form" onSubmit={onSubmit}>
           <div className="select">
             <label>Subject</label>
             <select
               class="form-select"
               aria-label="Default select example"
               style={{ width: "50%" }}
+              value={subject}
+              onChange={(t)=>setSubject(t)}
             >
               <option selected>Select Subjects</option>
               <option value="1">Physical Science</option>
@@ -62,6 +74,8 @@ const AddQuestion = () => {
               class="form-select"
               aria-label="Default select example"
               style={{ width: "50%" }}
+              value={grade}
+              onChange={(t)=>setGrade(t)}
             >
               <option selected>Select Grade</option>
               <option value="1">08</option>
@@ -80,6 +94,8 @@ const AddQuestion = () => {
               class="form-control"
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
+              value={topic}
+              onChange={(t)=>setTop(t)}
             />
           </div>
           <div class="mb-3">
@@ -90,6 +106,8 @@ const AddQuestion = () => {
               class="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
+              value={description}
+              onChange={(t)=>setDescription(t)}
             ></textarea>
           </div>
           <label className="upload">Upload Question Paper</label>
@@ -100,6 +118,8 @@ const AddQuestion = () => {
               id="inputGroupFile03"
               aria-describedby="inputGroupFileAddon03"
               aria-label="Upload"
+              value={file}
+              // onChange={()}
             />
           </div>
           <button type="submit" className="button">
