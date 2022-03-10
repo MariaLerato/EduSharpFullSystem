@@ -8,8 +8,8 @@
 .head{
     display: flex;
     justify-content: space-between;
-
 }
+
 .headBar{
     background:rgba(44, 44, 44, 0.5);  
 }
@@ -22,7 +22,9 @@
 }
 .ContentContainer{
 width: 100%;
+
 }
+
 .logoBar{
     padding:2%;
     margin-top: -1%;
@@ -244,3 +246,177 @@ input{
     margin-top: 5%;
     
 }
+.Cont{
+    /* width: 100%; */
+    display: flex;
+}
+.sidenav{
+    flex: 1;
+    background-color: rgb(16, 16, 54);
+    height: 100vh;
+    padding-top: 2%;
+    color:white;
+    font-size: 20px;
+}
+.app{
+    flex: 6;
+    padding:2%;
+    /* margin-top: 1%; */
+
+}
+.app h3{
+    font-size: 35px;
+    margin-bottom: 3%;
+    /* text-align: center; */
+}
+.form{
+margin-top: 2%;
+width: 55%;
+/* margin:auto */
+
+}
+
+
+select{
+    width: 40%;
+
+}
+
+.mb-3{
+    margin-top: 4%;
+}
+.button{
+    width: 25%;
+    align-items: flex-start;
+    margin-left: -1px;
+    border-radius: 5px;
+    border-color: rgb(16, 16, 54);
+    background-color: transparent;
+    color: rgb(16, 16, 54);
+}
+#back{
+    width: 25%;
+    border: 1px solid;
+    margin: 4%;
+    border-radius: 5px;
+    background-color: rgb(53, 53, 116);
+    /* background-color: transparent; */
+    color: white;
+    font-weight: 200 !important;
+      /* text-decoration: underline; */
+}
+.tabs{
+    border: none;
+    margin-left: 20%;
+}
+
+.lessonLink{
+    padding: 15%;
+    font-weight: 400;
+    font-size: 15px;
+}
+.contentContainer{
+    background-color: white;
+    flex: 6;
+    padding:2%;
+    margin-top: -2%;
+}
+.search{
+    height: 50px;
+    margin-left: -1%;
+    border:none;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.card-body{
+    height: 80px;
+    background:rgba(133, 133, 133, 0.5);
+    /* margin-top: -5%; */
+    color:white;
+    font-weight: 600;
+}
+#exampleFormControlInput1{
+    height: 40px;
+    margin-left: -1px;
+}
+.card{
+    margin-top: 3%;
+    margin-left: 3%;
+}
+.lessonLink a:hover{
+    text-decoration: underline;
+    transition: 0.8ms;
+}
+.lessonLink a{
+    color: white;
+    text-decoration: none;
+}
+
+
+
+#inputGroupFile03{
+    height: 40px;
+    margin-top: -2%;
+    margin-left: -1px;
+
+}
+
+
+.form h4{
+    /* margin-top: -4%; */
+    font-size: 35px;
+    font-weight: 400;
+}
+
+.picker{
+    display: flex;
+}
+
+.select{
+    /* padding-left: -12%;
+    width: 45%;
+    padding-top: -2%;
+    border:1px solid rgb(133, 131, 131);
+    margin:2%;
+    margin-left: 8%;
+    margin-top: -1%;
+    border-radius: 5px; */
+    text-align: start;
+    margin-top: 3%;
+    /* padding:2% */
+}
+
+
+
+.form-select{
+    /* margin-left: 2%;
+    width: 20%;
+    height: 40px; */
+    /* padding:2% */
+    width: 10px;
+}
+.textarea{
+    margin-left: 13%;
+   width: 45%; 
+    border-radius: 5px;
+}
+label{
+    font-size: 18px;
+    color:rgb(16, 16, 54);
+    font-weight: 500;
+
+}
+.descript{
+    margin-top: -2%;
+}
+.date{
+    height: 40px;
+   width: 45%;
+}
+
+
+
+
+
+

@@ -46,16 +46,17 @@ export const Sidemenu = () => {
     </div>
     <div className="grids">
       <div className="card1">
-    <Link to={'./AddLesson'}>
+    <Link to={'/AddLesson'}>
       <h2>Lessons</h2>
     </Link> 
+
         <p>
           Adding different types of lessons that are available for the client to view or participate in. This section includes, uploading lessons, editing them and deleting the lesson that is no longer used
         </p>
 
       </div>
       <div className="card2">
-       <Link to={'./AddQuestion'}>
+       <Link to={'/AddQuestion'}>
        <h2>Question Papers</h2>
        </Link> 
         <p>
@@ -64,7 +65,7 @@ export const Sidemenu = () => {
 
       </div>
       <div className="card3">
-        <Link to={'./AddBook'}>
+        <Link to={'/AddBook'}>
              <h2>Books</h2>
         </Link>
    

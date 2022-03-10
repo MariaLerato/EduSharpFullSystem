@@ -204,30 +204,32 @@ a{
     /* padding:2%; */
     font-size: 20px;
     display: flex;
+    margin-top: 1%;
    
 }
 .screens a{
     color:white
 }
+.screens a:hover{
+    text-decoration: underline;
+}
 .menu-container{
-  
     padding:2%;
-  
     margin-top: -2%;
-    /* width: 100%;    */
     background-image: url('https://images.pexels.com/photos/6334492/pexels-photo-6334492.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-    height: 60vh;
+    height: 70vh;
     background-position-x: center;
     background-position-y: center;
-  
-    /* background:rgba(219, 217, 217, 0.5); */
-    /* margin-left: 1%; */
+
 }
+
+
+
 #link{
       display: flex;
    justify-content: space-between;
@@ -240,6 +242,7 @@ a{
     color: #d3d3d3;
     font-weight: 400;
     padding-left: 1%;
+    margin-top: 5%;  
 }
 .text{
     width: 45%;
