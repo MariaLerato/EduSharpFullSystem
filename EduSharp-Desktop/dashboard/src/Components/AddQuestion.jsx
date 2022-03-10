@@ -4,7 +4,7 @@ import logo from "./images/image.png";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import styled from "styled-components";
-import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "./images/video.png";
 import {useNavigate} from 'react-router-dom'
 
