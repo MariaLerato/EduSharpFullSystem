@@ -111,7 +111,7 @@ margin-left: 50%;
     /* margin:1%; */
     padding:2% 4%;
      border:none ;
-     margin-top: -5%;
+     margin-top: -6%;
     border-radius: 5px;
     color:rgb(223, 217, 223);
     font-weight: 700;
@@ -136,13 +136,13 @@ margin-left: 50%;
 }
 .logButton{
     margin-top:-2%;
-    padding:2% 13%;
+    padding:1.5% 13%;
     border-color:rgb(199, 46, 46);
     border-radius: 5px;
     color:rgb(199, 46, 46);
    margin-left:2% ;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     background-color: transparent;
 }
 .Register input{

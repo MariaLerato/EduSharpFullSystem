@@ -46,7 +46,7 @@ export const AddLesson = () => {
           </div>
 <table>
   <tr>
-    <td className="menu2">
+    {/* <td className="menu2">
     <div >
     <div className='head-container2'>
           <img src={logo} alt ='' className='picture' ></img>
@@ -60,7 +60,7 @@ export const AddLesson = () => {
           <i className='fa fa-users '></i>Manage Users<br/>
       </div>
       </div>
-    </td>
+    </td> */}
     <td className='MyData'>
 
     <div >
