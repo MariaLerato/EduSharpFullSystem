@@ -16,7 +16,6 @@ export const ViewLesson = () => {
        <a href="/ViewLessons">
          <p>View Lessons</p>
        </a>
-    
     </div>
  
   </div>

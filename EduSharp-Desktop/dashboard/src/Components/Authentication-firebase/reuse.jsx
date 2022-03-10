@@ -38,7 +38,7 @@ class Users {
                  .then(() => {
                     //return
 
-                    console.log('--++---+++---')
+           
                    
                  })
                  .catch((error) => {
@@ -91,10 +91,8 @@ class Users {
   addItem(subject,grade,description,topic,file,filename,item){
       //item=>{lessons,question paper,books}
       const id=localStorage.getItem('userid')
-     
-
       console.log('llllll')
-      if(!subject||!grade||!description||!topic||file||item||filename)return {
+      if(!subject||!grade||!description||!topic||!file||!item||!filename)return {
         'status':'Error',
         'message':'Please enter all the information!'
       }
