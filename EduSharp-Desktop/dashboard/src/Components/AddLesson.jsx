@@ -3,9 +3,10 @@ import './AddLesson.css'
 import logo from './images/image.png'
 import styled from "styled-components";
 import Image from './images/video.png'
+import reuse from './Authentication-firebase/reuse';
 
 export const AddLesson = () => {
-  
+  console.log(reuse.addItem(),'-=-=-=-=-==-')
   const Tab = styled.button`
     font-size: 20px;
     padding: 10px 60px;
@@ -42,7 +43,7 @@ export const AddLesson = () => {
             <i className="fa fa-user-circle fa-2x"></i>
             <div className="icon">
             <i className="fa fa-bell"></i>
-            </div>
+            </div> 
           </div>
 <table>
   <tr>
