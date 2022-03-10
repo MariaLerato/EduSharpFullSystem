@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './images/image.png'
 import books from "./images/books-book-pages-read-literature-159866.webp"
 
-export const ViewBooks = () => {
+export const ViewLesson = () => {
   return<div className="Cont">
   <div className="sidenav">
     <div className="header">
@@ -10,20 +10,19 @@ export const ViewBooks = () => {
       <p>EduSharp</p>
     </div>
     <div className="lessonLink">
-     <a href="/AddBook" >
-        <p>Add Book</p>
+     <a href="/AddLesson" >
+        <p>Add Lesson</p>
        </a> 
-       <a href="/ViewBooks">
-         <p>View Books</p>
+       <a href="/ViewLessons">
+         <p>View Lessons</p>
        </a>
-    
     </div>
  
   </div>
   <div className='contentContainer'>
     <div >
       <i className='fa fa-search fa-2x'/> 
-     <input type={'search'} placeholder={'Search Books ..'} className={'search'}/>
+     <input type={'search'} placeholder={'Search Lessons ..'} className={'search'}/>
       <div class="card" style={{width: "18rem"}}>
   <img src={books} class="card-img-top" alt="..."/>
   <div class="card-body">
@@ -40,4 +39,4 @@ export const ViewBooks = () => {
   </div>;
 }
 
-export  default ViewBooks;
+export  default ViewLesson;
