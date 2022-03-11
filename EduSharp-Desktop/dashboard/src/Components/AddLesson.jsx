@@ -8,6 +8,7 @@ import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 import Image from "./images/video.png";
 import {useNavigate} from 'react-router-dom'
 import Users from './Authentication-firebase/reuse'
+import Sidenav from "./Sidenav/Sidenav";
 
 const AddLesson = () => {
   const navigate = useNavigate()
@@ -18,11 +19,19 @@ const AddLesson = () => {
   const [description,setDescription ] = useState()
 
   const onSubmit = ()=>{
-    Users.addItem(subject,grade,description,topic,file,'lesson')
+    Users.addItem(subject,grade,description,topic,file,'lessons')
   }
+
+  const btns=[{href:'/AddLesson',text:'Add Lesson'},{href:'/ViewLessons',text:'View Lessons'}]
+
+  //How to get viewlessons
+  // reuse.viewItems("lessons").then(res=>console.log('promis',res))
+
+
   return (
     <div className="Cont">
-      <div className="sidenav">
+      <Sidenav sidebtns={btns}/>
+      {/* <div className="sidenav">
         <div className="header">
           <img src={logo} alt={"edusharp"} width={50} height={50} />
           <p>EduSharp</p>
@@ -35,7 +44,7 @@ const AddLesson = () => {
             <p>View Lessons</p>
           </a>
         </div>
-      </div>
+      </div> */}
       <div className="app">
         <h3>Add Lessons</h3>
         {/* <div className="form"> */}
