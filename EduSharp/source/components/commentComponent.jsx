@@ -81,7 +81,7 @@ const CommentComponent = ({ data, onPress, profilePress, menuPress, likePress, n
             <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', height: 60 }}>
                 <Image onPress={profilePress} source={data.item.downloadUrl ? { uri: data.item.downloadUrl } : require("../../assets/images/user.png")} style={{ borderRadius: 45, width: 45, height: 45 }} />
                 <View style={{ paddingHorizontal: 10, width: '82%' }}>
-                    <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{data.item.name}</Text>
+                    <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{data.item.name} "==="</Text>
                     <Text style={{ fontSize: SIZES.h4, }}>{days}</Text>
                 </View>
                 <Icon onPress={menuPress} type="material-community" name="dots-vertical" />
