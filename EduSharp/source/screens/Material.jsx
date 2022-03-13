@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker } from 'react-native'
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker, FlatList } from 'react-native'
 import { Icon, Card, BottomSheet, Input, ListItem } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
 import ProgressIndicator from '../components/progressIndicator';
@@ -8,10 +8,12 @@ import * as DocumentPicker from 'expo-document-picker';
 import { v4 as uuidv4 } from 'uuid'
 import Info from '../mock/Q&A'
 import { useEffect } from 'react';
-import { firestore, storage } from '../BackendFirebase/configue/Firebase';
+import { auth, firestore, storage } from '../BackendFirebase/configue/Firebase';
+import MaterialComponent from '../components/materialcomponent';
+import GeneralService from '../BackendFirebase/services/GeneralService';
 
 
-const Material = () => {
+const Material = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
     //     setToggle(!toggle)
@@ -20,6 +22,7 @@ const Material = () => {
     const [share, setShare] = useState(false);
     const [modalVisible, setVisible] = useState(false);
 
+    const [alertColor, setalertColor] = useState('');
     const [selectedGrade, setselectedGrade] = useState('Grade 8');
     const [selectedSubject, setselectedSubject] = useState('Mathematics');
     const [topic, settopic] = useState(null);
@@ -30,44 +33,135 @@ const Material = () => {
     const [post, setpost] = useState([]);
     const [fileUrl, setfileUrl] = useState('');
     const [filename, setfilename] = useState('');
+    const [userID, setuserID] = useState('');
+    const [key, setkey] = useState('')
 
+    const handleLike = (key) => {
+        const data = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            createdAt: new Date()
+        }
+        GeneralService.post("likes", data, navigation).then(res => {
+            setalert(true);
+            setalertMessage("Liked");
+        })
+            .catch(err => {
+                setalert(true);
+                setalertMessage(err);
+            });
+    }
 
+    const handleStare = (key) => {
+        const data = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            createdAt: new Date()
+        }
+        GeneralService.post("stares", data, navigation).then(res => {
+            setalert(true);
+            setalertMessage("Liked");
+        })
+            .catch(err => {
+                setalert(true);
+                setalertMessage(err)
+            })
+    }
+
+    const handleShare = (key) => {
+        const data = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            createdAt: new Date()
+        }
+
+    }
+
+    const handleAddPost = () => {
+
+        setloading(true);
+        if (selectedGrade != null && selectedSubject != null && topic != null && description != null) {
+            let values = {
+                grade: selectedGrade,
+                subject: selectedSubject,
+                userID: auth.currentUser.uid,
+                topic: topic,
+                description: description,
+                status: true,
+                illustrationURL: null,
+                downloadUrl: null,
+                visibility: true,
+                downloadable: true,
+                createdAt: new Date().toString()
+            }
+            GeneralService.post("materials", values, navigation).then((res) => {
+                setloading(false);
+                setalert(true);
+                setalertMessage('Content is posted successfully.');
+                setVisible(false);
+                setalertColor(COLORS.Black)
+                console.log(res.data);
+            }).catch((err) => {
+                setalert(true);
+                setloading(false);
+                setalertColor(COLORS.Danger)
+                setalertMessage('Erroor has occured, please ry again in a moment.');
+                console.log(err);
+            })
+        } else {
+            setalert(true);
+            setloading(false);
+            setalertMessage("Please provide enought infomation for soliderity.");
+        }
+    }
 
     const getPost = async () => {
-        await firestore.collection("materials").get().then(async(querySnapshot) => {
+        await firestore.collection("materials").get().then(async (querySnapshot) => {
             console.log('Total users: ', querySnapshot.size);
             const data = [];
-           await querySnapshot.forEach(async(documentSnapshot) => {
-               
-                await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(res => {
-                    let dataset = {
-                        key: documentSnapshot.id,
-                        createdAt: documentSnapshot.data().createdAt,
-                        description: documentSnapshot.data().description,
-                        grade: documentSnapshot.data().grade,
-                        illustrationURL: documentSnapshot.data().illustrationURL,
-                        status: documentSnapshot.data().status,
-                        subject: documentSnapshot.data().subject,
-                        topic: documentSnapshot.data().topic,
-                        userID: documentSnapshot.data().userID,
-                        email: res.data().email,
-                        location: res.data().location,
-                        name: res.data().name,
-                        phonenumber: res.data().phonenumber,
-                    }
-                    data.push(dataset);
-                    
-                })
-                setpost(data);
-                console.log(data);
-            });
+            await querySnapshot.forEach(async (documentSnapshot) => {
 
-            
-        }).catch(err => {
-            console.log('====================================');
-            console.log(err, "==>>==>");
-            console.log('====================================');
-        });
+                await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
+
+
+                    await firestore.collection("likes").where('postKey', '==', documentSnapshot.id).get().then(async (reslikes) => {
+
+                        await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
+
+                            console.log(reslikes.size, rescomments.size, "==>>==>");
+                            let dataset = {
+                                key: documentSnapshot.id,
+                                likes: reslikes.size,
+                                comments: rescomments.size,
+                                createdAt: documentSnapshot.data().createdAt,
+                                description: documentSnapshot.data().description,
+                                grade: documentSnapshot.data().grade,
+                                downloadUrl: documentSnapshot.data().downloadUrl,
+                                status: documentSnapshot.data().status,
+                                subject: documentSnapshot.data().subject,
+                                topic: documentSnapshot.data().topic,
+                                userID: documentSnapshot.data().userID,
+                                email: res.data().email,
+                                location: res.data().location,
+                                name: res.data().name,
+                                image: res.data().profileUrl ? res.data().profileUrl : null,
+                                phonenumber: res.data().phonenumber,
+                            }
+                            data.push(dataset);
+                        })
+
+                    })
+                    setpost(data);
+                    console.log(data);
+                });
+
+
+            }).catch(err => {
+                console.log('====================================');
+                console.log(err, "==>>==>");
+                console.log('====================================');
+            });
+        })
     }
 
     const SelectFile = async () => {
@@ -88,91 +182,6 @@ const Material = () => {
 
 
     }
-
-    const handleAddPost = async () => {
-        setloading(true);
-
-        // uploadImageAsync();
-        if (fileUrl == '') {
-            if (selectedGrade != null && selectedSubject != null && topic != null && description != null) {
-                let values = {
-                    grade: selectedGrade,
-                    subject: selectedSubject,
-                    userID: auth.currentUser.uid,
-                    content: topic,
-                    description: description,
-                    status: true,
-                    fileUrl: null,
-                    downloadUrl: null,
-                    visibility: true,
-                    downloadable: true,
-                    createdAt: new Date(),
-                }
-                GeneralService.post("materials", values, navigation).then((res) => {
-                    setloading(false);
-                    setalert(true);
-                    setalertMessage('Content is posted successfully.');
-                    setVisible(false);
-                    console.log(res.data);
-                }).catch((err) => {
-                    setalert(true);
-                    setloading(false);
-                    setalertMessage('Erroor has occured, please ry again in a moment.');
-                    console.log(err);
-                })
-            } else {
-                setalert(true);
-                setloading(false);
-                setalertMessage("Please provide enought infomation for soliderity.");
-            }
-        }
-        else {
-            storage.ref("files").child('material').child(uuid.v4()).put(fileUrl).then((res) => {
-                console.log(res);
-            }).catch((err) => {
-                console.log(err);
-            })
-        }
-    }
-
-
-    const MaterialCard = () => {
-        return (
-            <View>
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
-                </View>
-                {Info.material.map(data =>
-                    <Card key={data.id} containerStyle={{ borderRadius: 10, }} >
-                        <Card.FeaturedTitle>
-                            <View style={Styles.cardHeader}>
-                                <Image source={data.picUser} style={{ width: 40, height: 40, borderRadius: 50 }} />
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 250 }}>
-                                    <View style={{ marginLeft: '4%' }}>
-                                        <Text style={{ fontSize: 18 }}>{data.name}</Text>
-                                        <Text>{data.time}</Text>
-                                    </View>
-                                    <TouchableOpacity onPress={() => setIsVisible(true)} style={{ alignSelf: "flex-end" }}>
-                                        <Icon name={'ellipsis-v'} type={'font-awesome'} style={{ right: '0%', marginBottom: 20, width: 8, height: 24 }} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </Card.FeaturedTitle>
-                        <Card.Image source={data.pic} style={{ width: '100%', height: 200 }}>
-                            <View style={{ backgroundColor: 'black', opacity: 0.7, marginTop: 'auto', borderRadius: 10 }}>
-                                <Text style={{ color: 'white', padding: '2%', fontWeight: '600', fontSize: 25, paddingLeft: '4%' }}>{data.title}</Text>
-                                <Text style={{ color: 'white', padding: '2%', paddingLeft: '4%', fontSize: 15 }}>{data.subtitle}</Text>
-                            </View>
-                        </Card.Image>
-                    </Card>
-                )}
-
-            </View>
-        )
-    }
-
-   
-   
 
     const uploadImageAsync = async () => {
 
@@ -202,12 +211,20 @@ const Material = () => {
         getPost();
 
     }, [])
+
     return (
         <>
             <View style={Styles.container}>
                 <View style={Styles.header}>
-                    <Text style={Styles.headerText}>Material</Text>
-                    <TouchableOpacity style={Styles.searchIcon}>
+                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                        <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
+                            <Icon type="material-community" name="arrow-left" size={26} />
+                            <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
+                                Material
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={Styles.touchable} onPress={() => navigation.navigate("search")}>
                         <Icon name='search' type='font-awesome' size={23} color={COLORS.primary} />
                     </TouchableOpacity>
                 </View>
@@ -223,10 +240,14 @@ const Material = () => {
                             style={Styles.toggle}
                         /> */}
                     </View>
-                    <MaterialCard />
+                    <FlatList data={post} renderItem={(data, index) => (
+                        <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                            likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies",{key: data.item.key,type:"file"})}} navigation={navigation} />
+                    )}
+                    />
 
                 </ScrollView>
-                <TouchableOpacity onPress={() => setVisible(true)} style={{ width: 60, height: 60, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', alignSelf: 'flex-end', marginTop: '-16%', marginBottom: '1%', marginRight: '2%' }}>
+                <TouchableOpacity onPress={() => setVisible(true)} style={{ marginHorizontal: 20, marginVertical: 20, width: 60, height: 60, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', alignSelf: 'flex-end' }}>
                     <Icon name={'plus'} type={'font-awesome'} size={30} color={COLORS.White} />
                 </TouchableOpacity>
                 <View>
@@ -276,18 +297,22 @@ const Material = () => {
                                 </View>
                                 <View style={Styles.modalInput}>
                                     <Input
-                                        placeholder={'content'}
+                                        placeholder={'State the topic'}
+                                        value={topic}
+                                        onChangeText={(e) => settopic(e)}
                                         containerStyle={{ backgroundColor: COLORS.White, height: '100%', borderRadius: 10, padding: '1%' }}
                                         inputContainerStyle={{ borderColor: 'white' }}
-
                                     />
                                 </View>
                                 <View style={Styles.modalInputDes}>
                                     <Input
                                         placeholder={'Description'}
-                                        containerStyle={{ backgroundColor: COLORS.White, height: '100%', borderRadius: 10, padding: '2%' }}
+                                        keyboardType={'twitter'}
+                                        value={description}
+                                        multiline
+                                        onChangeText={(e) => setdescription(e)}
+                                        containerStyle={{ backgroundColor: COLORS.White, height: '100%', borderRadius: 10, padding: 1 }}
                                         inputContainerStyle={{ borderColor: 'white' }}
-
                                     />
                                 </View>
 
@@ -318,17 +343,40 @@ const Material = () => {
                             <TouchableOpacity onPress={() => setIsVisible(false)}>
                                 <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
                             </TouchableOpacity >
-                            <View style={{ borderTopEndRadius: 20, padding: '2%', borderTopStartRadius: 60, paddingBottom: '-2%' }}>
-                                {
-                                    Info.materialItems.map((item, l) =>
-                                        <ListItem key={item.id} style={{ color: '#7DB4DA', borderRadius: 20 }} >
-                                            <ListItem.Content style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                                <Icon type={'font-awesome'} name={item.icon} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                                <ListItem.Title style={{ color: '#7DB4DA', fontWeight: '700', paddingLeft: '2%', fontSize: 16 }}>{item.name}</ListItem.Title>
-                                            </ListItem.Content>
-                                        </ListItem>
-                                    )
-                                }
+                            <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
+
+                                <Text style={{ marginVertical: 5 }}>Post Menu</Text>
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'font-awesome'} name={"eye"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Hide Post"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"pencil"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"share"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"item.icon"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"item.name"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"delete"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+
                             </View>
                         </View>
                     </BottomSheet>
@@ -364,16 +412,15 @@ const Styles = StyleSheet.create({
         marginRight: '2%'
     },
     header: {
-        display: 'flex',
         flexDirection: 'row',
-        marginTop: '4%',
-        justifyContent: 'space-between',
         borderBottomWidth: 0.5,
-        borderBottomColor: '#E9E9E9'
+        borderBottomColor: '#E9E9E9',
+        width: '100%',
+        justifyContent: 'space-between'
     },
     headerText: {
-        fontWeight: '600',
-        fontSize: 25
+        fontSize: SIZES.h1,
+        fontWeight: '100'
     },
     searchIcon: {
         marginRight: '2%'
