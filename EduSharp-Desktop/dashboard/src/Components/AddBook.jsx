@@ -11,7 +11,7 @@ import Users from './Authentication-firebase/reuse'
 
 const AddLesson = () => {
   const navigate = useNavigate()
-  
+   
   const [subject,setSubject] = useState()
   const [grade,setGrade] =useState()
   const [topic,setTop] = useState()
@@ -20,7 +20,6 @@ const AddLesson = () => {
 
   const onSubmit = ()=>{
     Users.addItem(subject,grade,description,topic,file,'book')
-    
   }
   return (
     <div className="Cont">
