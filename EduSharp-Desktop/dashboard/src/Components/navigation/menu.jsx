@@ -27,7 +27,8 @@ import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
 import reuse from "../Authentication-firebase/reuse";
-
+import Notification from "../Notification/Notification";
+import Manageusers from "../Manageusers/Manageusers";
 const Menu = () => {
 
  
@@ -44,6 +45,8 @@ const Menu = () => {
                 <Route path={"/AddBook"} element={<AddBook />} />
                 <Route path={"/AddLesson"} element={<AddLesson/>} />
                 <Route path={"/AddQuestion"} element={<AddQuestion />} />
+                <Route path={"/notifications"} element={<Notification />} />
+                <Route path={"/users"} element={<Manageusers/>} />
              
               </Routes>
             </div>
