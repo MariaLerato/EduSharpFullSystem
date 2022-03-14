@@ -2,14 +2,14 @@ import React,{useState,useEffect} from "react";
 import logo from "../images/image.png";
 import "../StyleSheet.css";
 import "font-awesome/css/font-awesome.min.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import SidenavBtn from "../ReuseblesComps/SideNav/SidenavBtn";
 import reuse from "../Authentication-firebase/reuse";
+import Users from "../Authentication-firebase/reuse"
 
 export const Sidemenu = () => {
   const[pdffile,setPdfFile]=useState()
-
- 
+  const navigate = useNavigate()
   const handlesubmit=()=>{
    // console.log('adasdada')
   reuse.addItem("LO",12,"something","topic",pdffile,pdffile.name,"books")
@@ -35,6 +35,9 @@ export const Sidemenu = () => {
       console.log('select a file')
     }
   }
+  const LogOut = ()=>{
+Users.signOut(navigate)
+  }
   return (
     <>
    
@@ -52,8 +55,9 @@ export const Sidemenu = () => {
           <li><a href="/home">Home</a></li>
           <li><a href="/notifications">Notifications</a></li>
           <li><a href="/complaint">Complaints</a></li>
-          <li><a href="/settings">Settings</a></li>
           <li><a href="/users">Manage Users</a></li>
+         <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
+
         </ul>
         {/* <SidenavBtn title="Home" path="/home" current="home"/>
         <SidenavBtn title="Notifications" path="/Notification" current="Notification"/>

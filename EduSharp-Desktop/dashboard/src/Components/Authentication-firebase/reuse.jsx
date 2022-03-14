@@ -74,9 +74,10 @@ class Users {
         console.log("reset password error:" + error);
       });
   }
-  signOut() {
+  signOut(navigate) {
     localStorage.removeItem("userid");
     auth.signOut();
+    navigate('/signIn')
   }
   isLogIn() {
     const id = localStorage.getItem("userid");

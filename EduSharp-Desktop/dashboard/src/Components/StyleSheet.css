@@ -208,6 +208,7 @@ a{
     font-size: 20px;
     display: flex;
     margin-top: 1%;
+
    
 }
 .screens a{
@@ -225,7 +226,7 @@ a{
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-    height: 70vh;
+    height: 75vh;
     background-position-x: center;
     background-position-y: center;
 
@@ -248,12 +249,26 @@ a{
 }
 .text{
     width: 45%;
-    margin-top: 5%;
+    margin-top: 8%;
 }
 .text h2{
     font-size: 45px;
     color:#e5e5e2;
     font-weight: 500;
+}
+
+
+.signOut{
+    border: rgb(243, 236, 236) 1px solid;
+    background-color: transparent;
+    color: rgb(243, 236, 236);
+    font-weight: 700;
+    font-size: 20px;
+}
+.signOut:hover{
+    text-decoration: underline 2px;
+    /* font-size: 25px; */
+    transition: 2s;
 }
 .text p{
     color:white;
@@ -275,9 +290,10 @@ a{
     padding:4%;
     margin-right: 4%;
     background-color: #eddeb4;
-    height: 30vh;
+    height: 95%;
 
 }
+
 .card1 h2{
     color: white;
     text-decoration: underline;
@@ -285,31 +301,32 @@ a{
 }
 .card1 p{
     padding-top: 2%;
-    font-size: 18px;
+    font-size: 16px;
 }
 .card2{
     border:  1px solid #d4ddf8;
     padding:4%;
     margin-right: 4%;
     background-color: #d4ddf8;
-    height: 30vh;
+    height: 95%;
 }
 .card2 p{
     padding-top: 2%;
-    font-size: 18px;
+    font-size: 16px;
 }
+
 .card2 h2{
     color: white;
     text-decoration: underline;
 }
 .card3 p{
-    padding-top: 2%;
-    font-size: 18px;
+    padding-top: 1%;
+    font-size: 16px;
 }
 .card3{
     border:  1px solid #9cf0c6;
     padding:4% ;
-    height: 30vh;
+    height: 95%;
     background-color: #9cf0c6;
 }
 .card3 h2{

@@ -27,16 +27,20 @@ import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
 import reuse from "../Authentication-firebase/reuse";
+import ResetPassword from "../GetStarted/resetPassword";
 
 const Menu = () => {
 
- 
-  
     return (
         <BrowserRouter>
+
           {reuse.isLogIn() ? (
             <div className="appMainContainer">
               <Routes>
+              {/* <Route path={'/signIn'} element={<LogIn />}/>
+                <Route path={'/signUp'} element={<Register />}/>
+                <Route path="/" element={<Landing/>}/>
+                <Route path="/resetPassword" element={<ResetPassword/>}/> */}
                 <Route path="/" element={<Navigate to={'/home'} replace={true}/>}/>
                 <Route path="/signIn" element={<Navigate to={'/home'} replace={true}/>}/>
                 <Route path="/signUp" element={<Navigate to={'/home'} replace={true}/>}/>
@@ -51,6 +55,7 @@ const Menu = () => {
             <Routes>
                 <Route path={'/signIn'} element={<LogIn />}/>
                 <Route path={'/signUp'} element={<Register />}/>
+                <Route path="/resetPassword" element={<ResetPassword/>}/>
                 <Route path="/" element={<Landing/>}/>
                 <Route path={'/home'} element={<Home/>}/>
 

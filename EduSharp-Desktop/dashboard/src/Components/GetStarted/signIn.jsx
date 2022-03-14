@@ -18,7 +18,6 @@ const LogIn = () => {
       Users.login(email, password, navigate,setLoad);
       
   };
-
   return (
     <div className="ContainerRegister">
       <div className="backBody">
@@ -29,7 +28,7 @@ const LogIn = () => {
           </div>
           <h3>Administration</h3>
         </div>
-        <div className="signBody" style={{ marginTop: "5%" }}>
+        <div className="signBody" style={{ marginTop: "8%" }}>
           <div className="headings">
             <h1>Sign In To Your Account.</h1>
           </div>
