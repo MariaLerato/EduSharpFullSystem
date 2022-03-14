@@ -48,7 +48,9 @@ const Menu = () => {
                 <Route path={"/AddBook"} element={<AddBook />} />
                 <Route path={"/AddLesson"} element={<AddLesson/>} />
                 <Route path={"/AddQuestion"} element={<AddQuestion />} />
-             
+              <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
+              <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
+              <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
               </Routes>
             </div>
           ) : (
@@ -60,7 +62,7 @@ const Menu = () => {
                 <Route path={'/home'} element={<Home/>}/>
 
                 <Route path={'/AddBook'} element={<AddBook/>}/>
-                <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
+               
                 <Route path={'/ReportBooks'} element={<ReportBooks/>}/>
 
                 <Route path={'/AddLesson'} element={<AddLesson/>}/>
