@@ -8,6 +8,7 @@ import GeneralService from "../BackendFirebase/services/GeneralService";
 import { auth, firestore } from "../BackendFirebase/configue/Firebase";
 import { useRoute } from "@react-navigation/native";
 import { Divider } from "react-native-paper";
+import * as Notifications from 'expo-notifications';
 import CommentComponent from "../components/commentComponent";
 
 const RepliesContainer = ({ navigation }) => {
@@ -32,6 +33,7 @@ const RepliesContainer = ({ navigation }) => {
     const [days, setdays] = useState('');
     const [comment, setcomment] = useState('');
     const [comments, setcomments] = useState([]);
+    const [postObject, setpostObject] = useState(null);
 
     const handleDaysCalculation = (date) => {
 
@@ -72,7 +74,7 @@ const RepliesContainer = ({ navigation }) => {
     }
 
 
-    const handleLike = (key) => {
+    const handleLike = (key, token, topic,desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
@@ -81,6 +83,7 @@ const RepliesContainer = ({ navigation }) => {
         GeneralService.post("likes", data, navigation).then(res => {
             setalert(true);
             setalertMessage("Liked");
+            schedulePushNotification("liked your post.",token, topic,desc);
         })
             .catch(err => {
                 setalert(true);
@@ -88,22 +91,22 @@ const RepliesContainer = ({ navigation }) => {
             })
     }
 
-    const handleCommentLike = (key) => {
-        const data = {
-            user: auth.currentUser.uid,
-            postKey: key,
-            createdAt: new Date()
-        }
-        GeneralService.post("comment_likes", data, navigation).then(res => {
-            setalert(true);
-            setalertMessage("Liked");
-        })
-            .catch(err => {
-                setalert(true);
-                setalertMessage(err)
-            })
-    }
+    async function schedulePushNotification(task,token, topic,desc) {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: `${myName} ${task}`,
+            body: `${topic}\n${desc}`,
+            data: { data: 'goes here' },
+          },
+          trigger: { seconds: 2,channelId:token },
 
+        }).then(res=>{
+            console.log(res);
+        }).catch(err=>{
+            console.log(err);
+        });
+      }
+      
     const handleStare = (key) => {
         const data = {
             user: auth.currentUser.uid,
@@ -120,13 +123,62 @@ const RepliesContainer = ({ navigation }) => {
             })
     }
 
-    const handleShare = (key) => {
+    const handleShare = (key, token, topic,desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
+        schedulePushNotification("shared your post.",token, topic,desc);
+    }
 
+    const handleCommentLike = (key, token, topic,desc) => {
+        const data = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            createdAt: new Date()
+        }
+        GeneralService.post("comment_likes", data, navigation).then(res => {
+            setalert(true);
+            setalertMessage("Liked");
+            schedulePushNotification("liked your comment.",token, topic,desc);
+        })
+            .catch(err => {
+                setalert(true);
+                setalertMessage(err)
+            })
+    }
+
+    
+    const ReportPost = async (key, token, topic,desc) => {
+        await firestore.collection("questionAndAnswers").doc(key).update({ Reported: true }).then(async (querySnapshot) => {
+            console.log(querySnapshot);
+            console.log(key);
+            setIsVisible(false);
+            schedulePushNotification("report your post for rule violation.",token, topic,desc);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const DeletePost = async (key) => {
+        await firestore.collection("questionAndAnswers").doc(key).delete().then(async (querySnapshot) => {
+            console.log(" Post deleted successfully ,querySnapshot");
+            console.log(key);
+            setIsVisible(false);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const SetVisibility = async (key) => {
+        await firestore.collection("questionAndAnswers").doc(key).update({ visibility: postObject.visibility ? false : true }).then(async (querySnapshot) => {
+            console.log(querySnapshot);
+            console.log(key);
+            setIsVisible(false);
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     const handleAddPost = () => {
@@ -222,13 +274,14 @@ const RepliesContainer = ({ navigation }) => {
                             topic: documentSnapshot.data().topic,
                             userID: documentSnapshot.data().userID,
                             email: res.data().email,
+                            token: res.data().token ? res.data().token : null,
                             location: res.data().location,
                             name: res.data().name,
                             image: res.data().profileUrl ? res.data().profileUrl : null,
                             phonenumber: res.data().phonenumber,
                         }
 
-
+                        setpostObject(dataset);
                         setpost(dataset);
                     })
 
@@ -299,20 +352,19 @@ const RepliesContainer = ({ navigation }) => {
                             likes: reslikes.size,
                             location: res.data().location,
                             name: res.data().name,
+                            token: res.data().token ? res.data().token : null,
                             image: res.data().profileUrl ? res.data().profileUrl : null,
                             phonenumber: res.data().phonenumber,
                         }
 
                         data.push(dataset);
-                        console.log('====================================');
-                        console.log(dataset);
-                        console.log('====================================');
+                        setpostObject(dataset);
                     })
                 })
             })
 
             setcomments(data);
-            console.log(data, "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+            console.log(data);
 
         })
     }
@@ -361,26 +413,26 @@ const RepliesContainer = ({ navigation }) => {
                         <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{post.name}</Text>
                         <Text style={{ fontSize: SIZES.h4, }}>{post.datePosted}</Text>
                     </View>
-                    <Icon onPress={() => { }} type="material-community" name="dots-vertical" />
+                    <Icon onPress={() => { setkey(post.key); setuserID(post.userID); setIsVisible(true)}} type="material-community" name="dots-vertical" />
                 </View>
 
                 <Text style={{ fontSize: SIZES.h2, }}>{post.topic}</Text>
                 <Text style={{ fontSize: SIZES.h4 }}>{post.description}</Text>
-                {post.downloadUrl ? <Image source={""} style={{ height: 210, width: '100%', borderRadius: 7 }} /> : null}
+                {post.downloadUrl ? <Image source={{ uri: post.downloadUrl }} style={{ height: 210, width: '100%', borderRadius: 7 }} /> : null}
                 <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
 
                 <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto' }}>
                     <View style={{ paddingHorizontal: 10 }}>
                         <TouchableOpacity onPress={() => { }}>
-                            <Text style={{ fontSize: SIZES.h4, textAlign: 'right' }}>{post.likes} comment</Text>
+                            <Text style={{ fontSize: SIZES.h4, textAlign: 'right' }}>{post.comments} comment</Text>
                         </TouchableOpacity>
                         <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                             <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <Icon onPress={handleLike} name={'thumb-up'} type={'material-community'} size={26} color={'#3D93D1'} />
+                                <Icon onPress={handleLike(post.key,post.token,post.topic,post.description)} name={'thumb-up'} type={'material-community'} size={26} color={'#3D93D1'} />
                                 <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{post.likes}</Text>
                             </View>
                             <Icon onPress={handleStare} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
-                            <Icon onPress={handleShare} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
+                            <Icon onPress={handleShare(post.key,post.token,post.topic,post.description)} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
                             <Icon name={'comment'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
                         </View>
                     </View>
@@ -391,11 +443,13 @@ const RepliesContainer = ({ navigation }) => {
             <Text style={[Styles.subtext, { fontSize: SIZES.body3, fontWeight: '900' }]}>Replies</Text>
 
             <View style={{ paddingLeft: 20 }}>
-                <FlatList data={comments} renderItem={(data, index) => (
+              {comments ?<FlatList data={comments} renderItem={(data, index) => (
                     <CommentComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-                        likePress={() => { handleCommentLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
+                        likePress={() => { handleCommentLike(data.item.key,data.item.token,data.item.topic,data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key,data.item.token,data.item.topic,data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
                 )}
-                />
+                />: <View>
+                     <Text style={[Styles.subtext, { fontSize: SIZES.body3, fontWeight: '900' }]}>No comments are made yet! Stay put.</Text>
+                    </View>}
             </View>
             {commenting ? <View style={{ position: 'absolute', bottom: 0, width: '100%', flexDirection: 'row', alignItems: 'center', paddingRight: 30 }}>
                 <Input style={{ maxHeight: 180, minHeight: 45, }} values={comment} onChangeText={(e) => { setcomment(e) }} keyboardType={"default"} multiline />
@@ -409,16 +463,66 @@ const RepliesContainer = ({ navigation }) => {
                         <TouchableOpacity onPress={() => setIsVisible(false)}>
                             <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
                         </TouchableOpacity >
-                        {
-                            Info.items.map((item, l) =>
-                                <ListItem key={item.id} style={{ color: '#7DB4DA', }} >
-                                    <ListItem.Content style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'font-awesome'} name={item.icon} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                        <ListItem.Title style={{ color: '#7DB4DA', fontWeight: '700', paddingLeft: '2%', fontSize: 16 }}>{item.name}</ListItem.Title>
-                                    </ListItem.Content>
-                                </ListItem>
-                            )
-                        }
+                        <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
+
+                            <Text style={{ marginVertical: 5, fontSize: SIZES.body2 ,fontWeight:'800'}}>Post Menu</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={postObject ? postObject.visibility ? "account-lock" : "account-lock" : "menu"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{postObject ? postObject.visibility ? "Hide post" : "Show post" : "Hide post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"pencil"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3  }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"share"} size={20} color={'#000000'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#000000', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"view-module"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"View post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+
+                            <TouchableOpacity style={{ marginHorizontal: 5,  width: '100%' ,paddingVertical:3}} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key,postObject.token,postObject.topic,postObject.description) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"alert-rhombus"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Report this post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"delete"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+
+                        </View>
                     </View>
                 </BottomSheet>
             </View>
