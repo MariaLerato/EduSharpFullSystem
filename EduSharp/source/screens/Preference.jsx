@@ -15,8 +15,18 @@ const Preference = ({ navigation })=> {
     return (
     <>
     <View>
-            <View style ={{top:10, margin:30, borderTopRadius: 5, borderTopRightRadius: 5 }}>
-           <Text>Welcome to Preference page</Text>
+            <View style ={{top:20, margin:30, borderTopRadius: 5, borderTopRightRadius: 5}}>
+           <Text>Languages </Text>
+           {/* <Icon
+                name='star'
+                type='FontAwesome'
+                color='#4B7BE8'
+              /> */}
+
+              <Text>Font size</Text>
+              <Text>Enable dark theme</Text>
+              <Text>Font size</Text>
+              <Text>Font size</Text>
     </View>
 
 
