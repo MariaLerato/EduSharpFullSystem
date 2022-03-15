@@ -1,12 +1,16 @@
 import React from 'react'
 import Users from '../Authentication-firebase/reuse'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
 import logo from '../images/image.png'
-const LogOut = ()=>{
-  Users.signOut(navigate)
-    }
+
+
 
 const LinkNav = () => {
+  const navigate = useNavigate()
+  const LogOut = ()=>{
+    Users.signOut(navigate)
+    console.log('455555555555555555555555555');
+  }
   return (
     <div id="link" className='bann'>
     <div className="head-container">

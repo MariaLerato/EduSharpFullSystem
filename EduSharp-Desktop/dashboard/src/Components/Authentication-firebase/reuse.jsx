@@ -77,6 +77,7 @@ class Users {
   signOut(navigate) {
     localStorage.removeItem("userid");
     auth.signOut();
+    console.log('=======================================');
     navigate('/signIn')
   }
   isLogIn() {
