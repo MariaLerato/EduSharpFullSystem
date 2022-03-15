@@ -6,7 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  ImageBackground,TouchableOpacity
+  ImageBackground
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Checkbox, Snackbar, TextInput } from "react-native-paper";
@@ -26,7 +26,7 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Profile = ({navigation}) => {
+const education = () => {
   const [name, setName] = useState();
   
   const [email, setemail] = useState();
@@ -79,25 +79,21 @@ const Profile = ({navigation}) => {
      
       <View style={{flex: 1,
     marginBottom: 390,backgroundColor:'#fff'}}>
-                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Profile</Text>
+                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Education</Text>
 
 <View style={{paddingHorizontal:20}}>
       <TextInput
-      style={{width: '100%'}}
+      style={{width: '100%', shadowColor:'white'}}
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
       value={name}
       onChangeText={text =>setName(text)}
     />
 
-<TextInput style={{marginTop:20, width: '100%'}}
-      
-      left={<TextInput.Icon name="email" />}
-      right={<TextInput.Icon name="pencil" />}
-      value={email}
-      onChangeText={text =>setemail(text)}
-
-    />
+<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20 }}>
+<Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text>
+<Text style={{fontSize:16, color:'blue'}}> + Add Subject</Text>
+</View>
 </View>
 
               <Button
@@ -124,7 +120,8 @@ const Profile = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white'
+    backgroundColor: "white"
+
   },
   row1: {
     height: row1Height,
@@ -155,7 +152,7 @@ const styles = StyleSheet.create({
       height:'100%'
   }
 });
-export default Profile;
+export default education;
 
 {
   /* <Stack.Navigator
