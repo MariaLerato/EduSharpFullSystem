@@ -53,7 +53,7 @@ Users.signOut(navigate)
       {/* <input type={'file'}  placeholder="add file" onChange={(e)=>setPdfFile(e.target.files[0])}/>
       <button onClick={handlesubmit}>fff</button> */}
           <li><a href="/home">Home</a></li>
-          <li><a href="/notifications">Notifications</a></li>
+          <li><a href="/Notification">Notifications</a></li>
           <li><a href="/complaint">Complaints</a></li>
           <li><a href="/users">Manage Users</a></li>
          <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
