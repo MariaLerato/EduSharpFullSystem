@@ -103,7 +103,7 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
                         </View>
                         <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
                         <Icon onPress={sharePress} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
-                        <Icon name={'comment'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
+                        <Icon name={'view-gallery-outline'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
                     </View>
                 </View>
             </View>

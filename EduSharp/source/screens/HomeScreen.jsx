@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
   const responseListener = useRef();
 
 
-
+// Function that request no
  const registerForPushNotificationsAsync=async()=> {
     let token;
     if (Constants.isDevice) {
@@ -72,8 +72,9 @@ const HomeScreen = ({ navigation }) => {
         alert('Failed to get push token for push notification!');
         return;
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
+      token = (await Notifications.set()).data;
       console.log(token);
+      await Notifications.subscribe(token); 
     } else {
       alert('Must use physical device for Push Notifications');
     }

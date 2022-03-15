@@ -58,6 +58,7 @@ width: 100%;
     color:rgb(226, 226, 219);
     margin-top: 1%;
 }
+
 .imgContainer{
     position: absolute;
     top: 0;
@@ -127,9 +128,76 @@ margin-left: 50%;
 .forgotButton:hover{
     text-decoration: underline 2px;
 }
+.banner{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding:1%;
+    margin:2%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
+}
+.banner p{
+    font-size: 20px;
+    font-weight: 600;
+    padding-top: 4%;
+   color: rgba(94, 93, 93, 0.5);
+   
+}
+.banner a{
+    padding:2%
+
+}
+.manageHeader{
+    padding:1%;
+    display: flex;
+    justify-content: space-between;
+}
+.manageHeader h3{
+    font-weight: 400;
+    font-family: cursive;
+    /* color: rgba(8, 8, 8, 0.5); */
+    font-size: 20px;
+    text-decoration: underline;
+}
+.iconsActive{
+    display: flex;
+    margin-right: 2%; 
+}
+.iconsActive i{
+    margin-top: 2%;
+    color: black;
+}
+.searchIcon{
+    width:250px;
+    padding:4%;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 5px;
+    /* margin-right: 2%; */
+}
+
+.iconsActive p{
+    background-color: rgb(77, 77, 167);
+    padding: 6%;
+    /* padding-left: -8%; */
+    margin-left: -8%;
+}
+.listUsers{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding:1%;
+    margin:2%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
+}
+.listUsers p{
+
+}
+
 .create{
     margin-left:5%;
-    padding:1% 12%;
+    width: 395px;
+    padding:1%;
     /* border-color:rgb(199, 46, 46); */
     border-radius: 5px;
     /* color:rgb(199, 46, 46); */
@@ -146,7 +214,8 @@ margin-left: 50%;
 .logButton{
     margin-top:-2%;
     margin-left:5%;
-    padding:1% 11%;
+    width: 395px;
+    padding:1%;
     /* border-color:rgb(199, 46, 46); */
     border-radius: 5px;
     /* color:rgb(199, 46, 46); */
@@ -254,7 +323,7 @@ input{
 .sub{
     align-items: flex-end;
     width: 40%;
-    margin-top: 25%;
+    margin-top: 20%;
     font-size: 20px;
     padding-right: 3%;
     font-weight: 500;
@@ -272,12 +341,17 @@ input{
     font-size: 25px;
     border-radius: 8px;
 }
+.bann{
+    background:rgba(94, 93, 93, 0.5)
+}
+
 .bodyContent h1{
     text-align: center;
     font-size: 40px;
     color:rgb(236, 157, 157);
    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .CardResourses{
     width: 80%;
     margin: auto;
@@ -288,6 +362,7 @@ input{
     margin-top: 5%;
     
 }
+
 .Cont{
     /* width: 100%; */
     display: flex;

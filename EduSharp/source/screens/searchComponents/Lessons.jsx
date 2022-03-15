@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker, FlatList } from 'react-native'
-import { Icon, Card, BottomSheet, Input, ListItem, Divider } from 'react-native-elements';
+import { Icon, Card, BottomSheet, Input, ListItem } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
-import ProgressIndicator from '../components/progressIndicator';
-import { COLORS, FONTS, SIZES, icons } from "../constants";
+import ProgressIndicator from '../../components/progressIndicator';
+import { COLORS, FONTS, SIZES, icons } from "../../constants";
 import * as DocumentPicker from 'expo-document-picker';
-import { v4 as uuidv4 } from 'uuid'
-import Info from '../mock/Q&A'
-import { useEffect } from 'react';
-import { auth, firestore, storage } from '../BackendFirebase/configue/Firebase';
-import MaterialComponent from '../components/materialcomponent';
-import GeneralService from '../BackendFirebase/services/GeneralService';
+import MaterialComponent from '../../components/materialcomponent';
 
+import { auth, firestore } from '../../BackendFirebase/configue/Firebase';
+import GeneralService from '../../BackendFirebase/services/GeneralService';
 
-const Material = ({ navigation }) => {
+const SearchLessons = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
     //     setToggle(!toggle)
@@ -21,7 +18,6 @@ const Material = ({ navigation }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [share, setShare] = useState(false);
     const [modalVisible, setVisible] = useState(false);
-    const [postObject, setpostObject] = useState(null);
 
     const [alertColor, setalertColor] = useState('');
     const [selectedGrade, setselectedGrade] = useState('Grade 8');
@@ -35,8 +31,9 @@ const Material = ({ navigation }) => {
     const [fileUrl, setfileUrl] = useState('');
     const [filename, setfilename] = useState('');
     const [userID, setuserID] = useState('');
-    const [key, setkey] = useState('');
+    const [key, setkey] = useState('')
 
+ 
     const handleLike = (key, token, topic,desc) => {
         const data = {
             user: auth.currentUser.uid,
@@ -98,6 +95,7 @@ const Material = ({ navigation }) => {
         }
         schedulePushNotification("shared your post.",token, topic,desc);
     }
+
 
     const handleSavePost = async (downloadUri) => {
 
@@ -186,7 +184,7 @@ const Material = ({ navigation }) => {
                 downloadable: true,
                 createdAt: new Date().toString()
             }
-            GeneralService.post("materials", values, navigation).then((res) => {
+            GeneralService.post("lessons", values, navigation).then((res) => {
                 setloading(false);
                 setalert(true);
                 setalertMessage('Content is posted successfully.');
@@ -208,11 +206,14 @@ const Material = ({ navigation }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("materials").get().then(async (querySnapshot) => {
+        await firestore.collection("lessons").get().then(async (querySnapshot) => {
             console.log('Total users: ', querySnapshot.size);
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
+                console.log('====================================');
+                console.log(documentSnapshot.data().userID);
+                console.log('====================================');
                 await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
 
 
@@ -268,8 +269,8 @@ const Material = ({ navigation }) => {
 
             setfileUrl(result);
             setfilename(result.name);
-            console.log(result.file);
-            uploadImageAsync(result.file);
+            console.log(result);
+
         }
 
 
@@ -304,15 +305,19 @@ const Material = ({ navigation }) => {
 
     }, [])
 
+
     return (
         <>
             <View style={Styles.container}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
+                </View>
                 <View style={Styles.header}>
                     <TouchableOpacity onPress={() => { navigation.goBack() }}>
                         <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
                             <Icon type="material-community" name="arrow-left" size={26} />
                             <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
-                                Material
+                                Lessons
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -322,13 +327,13 @@ const Material = ({ navigation }) => {
                 </View>
                 <ScrollView>
                     <View style={Styles.subtitle}>
-                        <Text style={Styles.text}>View only the content that is relevent to my course</Text>
+                        <Text style={[Styles.text, { fontSize: SIZES.body3 }]}>View only the content that is relevent to my course</Text>
                         {/* <ToggleSwitch
                             isOn={true}
                             onColor={'#3D93D1'}
                             offColor="red"
                             labelStyle={{ color: "black", fontWeight: '900' }}
-                            size="medium" 
+                            size="medium"
                             style={Styles.toggle}
                         /> */}
                     </View>
@@ -339,9 +344,6 @@ const Material = ({ navigation }) => {
                     />
 
                 </ScrollView>
-                <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
-                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
-                </TouchableOpacity>
                 <View>
 
                     <Modal
@@ -407,18 +409,16 @@ const Material = ({ navigation }) => {
                                         inputContainerStyle={{ borderColor: 'white' }}
                                     />
                                 </View>
-
                                 <TouchableOpacity style={Styles.fileContainer}>
                                     <Input
-                                        placeholder={'Add pdf'}
-                                        value={filename}
-                                        onChangeText={(e) => setfilename(e)}
-                                        containerStyle={{ borderRadius: 1, padding: '1%', height: '100%' }}
+                                        placeholder={'Add Video'}
+                                        containerStyle={{ height: '100%', borderRadius: 20 }}
                                         inputContainerStyle={{ borderColor: '#EAEAEA' }}
                                         rightIcon={<Icon name={'file'} type={'font-awesome'} size={18} color={COLORS.primary} onPress={SelectFile} />}
                                     />
                                 </TouchableOpacity>
-                                <View style={[Styles.buttons, { marginVertical: 10 }]}>
+
+                                <View style={Styles.buttons}>
                                     <TouchableOpacity onPress={() => setVisible(false)} style={Styles.cancel}><Text style={Styles.cancelText}>Cancel</Text></TouchableOpacity>
                                     <TouchableOpacity onPress={handleAddPost} style={Styles.postbutton} ><Text style={Styles.postText}>Upload</Text></TouchableOpacity>
                                 </View>
@@ -431,7 +431,46 @@ const Material = ({ navigation }) => {
                     <BottomSheet
                         modalProps={{}}
                         isVisible={isVisible}>
-                                           <View style={{ paddingBottom: '1%', borderRadius: 5 }}>
+                        <View>
+                            <TouchableOpacity onPress={() => setIsVisible(false)}>
+                                <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
+                            </TouchableOpacity >
+                            <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
+
+                                <Text style={{ marginVertical: 5 }}>Post Menu</Text>
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'font-awesome'} name={"eye"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Hide Post"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"pencil"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"share"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"item.icon"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"item.name"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, }} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"delete"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                    </View>
+                                </TouchableOpacity >
+
+                            </View>
+                        </View>                    <View style={{ paddingBottom: '1%', borderRadius: 5 }}>
                         <TouchableOpacity onPress={() => setIsVisible(false)}>
                             <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
                         </TouchableOpacity >
@@ -525,7 +564,6 @@ const Styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
-        width: '50%'
     },
     toggle: {
         marginRight: '2%'
@@ -656,4 +694,4 @@ const Styles = StyleSheet.create({
 
 
 })
-export default Material
+export default SearchLessons
