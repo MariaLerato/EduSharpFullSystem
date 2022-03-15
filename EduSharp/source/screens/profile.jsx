@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,15 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  TextInput,
-  ImageBackground
+  ImageBackground,TouchableOpacity
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Checkbox, Snackbar, TextInput } from "react-native-paper";
+import { Icon, Input, Avatar } from "react-native-elements";
+import Styles from "../style/signinScreen";
+import { COLORS, SIZES, FONTS } from "../constants";
+import { db,auth } from "../BackendFirebase/configue/Firebase";
 
-import { Icon, Input,Avatar } from "react-native-elements";
 import ProfileHome from "../components/ProfileHome";
 import EditProfile from "../components/EditProfile";
 import EducProfile from "../components/EducProfile";
@@ -23,7 +26,33 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Profile = () => {
+const Profile = ({navigation}) => {
+  const [name, setName] = useState();
+  
+  const [email, setemail] = useState();
+ const [url,seturl] = useState();
+  //
+ 
+  const userId = auth.currentUser.uid;
+  const updateUser = () => {
+      db.ref('/users/' + userId).update({
+          name: name,
+          email: email,
+
+      });
+  };
+
+//   useEffect(() => {
+//     db.ref('/users/' + userId).on('value', value => {
+//         console.log(value, 'value')
+//         setName(value?.val().name)
+        
+//         setemail(value.val().email)
+
+//     })
+// }, [])
+
+
   const LocationArray = ["Home", "Profile", "Education"];
   const [location, setLocation] = useState("Education");
   const backgroundImg = {
@@ -42,24 +71,60 @@ const Profile = () => {
             <Avatar      source={profilimg}  style={styles.image} rounded/>
             <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/>
         </View>
-        <View style={styles.usernames}>
-          <Text style={{color:"rgba(0,0,0,1)",fontSize:16,fontWeight:'bold'}}>username</Text>
-          <Text style={{color:"rgba(0,0,0,.5)",fontStyle:'italic'}}>learner grade 11</Text>
+       
         </View>
-        {location === "Home" ? (
-          <ProfileHome setLocation={setLocation} />
-        ) : location === "Profile" ? (
-          <EditProfile />
-        ) : (
-          <EducProfile />
-        )}
+       
+        
+     
+     
+      <View style={{flex: 1,
+    marginBottom: 390,backgroundColor:'#fff'}}>
+                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Profile</Text>
+
+<View style={{paddingHorizontal:20}}>
+      <TextInput
+      style={{width: '100%'}}
+      left={<TextInput.Icon name="account" type="material-community" /> } 
+      right={<TextInput.Icon name="pencil" />}
+      value={name}
+      onChangeText={text =>setName(text)}
+    />
+
+<TextInput style={{marginTop:20, width: '100%'}}
+      
+      left={<TextInput.Icon name="email" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={email}
+      onChangeText={text =>setemail(text)}
+
+    />
+</View>
+
+              <Button
+                  title="Update"
+                  containerStyle={{
+                    marginTop: 30,
+                    borderRadius: 20,
+                  }}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    marginHorizontal: 20,
+                    backgroundColor: COLORS.primary,
+                  }}
+                  titleStyle={{
+                    color: COLORS.White,
+                  }}
+                  onPress={updateUser}
+                />
       </View>
+    
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'white'
   },
   row1: {
     height: row1Height,

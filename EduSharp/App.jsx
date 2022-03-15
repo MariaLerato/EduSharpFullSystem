@@ -23,6 +23,8 @@ import WelcomeScreen from './source/screens/welcome';
 import Lessons from './source/screens/Lessons';
 import QuestionPaper from './source/screens/QuestionPapers';
 import Pro from './source/screens/Pro';
+import Education from './source/screens/education';
+
 
 const Menu = () => {
     const Stack = createNativeStackNavigator()
@@ -51,6 +53,7 @@ const Menu = () => {
                 <Stack.Screen name={'downloads'} component={DownloadFiles} />
                 <Stack.Screen name={'videos'} component={VideoFiles} />
                 <Stack.Screen name={'search'} component={Search} />
+                <Stack.Screen name={'education'} component={Education}/>
                 <Stack.Screen name={'StarredReplies'} component={StarredReplies} />
                 <Stack.Screen name={'lessonscreen'} component={Lessons} />
                 <Stack.Screen name={'questionpaperscreen'} component={QuestionPaper} />
