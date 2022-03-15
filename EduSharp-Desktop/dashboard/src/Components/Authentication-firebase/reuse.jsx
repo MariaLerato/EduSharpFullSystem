@@ -93,10 +93,14 @@ class Users {
       const id=localStorage.getItem('userid')
      
 
-      console.log('llllll')
-      if(!subject||!grade||!description||!topic||file||item||filename)return {
-        'status':'Error',
-        'message':'Please enter all the information!'
+      console.log('=====')
+      if(!subject||!grade||!description||!topic||!file||!item||!filename) {
+        console.log('llllll')
+        return{
+
+          'status':'Error',
+          'message':'Please enter all the information!'
+        }
       }
       console.log(id,'------=-=---------========---------=---------=',item)
      

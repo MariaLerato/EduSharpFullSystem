@@ -10,7 +10,9 @@ export const Sidemenu = () => {
   const[pdffile,setPdfFile]=useState()
 
   const handlesubmit=()=>{
-  reuse.addItem("LO",12,"something","topic",pdffile,pdffile.name,"books")
+  reuse.addItem("LO",12,"something","topic",pdffile,pdffile?.name,"books").then(res=>{
+    console.log(res,'========')
+  })
   
   }
   
@@ -26,7 +28,8 @@ export const Sidemenu = () => {
       <div className="screens">
         {/* <div className="active"></div> */}
         <ul  >
-      
+        <input type={'file'}  placeholder="add file" onChange={(e)=>setPdfFile(e.target.files[0])}/>
+      <button onClick={handlesubmit}>fff</button>
           <li><a href="/home">Home</a></li>
           <li><a href="/notifications">Notifications</a></li>
           <li><a href="/complaint">Complaints</a></li>
