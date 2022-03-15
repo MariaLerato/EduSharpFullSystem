@@ -27,6 +27,7 @@ const width = Dimensions.get("window").width / 2 - 30;
 
 const Search = ({ navigation }) => {
   const [categoryIndex, setCategoryIndex] = React.useState(0);
+  
   const categories = [{item:"Q As",location:'QList'}, {item:"Material",location:'Material'},{ item:"Lesson",location:'QList'}, {item:"Papers",location:'QList'}];
 
   const CategoryList = () => {

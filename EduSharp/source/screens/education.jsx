@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  TouchableOpacity,
+  StatusBar,
   Dimensions,
   ImageBackground
 } from "react-native";
@@ -26,7 +26,7 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Pro = ({navigation}) => {
+const education = () => {
   const [name, setName] = useState();
   
   const [email, setemail] = useState();
@@ -73,38 +73,55 @@ const Pro = ({navigation}) => {
         </View>
        
         </View>
-       <View style={styles.elevated}>
-        <TouchableOpacity onPress={()=>navigation.navigate('profile')} >
-            <View style={styles.boxcontainer}>
-            <Icon name="person" size={22} style={{ color: COLORS.secondary, marginTop: 14,  }} />
+       
+        
+     
+     
+      <View style={{flex: 1,
+    marginBottom: 390,backgroundColor:'#fff'}}>
+                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Education</Text>
 
-              <Text style={styles.boxText}>Personal Information</Text>
-              <Icon name="arrow-forward-ios" size={20} style={{ color: COLORS.gray, marginTop: 14, paddingLeft: 90 }} />
+<View style={{paddingHorizontal:20}}>
+      <TextInput
+      style={{width: '100%', shadowColor:'white'}}
+      left={<TextInput.Icon name="account" type="material-community" /> } 
+      right={<TextInput.Icon name="pencil" />}
+      value={name}
+      onChangeText={text =>setName(text)}
+    />
 
-            </View>
+<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20 }}>
+<Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text>
+<Text style={{fontSize:16, color:'blue'}}> + Add Subject</Text>
+</View>
+</View>
 
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=>navigation.navigate('education')} >
-            <View style={styles.boxcontainer}>
-            <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14,  }} />
-
-              <Text style={styles.boxText}>Educational Information</Text>
-              <Icon name="arrow-forward-ios" size={20} style={{ color: COLORS.gray, marginTop: 14, paddingLeft: 70 }} />
-
-            </View>
-
-            </TouchableOpacity>
-              </View>
-      
+              <Button
+                  title="Update"
+                  containerStyle={{
+                    marginTop: 30,
+                    borderRadius: 20,
+                  }}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    marginHorizontal: 20,
+                    backgroundColor: COLORS.primary,
+                  }}
+                  titleStyle={{
+                    color: COLORS.White,
+                  }}
+                  onPress={updateUser}
+                />
+      </View>
+    
     </View>
   );
 };
-const { width} = Dimensions.get("screen");
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white'
+    backgroundColor: "white"
+
   },
   row1: {
     height: row1Height,
@@ -133,57 +150,9 @@ const styles = StyleSheet.create({
   image:{
       width:'100%',
       height:'100%'
-  },
-  innerBottom: {
-    paddingHorizontal: 15,
-    top: 50,
-  },
-
-  bottomView: {
-    flex: 1.5,
-    backgroundColor: "#fff",
-    bottom: 40,
-    borderTopStartRadius: 40,
-    borderTopEndRadius: 40,
-  },
-  elevated:{
-paddingHorizontal:20,
-top:-280
-  },
-  boxcontainer: {
-    width: width / 1.1,
-    height: height / 12.3,
-    elevation: 15,
-    borderRadius: 10,
-    backgroundColor: "#fff",
-    marginTop: 20,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-  },
-  logOut: {
-    paddingTop: 130,
-  },
-  containerStyle: {
-    width: 300,
-    marginVertical: 10,
-    borderColor: "gray",
-    elevation: 12,
-  },
-  buttonStyle: {
-    backgroundColor: "white",
-    borderColor: "transparent",
-    borderWidth: 0,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,.2)",
-  },
-
-  boxText: {
-    fontSize: 16,
-    marginTop: 15,
-  },
+  }
 });
-export default Pro;
+export default education;
 
 {
   /* <Stack.Navigator
@@ -196,5 +165,3 @@ export default Pro;
       <Stack.Screen name="Search" component={Search} />
     </Stack.Navigator> */
 }
-
-
