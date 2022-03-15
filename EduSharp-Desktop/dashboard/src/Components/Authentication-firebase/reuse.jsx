@@ -140,7 +140,7 @@ class Users {
   }
   viewItems(item) {
     const id = localStorage.getItem("userid");
-    
+    console.log("amariamariamariaamariamairiaamiair")
     var res=[];
    return firestore
       .collection(item)

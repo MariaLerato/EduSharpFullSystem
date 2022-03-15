@@ -6,6 +6,7 @@ import { Link,useNavigate } from "react-router-dom";
 import SidenavBtn from "../ReuseblesComps/SideNav/SidenavBtn";
 import reuse from "../Authentication-firebase/reuse";
 import Users from "../Authentication-firebase/reuse"
+import LinkNav from "./linkNav";
 
 export const Sidemenu = () => {
   const[pdffile,setPdfFile]=useState()
@@ -40,38 +41,11 @@ Users.signOut(navigate)
   }
   return (
     <>
-   
-    <div className="menu-container">
-      <div id="link">
-          <div className="head-container">
-        <img src={logo} alt="" className="picture" width={50} height={50}></img>
-        <h2>EduSharp</h2>
-      </div>
-      <div className="screens">
-        {/* <div className="active"></div> */}
-        <ul  >
-      {/* <input type={'file'}  placeholder="add file" onChange={(e)=>setPdfFile(e.target.files[0])}/>
-      <button onClick={handlesubmit}>fff</button> */}
-          <li><a href="/home">Home</a></li>
-          <li><a href="/notifications">Notifications</a></li>
-          <li><a href="/complaint">Complaints</a></li>
-          <li><a href="/users">Manage Users</a></li>
-         <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
 
-        </ul>
-        {/* <SidenavBtn title="Home" path="/home" current="home"/>
-        <SidenavBtn title="Notifications" path="/Notification" current="Notification"/>
-        <SidenavBtn
-         
-          title="Complaints"
-          path="/Complaints"
-          current="Complaints"
-        />
-        <SidenavBtn  title="Profile" path="/Profile"  current="Profile"/>
-        <SidenavBtn  title="Manage Users" path="/ManageUsers"  current="ManageUsers"/> */}
-     
-      </div>
-      </div>
+    <div className="menu-container">
+      
+     <LinkNav/>
+   
     
       <div className="text">
         <h2>Taking Education To new heights for learners in high school</h2>

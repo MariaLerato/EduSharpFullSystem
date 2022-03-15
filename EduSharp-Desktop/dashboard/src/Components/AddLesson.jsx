@@ -18,7 +18,8 @@ const AddLesson = () => {
   const [file,setFile] = useState()
   const [description,setDescription ] = useState()
 
-  const onSubmit = ()=>{
+  const onSubmit = (e)=>{
+    e.preventDefault()
     Users.addItem(subject,grade,description,topic,file,'lessons')
   }
 
@@ -57,7 +58,7 @@ const AddLesson = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={subject}
-              onChange={(t)=>setSubject(t)}
+              onChange={()=>setSubject()}
             >
               <option selected>Select Subjects</option>
               <option value="1">Physical Science</option>
@@ -83,7 +84,7 @@ const AddLesson = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={grade}
-              onChange={(t)=>setGrade(t)}
+              onChange={()=>setGrade()}
 
             >
               <option selected>Select Grade</option>
@@ -104,7 +105,7 @@ const AddLesson = () => {
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
               value={topic}
-              onChange={(t)=>setTop(t)}
+              onChange={()=>setTop()}
 
             />
           </div>
@@ -117,7 +118,7 @@ const AddLesson = () => {
               id="exampleFormControlTextarea1"
               rows="3"
               value={description}
-              onChange={(t)=>setDescription(t)}
+              onChange={()=>setDescription()}
             ></textarea>
           </div>
           <label className="upload">Upload Lesson</label>

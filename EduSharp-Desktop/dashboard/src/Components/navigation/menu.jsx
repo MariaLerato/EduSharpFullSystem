@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route ,Navigate,Link} from "react-router-dom";
 import  AddBook  from "../AddBook";
 import "../AddBook.css";
 import { ViewBooks } from "../../Components/ViewBooks";
@@ -28,14 +28,16 @@ import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
 import reuse from "../Authentication-firebase/reuse";
 import ResetPassword from "../GetStarted/resetPassword";
+import ManageUsers from "../GetStarted/manageUsers";
 
 const Menu = () => {
 
     return (
         <BrowserRouter>
-
+         
           {reuse.isLogIn() ? (
             <div className="appMainContainer">
+         
               <Routes>
               {/* <Route path={'/signIn'} element={<LogIn />}/>
                 <Route path={'/signUp'} element={<Register />}/>
@@ -51,6 +53,7 @@ const Menu = () => {
               <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
               <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
               <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
+              <Route path={"/manageUsers"} element={<ManageUsers/>}/>
               </Routes>
             </div>
           ) : (

@@ -272,12 +272,17 @@ input{
     font-size: 25px;
     border-radius: 8px;
 }
+.bann{
+    background:rgba(94, 93, 93, 0.5)
+}
+
 .bodyContent h1{
     text-align: center;
     font-size: 40px;
     color:rgb(236, 157, 157);
    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .CardResourses{
     width: 80%;
     margin: auto;
