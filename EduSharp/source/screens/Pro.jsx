@@ -13,26 +13,26 @@ import {
 // import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Icon, Button } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import * as ImagePicker from "expo-image-picker";
+// import * as ImagePicker from "expo-image-picker";
 
 const Pro = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   let openImagePickerAsync = async () => {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // let permissionResult =
+    //   await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      alert("Permission to access camera roll is required!");
-      return;
-    }
+    // if (permissionResult.granted === false) {
+    //   alert("Permission to access camera roll is required!");
+    //   return;
+    // }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    if (pickerResult.cancelled === true) {
-      return;
-    }
+    // let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    // if (pickerResult.cancelled === true) {
+    //   return;
+    // }
 
-    setSelectedImage({ localUri: pickerResult.uri });
+    // setSelectedImage({ localUri: pickerResult.uri });
   };
 
   return (
@@ -42,7 +42,7 @@ const Pro = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <ImageBackground
-          source={require("../images/Rectangle.jpg")}
+          source={require("../../assets/images/Rectangle.jpg")}
           style={{ height: Dimensions.get("window").height / 2.9 }}
         ></ImageBackground>
         {/*Bottom View*/}
@@ -68,7 +68,7 @@ const Pro = ({ navigation }) => {
                 />
               ) : (
                 <Image
-                  source={require("../images/Profile.jpg")}
+                  // source={require("../../assets/images/Profile.jpg")}
                   style={{
                     height: 120,
                     width: 120,

@@ -109,7 +109,7 @@ const [code, setcode] = useState(0);
      {code == 0?<SearchQList />:null}
      {code == 1?<SearchLessons/>:null}
      {code == 2?<SearchMaterial/>:null}
-     {code == 3?<SearchQuestionPaper/>:null}
+     {code == 3?<SearchQuestionPaper/>:null} 
     </View>
   );
 };
