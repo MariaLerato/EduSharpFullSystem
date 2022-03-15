@@ -143,7 +143,7 @@ const HomeScreen = ({ navigation }) => {
         }}
       >
         <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Material")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Pro")}>
             <View style={{ alignSelf: 'center', top: 20, }}>
               <FontAwesome5
                 name="folder-open"
@@ -161,7 +161,7 @@ const HomeScreen = ({ navigation }) => {
                 top: 30,
               }}
             >
-              Materials
+              Profile
             </Text>
           </TouchableOpacity>
         </Card>

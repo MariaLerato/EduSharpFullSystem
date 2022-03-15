@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import logo from './images/image.png'
 import books from "./images/books-book-pages-read-literature-159866.webp"
-
+import Users from './Authentication-firebase/reuse'
 export const ViewLesson = () => {
+   const [items,setItems] = useState([])
+  
+   const ViewLessons = ()=>{ 
+    Users.viewItems()
+    .then((res)=>{
+      console.log('data',res.data)
+    })
+    .catch((e)=>{
+      console.log('err',e)
+    })
+    useEffect(()=>{
+      Users.viewItems()
+    })
+  }
   return<div className="Cont">
   <div className="sidenav">
     <div className="header">

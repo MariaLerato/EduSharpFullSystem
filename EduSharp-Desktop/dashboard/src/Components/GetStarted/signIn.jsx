@@ -3,10 +3,11 @@ import "./style.css";
 import logo from "../images/image.png";
 import { useNavigate } from "react-router-dom";
 import Users from "../Authentication-firebase/reuse";
-import CircularProgress from "@mui/material/CircularProgress";
+// import CircularProgress from "@mui/material/CircularProgress";
 // import Button from '@mui/material/Button';
 
 const LogIn = () => {
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [load, setLoad] = useState(false);
@@ -18,7 +19,6 @@ const LogIn = () => {
       Users.login(email, password, navigate,setLoad);
       
   };
-
   return (
     <div className="ContainerRegister">
       <div className="backBody">
@@ -29,7 +29,7 @@ const LogIn = () => {
           </div>
           <h3>Administration</h3>
         </div>
-        <div className="signBody" style={{ marginTop: "5%" }}>
+        <div className="signBody" style={{ marginTop: "8%" }}>
           <div className="headings">
             <h1>Sign In To Your Account.</h1>
           </div>
@@ -64,7 +64,7 @@ const LogIn = () => {
               Forgot Password?
             </button>
             <div className="buttons">
-              {load && <CircularProgress color="success"/>}
+              {/* {load && <CircularProgress color="success"/>} */}
               <button className="logButton" onClick={SignIn} type={"submit"}>
                 Log In To Account
               </button>

@@ -22,8 +22,7 @@ import Profile from './source/screens/profile';
 import WelcomeScreen from './source/screens/welcome';
 import Lessons from './source/screens/Lessons';
 import QuestionPaper from './source/screens/QuestionPapers';
-
-
+import Pro from './source/screens/Pro';
 
 const Menu = () => {
     const Stack = createNativeStackNavigator()
@@ -34,13 +33,14 @@ const Menu = () => {
             <Stack.Navigator initialRouteName={'welcomeScreen'} screenOptions={{ headerShown: false }}
             >
                 
+                <Stack.Screen name={'Pro'} component={Pro}/>
                 <Stack.Screen name={'welcomeScreen'} component={WelcomeScreen} />
                 <Stack.Screen name={'home'} component={HomeScreen} />
                 <Stack.Screen name={'SplashScreen'} component={Splash} />
                 <Stack.Screen name={'register'} component={Register} />
                 <Stack.Screen name={'SignInScreen'} component={SignIn} />
                 <Stack.Screen name={'terms&conditions'} component={Terms} />
-                <Stack.Screen name={'Profile'} component={Profile} />
+                <Stack.Screen name={'profile'} component={Profile} />
                 <Stack.Screen name={'DashBoard'} component={DashBoard} />
                 <Stack.Screen name={'QList'} component={Questions} />
                 <Stack.Screen name={'Replies'} component={RepliesContainer} />

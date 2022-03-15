@@ -10,7 +10,7 @@ const Landing = ()=>{
             <div className='head'>
                 <div className='logo'>
                       <img src={logo} alt={'edusharp'} width={50} height={50}/>
-                <h3>EduSharp</h3>
+                     <h3>EduSharp</h3>
                 </div>
                     <h3>
                         Administration

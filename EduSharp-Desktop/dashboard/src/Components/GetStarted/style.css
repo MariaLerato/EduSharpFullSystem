@@ -1,5 +1,5 @@
 .ContainerLanding{
-    background-image: url('../images/lilies.webp');
+    background-image: url('https://cdn.pixabay.com/photo/2018/03/19/18/20/tea-time-3240766_960_720.jpg');
     background-repeat: no-repeat;
     height: 100vh;
     background-size:cover;
@@ -11,7 +11,7 @@
 }
 
 .headBar{
-    background:rgba(44, 44, 44, 0.5);  
+    background:rgba(131, 131, 131, 0.5);  
 }
 .Bar{
    display: flex;
@@ -39,6 +39,7 @@ width: 100%;
 .body{
     display: flex;
     justify-content: space-between;
+    color: white;
 }
 .logo{
     display: flex;
@@ -46,13 +47,18 @@ width: 100%;
     padding:2%;
     margin-top: -1%;
 }
+
 .logo h3{
     color:beige;
     font-size: 20px;
+    padding-top: 8%;
 }
+
 .head h3{
-    color:rgb(180, 180, 178)
+    color:rgb(226, 226, 219);
+    margin-top: 1%;
 }
+
 .imgContainer{
     position: absolute;
     top: 0;
@@ -65,12 +71,12 @@ width: 100%;
  height: 100%;
 }
 .ContainerRegister{
-    /* background-image: url('../images/white-phone.jpeg');
+     background-image: url('https://cdn.pixabay.com/photo/2017/12/31/09/34/book-3051871_960_720.jpg');
     background-repeat: no-repeat;
-    height: 100vh; */
-    /* background-size:cover;
-    background-attachment: fixed; */
-    /* object-fit: contain; */
+    height: 100vh; 
+     background-size:cover;
+    background-attachment: fixed; 
+     object-fit: contain; 
     position: relative;
     background-color: gray;
 }
@@ -91,7 +97,7 @@ width: 100%;
     font-size: 17px;
 }
 .signBody{
-margin-top: 2%;
+margin-top: 5%;
 margin-left: 50%;
 }
 .input-icons i{
@@ -110,18 +116,88 @@ margin-left: 50%;
 .forgotButton{
     margin-left:25%;
     /* margin:1%; */
-    padding:2% 4%;
+    padding:2%;
      border:none ;
      margin-top: -6%;
     border-radius: 5px;
-    color:rgb(223, 217, 223);
+    color:rgb(250, 250, 236);
     font-weight: 700;
     font-size: 15px;
     background-color: transparent;
 }
+.forgotButton:hover{
+    text-decoration: underline 2px;
+}
+.banner{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding:1%;
+    margin:2%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
+}
+.banner p{
+    font-size: 20px;
+    font-weight: 600;
+    padding-top: 4%;
+   color: rgba(94, 93, 93, 0.5);
+   
+}
+.banner a{
+    padding:2%
+
+}
+.manageHeader{
+    padding:1%;
+    display: flex;
+    justify-content: space-between;
+}
+.manageHeader h3{
+    font-weight: 400;
+    font-family: cursive;
+    /* color: rgba(8, 8, 8, 0.5); */
+    font-size: 20px;
+    text-decoration: underline;
+}
+.iconsActive{
+    display: flex;
+    margin-right: 2%; 
+}
+.iconsActive i{
+    margin-top: 2%;
+    color: black;
+}
+.searchIcon{
+    width:250px;
+    padding:4%;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 5px;
+    /* margin-right: 2%; */
+}
+
+.iconsActive p{
+    background-color: rgb(77, 77, 167);
+    padding: 6%;
+    /* padding-left: -8%; */
+    margin-left: -8%;
+}
+.listUsers{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding:1%;
+    margin:2%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
+}
+.listUsers p{
+
+}
+
 .create{
-    margin-left:2%;
-    padding:2% 14%;
+    margin-left:5%;
+    width: 395px;
+    padding:1%;
     /* border-color:rgb(199, 46, 46); */
     border-radius: 5px;
     /* color:rgb(199, 46, 46); */
@@ -129,37 +205,53 @@ margin-left: 50%;
     font-size: 20px;
     background-color: transparent;
     cursor: pointer;
-    border: 1px solid white;
-    color: white;
+    border: 2px solid rgb(199, 46, 46);
+    color: rgb(199, 46, 46);
 }
 .create:hover{
     box-shadow: 1px 1px 1px rgba(0,0,0,.3);
 }
 .logButton{
     margin-top:-2%;
-    padding:1.5% 13%;
-    border-color:rgb(199, 46, 46);
+    margin-left:5%;
+    width: 395px;
+    padding:1%;
+    /* border-color:rgb(199, 46, 46); */
     border-radius: 5px;
-    color:rgb(199, 46, 46);
-   margin-left:2% ;
+    /* color:rgb(199, 46, 46); */
     font-weight: 600;
-    font-size: 18px;
+    font-size: 20px;
     background-color: transparent;
+    cursor: pointer;
+    border: 2px solid rgb(199, 46, 46);
+    color: rgb(199, 46, 46);
 }
 .Register input{
-    width: 380px;
-    margin-left: -1%;
+    width: 395px;
+    margin-left: 2%;
 padding: 2%;
+font-weight: 600
 }
 .Register p{
-    color:rgb(250, 250, 236)
+    color:rgb(250, 250, 236);
+    font-weight: 700;
+}
+.Register a{
+    /* text-decoration: underline; */
+    font-size: 20px;
+    color:rgb(58, 58, 58);
+    font-weight: 600;
+}
+.Register a:hover{
+    text-decoration: underline 2px ;
+    transition: 10s;
 }
 input{
-    width: 50%;
-    height:20px;
+    width: 65%;
+    height:50px;
 }
 .body h2{
-    color:rgb(92, 91, 91);
+    color:rgb(226, 222, 222);
     width: 55%;
     padding:2%;
     font-size: 45px;
@@ -230,31 +322,36 @@ input{
 }
 .sub{
     align-items: flex-end;
-    /* text-align: left; */
     width: 40%;
-    margin-top: 18%;
-    font-size: 16px;
+    margin-top: 20%;
+    font-size: 20px;
     padding-right: 3%;
+    font-weight: 500;
 
 }
 .subtitle{
 
 }
 .click{
-    padding:4% 15%;
+    padding:3% 15%;
     border:none;
     background-color:rgb(77, 77, 167);
     color:white;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 25px;
     border-radius: 8px;
 }
+.bann{
+    background:rgba(94, 93, 93, 0.5)
+}
+
 .bodyContent h1{
     text-align: center;
     font-size: 40px;
     color:rgb(236, 157, 157);
    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .CardResourses{
     width: 80%;
     margin: auto;
@@ -265,6 +362,7 @@ input{
     margin-top: 5%;
     
 }
+
 .Cont{
     /* width: 100%; */
     display: flex;
