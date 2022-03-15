@@ -63,15 +63,12 @@ const Menu = () => {
                 <Route path="/resetPassword" element={<ResetPassword/>}/>
                 <Route path="/" element={<Landing/>}/>
                 <Route path={'/home'} element={<Home/>}/>
-
                 <Route path={'/AddBook'} element={<AddBook/>}/>
                
                 <Route path={'/ReportBooks'} element={<ReportBooks/>}/>
-
                 <Route path={'/AddLesson'} element={<AddLesson/>}/>
                 <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
                 <Route path={'./ReportLesson'} element={<ReportLesson/>}/>
-                
                 <Route path={'/AddQuestion'} element={<AddQuestion/>}/>
                 <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
                 <Route path={'./ReportPaper'} element={<ReportPaper/>}/>

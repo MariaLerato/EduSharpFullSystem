@@ -283,7 +283,7 @@ a{
     justify-content: center;
     margin-left: 20%;
     padding:2%;
-    margin-top: -5%;
+    margin-top: -15%;
 }
 .card1{
     border:  1px solid #eddeb4 ;
@@ -319,6 +319,8 @@ a{
     color: white;
     text-decoration: underline;
 }
+
+
 .card3 p{
     padding-top: 1%;
     font-size: 16px;
