@@ -8,6 +8,20 @@ import {
   Dimensions,
   ImageBackground
 } from "react-native";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Checkbox, Snackbar, TextInput } from "react-native-paper";
+import { Icon, Input, Avatar } from "react-native-elements";
+import Styles from "../style/signinScreen";
+import { COLORS, SIZES, FONTS } from "../constants";
+import { db,auth } from "../BackendFirebase/configue/Firebase";
+import firebase from "firebase";
+
+import ProfileHome from "../components/ProfileHome";
+import EditProfile from "../components/EditProfile";
+import EducProfile from "../components/EducProfile";
+import { Button } from "react-native-elements/dist/buttons/Button";
+
 // import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Icon, Button } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -19,6 +33,39 @@ const imageradius=imagesize/2;
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
 const row1Height = height * 0.3;
+
+const row2Height = height * 0.7;
+const Stack = createNativeStackNavigator();
+
+const Pro = ({navigation}) => {
+  const [name, setName] = useState({});
+  
+  const [email, setemail] = useState({});
+ const [url,seturl] = useState();
+ const db = firebase.firestore();
+
+ 
+  const userId = auth.currentUser.uid;
+  const updateUser = () => {
+      db.ref('/users/' + userId).update({
+          name: name,
+          email: email,
+
+      });
+  };
+
+  useEffect(()=>{
+    let item = [];
+    db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+    console.log(name,'thap')
+  
+  },[])
+
+const userName = name.name
+const userPhonenumber = name.phonenumber
+const userLocation = name.location
+ const userEmail = name.email
+
 const Pro = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -36,11 +83,25 @@ const Pro = ({ navigation }) => {
     //   return;
     // }
 
+
     // setSelectedImage({ localUri: pickerResult.uri });
   };
 
   const profilimg = { uri: 'https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' }
   return (
+
+    <View style={styles.container}>
+      <ImageBackground source={backgroundImg} resizeMode="cover" style={styles.row1}></ImageBackground>
+      <View style={styles.row2}>
+        <View style={styles.imgContainer}>
+            <Avatar      source={profilimg}  style={styles.image} rounded/>
+            <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/>
+        </View>
+        <Text
+              style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
+            >
+            {userName} 
+
     <>
       <ScrollView
         style={{ flex: 1, backgroundColor: "#ffffff" }}
@@ -59,11 +120,17 @@ const Pro = ({ navigation }) => {
             >
               {" "}
               User Name
+
             </Text>
             <Text style={{ fontSize: 16, textAlign: "center" }}>
               {" "}
               Learner: Grade(0)
             </Text>
+
+        </View>
+       <View style={styles.elevated}>
+        <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
+
 
             <View style={{ marginLeft: 120, top: -50 }}>
               {selectedImage ? (
@@ -102,9 +169,18 @@ const Pro = ({ navigation }) => {
 
             </View>
 
+
+            </TouchableOpacity>
+
+
+            <TouchableOpacity onPress={()=>navigation.navigate('education')} >
+            <View style={styles.boxcontainer}>
+            <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14,  }} />
+
             <TouchableOpacity onPress={() => navigation.navigate('education')} >
               <View style={styles.boxcontainer}>
                 <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14, }} />
+
 
                 <Text style={styles.boxText}>Educational Information</Text>
                 <Icon name="arrow-forward-ios" size={20} style={{ color: COLORS.gray, marginTop: 14, paddingLeft: 70 }} />
@@ -112,6 +188,23 @@ const Pro = ({ navigation }) => {
               </View>
 
             </TouchableOpacity>
+
+
+           
+              </View>
+              <View style={{bottom:20, position:'absolute', alignContent:'center', paddingHorizontal:20}}>
+              <Icon
+                name="logout"
+                size={25}
+                color="red"
+                onPress={navigation.goBack}
+              />
+            </View>
+             
+      
+    </View>
+  );
+
           </View>
 
         </View> */}
