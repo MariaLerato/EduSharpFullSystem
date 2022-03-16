@@ -14,10 +14,7 @@ import { Icon, Input, Avatar } from "react-native-elements";
 import Styles from "../style/signinScreen";
 import { COLORS, SIZES, FONTS } from "../constants";
 import { db,auth } from "../BackendFirebase/configue/Firebase";
-
-import ProfileHome from "../components/ProfileHome";
-import EditProfile from "../components/EditProfile";
-import EducProfile from "../components/EducProfile";
+import firebase from "firebase";
 import { Button } from "react-native-elements/dist/buttons/Button";
 const imagesize=100
 const imageradius=imagesize/2
@@ -26,20 +23,56 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Profile = ({navigation}) => {
-  const [name, setName] = useState();
-  
-  const [email, setemail] = useState();
- const [url,seturl] = useState();
-  //
- 
+const Profile = ({navigation, route}) => {
+  const [name, setName] = useState(route.params.userName);
+  const [email, setEmail] = useState(route.params.userEmail);
+  const [phone, setPhone] = useState(route.params.userPhone);
+  const [location, setLocation] = useState(route.params.userLocation);
   const userId = auth.currentUser.uid;
-  const updateUser = () => {
-      db.ref('/users/' + userId).update({
-          name: name,
-          email: email,
+  const db = firebase.firestore();
 
-      });
+  const updateUser = ()=>{
+    db.collection('users').doc(userId).update({name:name, email:email,location:location})
+  }
+
+
+// useEffect(()=>{
+//   let item = [];
+//   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+//   console.log(name)
+
+// },[])
+
+//   const Update = () => {
+//     firebase
+//       .database()
+//       .ref(`/users/${firebase.auth().currentUser.uid}`)
+//       .update({
+//         name: name,
+//         Email: Email,
+//       })
+//       .then(() => {
+//         Alert.alert("Update", "Your Profile was successfully Updated");
+//         // setisLoading(false);
+//       })
+//       .catch((err) => {
+//         // setisLoading(false);
+//         SetErrMessage(err.message);
+//         // setdisplayFormErr(true);
+//       });
+//   };
+
+  function OnnameChange(value) {
+    setName(value);
+  }
+ 
+  function OnEmailChange(value) {
+    setEmail(value);
+  }
+
+  const Logout = () => {
+    navigation.navigate("Login");
+    firebase.auth().signOut();
   };
 
 //   useEffect(() => {
@@ -54,7 +87,6 @@ const Profile = ({navigation}) => {
 
 
   const LocationArray = ["Home", "Profile", "Education"];
-  const [location, setLocation] = useState("Education");
   const backgroundImg = {
     uri: "https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   };
@@ -87,7 +119,7 @@ const Profile = ({navigation}) => {
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
       value={name}
-      onChangeText={text =>setName(text)}
+      onChangeText={text=>setName(text)}
     />
 
 <TextInput style={{marginTop:20, width: '100%'}}
@@ -95,9 +127,29 @@ const Profile = ({navigation}) => {
       left={<TextInput.Icon name="email" />}
       right={<TextInput.Icon name="pencil" />}
       value={email}
-      onChangeText={text =>setemail(text)}
+      onChangeText={(text)=>setEmail(text)}
 
     />
+
+{/* <TextInput style={{marginTop:20, width: '100%'}}
+      
+      left={<TextInput.Icon name="email" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={phone}
+      onChangeText={(text)=>setPhone(text)}
+
+    /> */}
+
+<TextInput style={{marginTop:20, width: '100%'}}
+      
+      left={<TextInput.Icon name="email" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={location}
+      onChangeText={(text)=>setLocation(text)}
+
+    />
+
+
 </View>
 
               <Button
@@ -114,7 +166,7 @@ const Profile = ({navigation}) => {
                   titleStyle={{
                     color: COLORS.White,
                   }}
-                  onPress={updateUser}
+                  onPress={updateUser()}
                 />
       </View>
     

@@ -4,8 +4,8 @@ import {
   Text,
   Image,
   StyleSheet,
-  StatusBar,
-  Dimensions,
+  StatusBar, TouchableOpacity,
+  Dimensions,Modal,
   ImageBackground
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,6 +27,9 @@ const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
 const education = () => {
+
+  const [modalVisible, setVisible] = useState(false)
+
   const [name, setName] = useState();
   
   const [email, setemail] = useState();
@@ -35,12 +38,19 @@ const education = () => {
  
   const userId = auth.currentUser.uid;
   const updateUser = () => {
-      db.ref('/users/' + userId).update({
+      db.collection('/users/' + userId).update({
           name: name,
           email: email,
 
       });
   };
+
+  useEffect(()=>{
+    let item = [];
+    db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+    console.log(name)
+  
+  },[])
 
 //   useEffect(() => {
 //     db.ref('/users/' + userId).on('value', value => {
@@ -92,7 +102,34 @@ const education = () => {
 
 <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20 }}>
 <Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text>
-<Text style={{fontSize:16, color:'blue'}}> + Add Subject</Text>
+
+
+<TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
+                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
+                </TouchableOpacity>
+                <View></View>
+<Text style={{fontSize:16, color:'blue'}}> + Add Subject
+
+{/* <Modal
+                        animationType={'slide'}
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            alert('Modal closed')
+                            setVisible(!modalVisible)
+                        }
+                        }
+                        presentationStyle={'overFullScreen'}
+                    >
+                        <View>
+                           
+                                <Text>Modeal</Text>
+
+                                
+
+                        </View>
+                    </Modal> */}
+</Text>
 </View>
 </View>
 

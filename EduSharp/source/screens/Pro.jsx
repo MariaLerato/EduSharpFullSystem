@@ -14,6 +14,7 @@ import { Icon, Input, Avatar } from "react-native-elements";
 import Styles from "../style/signinScreen";
 import { COLORS, SIZES, FONTS } from "../constants";
 import { db,auth } from "../BackendFirebase/configue/Firebase";
+import firebase from "firebase";
 
 import ProfileHome from "../components/ProfileHome";
 import EditProfile from "../components/EditProfile";
@@ -27,11 +28,12 @@ const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
 const Pro = ({navigation}) => {
-  const [name, setName] = useState();
+  const [name, setName] = useState({});
   
-  const [email, setemail] = useState();
+  const [email, setemail] = useState({});
  const [url,seturl] = useState();
-  //
+ const db = firebase.firestore();
+
  
   const userId = auth.currentUser.uid;
   const updateUser = () => {
@@ -42,16 +44,17 @@ const Pro = ({navigation}) => {
       });
   };
 
-//   useEffect(() => {
-//     db.ref('/users/' + userId).on('value', value => {
-//         console.log(value, 'value')
-//         setName(value?.val().name)
-        
-//         setemail(value.val().email)
+  useEffect(()=>{
+    let item = [];
+    db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+    console.log(name,'thap')
+  
+  },[])
 
-//     })
-// }, [])
-
+const userName = name.name
+const userPhonenumber = name.phonenumber
+const userLocation = name.location
+ const userEmail = name.email
 
   const LocationArray = ["Home", "Profile", "Education"];
   const [location, setLocation] = useState("Education");
@@ -71,10 +74,18 @@ const Pro = ({navigation}) => {
             <Avatar      source={profilimg}  style={styles.image} rounded/>
             <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/>
         </View>
-       
+        <Text
+              style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
+            >
+            {userName} 
+            </Text>
+            <Text style={{ fontSize: 16, textAlign: "center" }}>
+              {" "}
+              Learner: Grade(0)
+            </Text>
         </View>
        <View style={styles.elevated}>
-        <TouchableOpacity onPress={()=>navigation.navigate('profile')} >
+        <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
             <View style={styles.boxcontainer}>
             <Icon name="person" size={22} style={{ color: COLORS.secondary, marginTop: 14,  }} />
 
@@ -84,6 +95,8 @@ const Pro = ({navigation}) => {
             </View>
 
             </TouchableOpacity>
+
+
             <TouchableOpacity onPress={()=>navigation.navigate('education')} >
             <View style={styles.boxcontainer}>
             <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14,  }} />
@@ -94,7 +107,18 @@ const Pro = ({navigation}) => {
             </View>
 
             </TouchableOpacity>
+
+           
               </View>
+              <View style={{bottom:20, position:'absolute', alignContent:'center', paddingHorizontal:20}}>
+              <Icon
+                name="logout"
+                size={25}
+                color="red"
+                onPress={navigation.goBack}
+              />
+            </View>
+             
       
     </View>
   );

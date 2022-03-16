@@ -22,12 +22,15 @@ export default function DashBoard() {
       <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}
       drawerActiveBackgroundColor='#4B7BE8'
       drawerActiveInColor='#fff'
+      screenOptions={{ headerShown: false }}
       />}
 
       >
 
         <Drawer.Screen name="Home" component={HomeScreen}
-          options={{
+               screenOptions={{ headerShown: false }}
+
+         options={{
             title: 'Home',
             headerStyle: {
               backgroundColor: '#4B7BE8',
@@ -44,6 +47,8 @@ export default function DashBoard() {
         />
 
         <Drawer.Screen name="Profile" component={Pro}
+                screenOptions={{ headerShown: false }}
+
           options={{
             title: 'Profile',
             headerStyle: {
