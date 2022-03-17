@@ -23,7 +23,7 @@ const Documents=()=>{
     });
 },[]);
 
-const Card = ({hotel,index}) =>{
+const Card = ({book,index}) =>{
     return( 
      <View style={{
          flex:1,
@@ -31,7 +31,7 @@ const Card = ({hotel,index}) =>{
  
  }}> 
  
-     <Image source={{ uri: hotel?.images }} style={{width:'40%',height:'105%', borderRadius:10,}}>
+     <Image source={{ uri: book?.images }} style={{width:'40%',height:'105%', borderRadius:10,}}>
      </Image>
      </View>
 )} 
@@ -45,7 +45,7 @@ const Card = ({hotel,index}) =>{
             data={books}
             contentContainerStyle={{paddingVertical:30,paddingLeft:20, justifyContent:'space-between'}}
             showsHorizontalScrollIndicator={false}
-            renderItem={({item,index}) => <Card hotel={item} index={index}/>}
+            renderItem={({item,index}) => <Card book={item} index={index}/>}
             />
         </View>
     )

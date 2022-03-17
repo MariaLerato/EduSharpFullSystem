@@ -37,20 +37,20 @@ const education = () => {
   //
  
   const userId = auth.currentUser.uid;
-  const updateUser = () => {
-      db.collection('/users/' + userId).update({
-          name: name,
-          email: email,
+  // const updateUser = () => {
+  //     db.collection('/users/' + userId).update({
+  //         name: name,
+  //         email: email,
 
-      });
-  };
+  //     });
+  // };
 
-  useEffect(()=>{
-    let item = [];
-    db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-    console.log(name)
+  // useEffect(()=>{
+  //   let item = [];
+  //   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+  //   console.log(name)
   
-  },[])
+  // },[])
 
 //   useEffect(() => {
 //     db.ref('/users/' + userId).on('value', value => {
@@ -147,7 +147,7 @@ const education = () => {
                   titleStyle={{
                     color: COLORS.White,
                   }}
-                  onPress={updateUser}
+                  // onPress={updateUser}
                 />
       </View>
     

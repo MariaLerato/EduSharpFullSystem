@@ -156,12 +156,12 @@ const HomeScreen = ({ navigation }) => {
             <Text
               style={{
                 fontSize: 20,
-
+                fontWeight:'normal',
                 textAlign: "center",
                 top: 30,
               }}
             >
-Material            </Text>
+              Material            </Text>
           </TouchableOpacity>
         </Card>
 

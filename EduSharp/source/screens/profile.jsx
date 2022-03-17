@@ -209,14 +209,4 @@ const styles = StyleSheet.create({
 });
 export default Profile;
 
-{
-  /* <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="HotelsView" component={HotelsView} /> 
-      <Stack.Screen name="Search" component={Search} />
-    </Stack.Navigator> */
-}
+
