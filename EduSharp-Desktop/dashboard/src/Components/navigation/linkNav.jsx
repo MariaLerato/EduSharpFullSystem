@@ -20,11 +20,10 @@ const LinkNav = () => {
     <div className="screens">
     <ul  >  
       <li><Link to="/home">Home</Link></li>
-      <li><Link to="/notifications">Notifications</Link></li>
+      <li><Link to="/Notification">Notifications</Link></li>
       <li><Link to="/complaint">Complaints</Link></li>
       <li><Link to="/manageUsers">Manage Users</Link></li>
      <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
-
     </ul>    
   </div>
   </div>

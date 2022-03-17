@@ -14,12 +14,13 @@ const ManageUsers = () => {
         <LinkNav/>
     <div>
         <div className='manageHeader'>
-            <h3>Manage Users</h3>
+           
             <div className='iconsActive'>
-            <i className='fa fa-search fa'/> 
+            <i className='fa fa-search fa-2x'/> 
      <input type={'search'} placeholder={'Search Lessons ..'} className={'searchIcon'}/>
-
             </div>
+            <div className = 'delete'>
+            <input type="checkbox" class="form-check-input" id="exampleCheck1"/>Delete </div>
         </div>
         <div className='banner'>
             <p>Name</p>

@@ -55,10 +55,8 @@ const Menu = () => {
               <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
               <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
               <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
-
               <Route path={'/Notification'} element={<Notification/>}/>
               <Route path={'/complaint'} element={<Complaints/>}/>
-
               <Route path={"/manageUsers"} element={<ManageUsers/>}/>
               </Routes>
             </div>

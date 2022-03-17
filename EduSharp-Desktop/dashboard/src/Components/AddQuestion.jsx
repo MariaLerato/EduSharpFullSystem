@@ -49,7 +49,7 @@ const AddQuestion = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={subject}
-              onChange={(t)=>setSubject(t)}
+              onChange={()=>setSubject()}
             >
               <option selected>Select Subjects</option>
               <option value="1">Physical Science</option>
@@ -75,7 +75,7 @@ const AddQuestion = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={grade}
-              onChange={(t)=>setGrade(t)}
+              onChange={()=>setGrade()}
             >
               <option selected>Select Grade</option>
               <option value="1">08</option>
@@ -95,7 +95,7 @@ const AddQuestion = () => {
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
               value={topic}
-              onChange={(t)=>setTop(t)}
+              onChange={(t)=>setTop()}
             />
           </div>
           <div class="mb-3">

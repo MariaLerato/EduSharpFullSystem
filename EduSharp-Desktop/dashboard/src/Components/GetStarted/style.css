@@ -150,6 +150,7 @@ margin-left: 50%;
 .manageHeader{
     padding:1%;
     display: flex;
+
     justify-content: space-between;
 }
 .manageHeader h3{
@@ -164,15 +165,22 @@ margin-left: 50%;
     margin-right: 2%; 
 }
 .iconsActive i{
-    margin-top: 2%;
-    color: black;
+    margin-top: 1%;
+
+    /* margin-left: 5%; */
+}
+.delete{
+    /* margin-right: 8%; */
+    color:blue;   
+    display: flex;
 }
 .searchIcon{
-    width:250px;
+    width:350px;
     padding:4%;
     font-size: 15px;
-    height: 35px;
+    height: 40px;
     border-radius: 5px;
+    /* border-color: black; */
     /* margin-right: 2%; */
 }
 
@@ -320,6 +328,7 @@ input{
     justify-items: center ;
     box-shadow: 5px 5px 5px  #888888;
 }
+
 .sub{
     align-items: flex-end;
     width: 40%;
@@ -329,6 +338,7 @@ input{
     font-weight: 500;
 
 }
+
 
 .subtitle{
 

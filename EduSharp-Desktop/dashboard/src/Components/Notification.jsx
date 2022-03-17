@@ -9,6 +9,7 @@ import reuse from "./Authentication-firebase/reuse";
 import Users from "./Authentication-firebase/reuse"
 import "./notification.css";
 import { Button } from "bootstrap";
+import LinkNav from "./navigation/linkNav";
 export const Notification = () => {
   const navigate = useNavigate()
   const LogOut = ()=>{
@@ -17,27 +18,8 @@ export const Notification = () => {
 
   return (
     <>
-    <div className="menu-container">
-      <div id="link">
-          <div className="head-container">
-        <img src={logo} alt="" className="picture" width={50} height={50}></img>
-        <h2>EduSharp</h2>
-      </div>
-      <div className="screens">
-       
-        <ul  >
-          <li><a href="/home">Home</a></li>
-          <li><a href="/Notification">Notifications</a></li>
-          <li><a href="/complaint">Complaints</a></li>
-          <li><a href="/users">Manage Users</a></li>
-         <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
-
-        </ul>
-
-      </div>
-      </div>
-     
-
+    <div className="-container">
+    <LinkNav/>
       <h1>Notifications</h1>
       <div className="Panel">
         <div className="wrapper" >
