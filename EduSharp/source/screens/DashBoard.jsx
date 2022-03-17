@@ -104,13 +104,13 @@ export default function DashBoard() {
         />
 
 
-        <Drawer.Screen name="Preference" component={Preference}
+        <Drawer.Screen name="Notifications" component={Preference}
           style={{ flexDirection: 'row', padding: 20, borderTopWidth: 1, borderTopColor: 'gray' }}
           options={{
-            title: 'My Preference',
+            title: 'My notifications',
             drawerIcon: ({ focused, size }) => (
               <Icon
-                name='settings'
+                name='notifications'
                 type='FontAwesome'
                 color='#4B7BE8'
               />
