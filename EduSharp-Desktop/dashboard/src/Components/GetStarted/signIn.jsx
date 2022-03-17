@@ -3,7 +3,7 @@ import "./style.css";
 import logo from "../images/image.png";
 import { useNavigate } from "react-router-dom";
 import Users from "../Authentication-firebase/reuse";
-// import CircularProgress from "@mui/material/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 // import Button from '@mui/material/Button';
 
 const LogIn = () => {
@@ -64,7 +64,7 @@ const LogIn = () => {
               Forgot Password?
             </button>
             <div className="buttons">
-              {/* {load && <CircularProgress color="success"/>} */}
+              {load && <CircularProgress color="success"/>}
               <button className="logButton" onClick={SignIn} type={"submit"}>
                 Log In To Account
               </button>
