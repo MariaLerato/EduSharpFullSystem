@@ -4,9 +4,9 @@ import {
   Text,
   Image,
   StyleSheet,
-  StatusBar,
-  Dimensions,
-  ImageBackground,TouchableOpacity
+  StatusBar, TouchableOpacity,
+  Dimensions,Modal,
+  ImageBackground
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Checkbox, Snackbar, TextInput } from "react-native-paper";
@@ -14,7 +14,10 @@ import { Icon, Input, Avatar } from "react-native-elements";
 import Styles from "../style/signinScreen";
 import { COLORS, SIZES, FONTS } from "../constants";
 import { db,auth } from "../BackendFirebase/configue/Firebase";
-import firebase from "firebase";
+
+import ProfileHome from "../components/ProfileHome";
+import EditProfile from "../components/EditProfile";
+import EducProfile from "../components/EducProfile";
 import { Button } from "react-native-elements/dist/buttons/Button";
 const imagesize=100
 const imageradius=imagesize/2
@@ -23,57 +26,31 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Profile = ({navigation, route}) => {
-  const [name, setName] = useState(route.params.userName);
-  const [email, setEmail] = useState(route.params.userEmail);
-  const [phone, setPhone] = useState(route.params.userPhone);
-  const [location, setLocation] = useState(route.params.userLocation);
-  const userId = auth.currentUser.uid;
-  const db = firebase.firestore();
+const education = () => {
 
-  const updateUser = ()=>{
-    db.collection('users').doc(userId).update({name:name, email:email,location:location})
-  }
+  const [modalVisible, setVisible] = useState(false)
 
-
-// useEffect(()=>{
-//   let item = [];
-//   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-//   console.log(name)
-
-// },[])
-
-//   const Update = () => {
-//     firebase
-//       .database()
-//       .ref(`/users/${firebase.auth().currentUser.uid}`)
-//       .update({
-//         name: name,
-//         Email: Email,
-//       })
-//       .then(() => {
-//         Alert.alert("Update", "Your Profile was successfully Updated");
-//         // setisLoading(false);
-//       })
-//       .catch((err) => {
-//         // setisLoading(false);
-//         SetErrMessage(err.message);
-//         // setdisplayFormErr(true);
-//       });
-//   };
-
-  function OnnameChange(value) {
-    setName(value);
-  }
+  const [name, setName] = useState();
+  
+  const [email, setemail] = useState();
+ const [url,seturl] = useState();
+  //
  
-  function OnEmailChange(value) {
-    setEmail(value);
-  }
+  const userId = auth.currentUser.uid;
+  // const updateUser = () => {
+  //     db.collection('/users/' + userId).update({
+  //         name: name,
+  //         email: email,
 
-  const Logout = () => {
-    navigation.navigate("Login");
-    firebase.auth().signOut();
-  };
+  //     });
+  // };
+
+  // useEffect(()=>{
+  //   let item = [];
+  //   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+  //   console.log(name)
+  
+  // },[])
 
 //   useEffect(() => {
 //     db.ref('/users/' + userId).on('value', value => {
@@ -87,6 +64,7 @@ const Profile = ({navigation, route}) => {
 
 
   const LocationArray = ["Home", "Profile", "Education"];
+  const [location, setLocation] = useState("Education");
   const backgroundImg = {
     uri: "https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   };
@@ -111,45 +89,48 @@ const Profile = ({navigation, route}) => {
      
       <View style={{flex: 1,
     marginBottom: 390,backgroundColor:'#fff'}}>
-                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Profile</Text>
+                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Education</Text>
 
 <View style={{paddingHorizontal:20}}>
       <TextInput
-      style={{width: '100%'}}
+      style={{width: '100%', shadowColor:'white'}}
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
       value={name}
-      onChangeText={text=>setName(text)}
+      onChangeText={text =>setName(text)}
     />
 
-<TextInput style={{marginTop:20, width: '100%'}}
-      
-      left={<TextInput.Icon name="email" />}
-      right={<TextInput.Icon name="pencil" />}
-      value={email}
-      onChangeText={(text)=>setEmail(text)}
-
-    />
-
-{/* <TextInput style={{marginTop:20, width: '100%'}}
-      
-      left={<TextInput.Icon name="email" />}
-      right={<TextInput.Icon name="pencil" />}
-      value={phone}
-      onChangeText={(text)=>setPhone(text)}
-
-    /> */}
-
-<TextInput style={{marginTop:20, width: '100%'}}
-      
-      left={<TextInput.Icon name="email" />}
-      right={<TextInput.Icon name="pencil" />}
-      value={location}
-      onChangeText={(text)=>setLocation(text)}
-
-    />
+<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20 }}>
+<Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text>
 
 
+<TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
+                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
+                </TouchableOpacity>
+                <View></View>
+<Text style={{fontSize:16, color:'blue'}}> + Add Subject
+
+{/* <Modal
+                        animationType={'slide'}
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            alert('Modal closed')
+                            setVisible(!modalVisible)
+                        }
+                        }
+                        presentationStyle={'overFullScreen'}
+                    >
+                        <View>
+                           
+                                <Text>Modeal</Text>
+
+                                
+
+                        </View>
+                    </Modal> */}
+</Text>
+</View>
 </View>
 
               <Button
@@ -166,7 +147,7 @@ const Profile = ({navigation, route}) => {
                   titleStyle={{
                     color: COLORS.White,
                   }}
-                  onPress={updateUser()}
+                  // onPress={updateUser}
                 />
       </View>
     
@@ -176,7 +157,8 @@ const Profile = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white'
+    backgroundColor: "white"
+
   },
   row1: {
     height: row1Height,
@@ -207,6 +189,16 @@ const styles = StyleSheet.create({
       height:'100%'
   }
 });
-export default Profile;
+export default education;
 
-
+{
+  /* <Stack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="HotelsView" component={HotelsView} /> 
+      <Stack.Screen name="Search" component={Search} />
+    </Stack.Navigator> */
+}

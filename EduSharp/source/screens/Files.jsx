@@ -20,37 +20,57 @@ import {
   BottomSheet,
   Card,
 } from "react-native-elements";
-import SearchQList from "./searchComponents/QList";
-import SearchLessons from './searchComponents/Lessons';
-import SearchMaterial from './searchComponents/Material';
-import SearchQuestionPaper from './searchComponents/QuestionPapers';
+import Documents from "./filesComponents/documents";
+import Downloads from "./filesComponents/downloads";
+import Images from "./filesComponents/images";
+import Videos from "./filesComponents/videos";
+
+import Info from '../mock/Q&A'
 
 const width = Dimensions.get("window").width / 2 - 30;
 
 // import { Icon } from "react-native-paper/lib/typescript/components/List/List";
 
-const Search = ({ navigation }) => {
+const Files = ({ navigation }) => {
 
   const [categoryIndex, setCategoryIndex] = React.useState(0);
   
-  const categories = [{item:"Q As",location:'QList'}, {item:"Material",location:'Material'},{ item:"Lesson",location:'QList'}, {item:"Papers",location:'QList'}];
+  const categories = [{item:"Q As",location:'documents'}, {item:"Downloads",location:'Downloads'},{ item:"Images",location:'Images'}, {item:"Videos",location:'Videos'}];
 
 
 const [code, setcode] = useState(0);
 
- 
+const CardFiles = () => {
+    return (
+        <View style={{ width: '45%', alignSelf: 'center', marginLeft: '2%' }}>
+            {Info.docs.map(data =>
+                <Card key={data.id} containerStyle={{ borderRadius: 20 }}>
+                        <Icon name={data.icon} type={data.typeIcon} size={20}
+                            color='#4B7BE8' />
+                    <Card.Image source={data.pic} style={{ width: '100%', paddingTop: '-5%' }}>
+                        <View style={{ alignSelf: 'flex-end', justifyContent: 'flex-end', marginTop: '-2%' }}>
+
+                        </View>
+                    </Card.Image>
+                </Card>
+            )}
+        </View>
+    )
+}
+
   return (
     <View style={Styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',paddingHorizontal:10 }}>
         <Icon
           name="arrow-back-ios"
-          size={28}
-          color={COLORS.Black}
+          size={20}
+          color={COLORS.primary}
           onPress={navigation.goBack}
         />
-        <View style={Styles.touchable}>
-          <TextInput placeholder="Search" style={{ fontSize:SIZES.h3, color: COLORS.grey }} />
-          <Icon name="search" color={COLORS.primary} size={28} />
+        <View >
+          <Text style={[
+                Styles.categoryText,{fontSize:SIZES.h2,fontWeight:'bold',color:COLORS.primary}
+              ]}>My Files</Text>
         </View>
       </View>
 
@@ -62,10 +82,10 @@ const [code, setcode] = useState(0);
 
             <Text
               style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
+                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
               ]}
             >
-              {"QA's "}
+              {"Docs "}
             </Text>
           </TouchableOpacity>
          
@@ -76,10 +96,10 @@ const [code, setcode] = useState(0);
 
             <Text
               style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
+                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
               ]}
             >
-              {"Material "}
+              {"Images "}
             </Text>
           </TouchableOpacity>
 
@@ -90,10 +110,10 @@ const [code, setcode] = useState(0);
 
             <Text
               style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
+                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
               ]}
             >
-              {"Lessons"}
+              {"Downloads"}
             </Text>
           </TouchableOpacity>
 
@@ -104,21 +124,22 @@ const [code, setcode] = useState(0);
 
             <Text
               style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
+                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
               ]}
             >
-              {"Question Papers"}
+              {"Videos"}
             </Text>
           </TouchableOpacity>
+          
       </View>
-     {code == 0?<SearchQList />:null}
-     {code == 1?<SearchLessons/>:null}
-     {code == 2?<SearchMaterial/>:null}
-     {code == 3?<SearchQuestionPaper/>:null} 
+     {code == 0?<Documents />:null}
+     {code == 1?<Images/>:null}
+     {code == 2?<Downloads/>:null}
+     {code == 3?<Videos/>:null}
     </View>
   );
 };
-export default Search;
+export default Files;
 
 const Styles = StyleSheet.create({
   categoryContainer: {

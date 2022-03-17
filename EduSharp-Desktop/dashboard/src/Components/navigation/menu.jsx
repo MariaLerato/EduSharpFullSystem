@@ -22,6 +22,8 @@ import "../ReportLesson.css";
 import  Home  from "../GetStarted/home";
 import LogIn from "../GetStarted/signIn";
 import  Register  from"../GetStarted/signUp";
+import { Notification } from "../Notification";
+import { Complaints } from "../Complains";
 // import Notification from "./Notification/Notification.jsx";
 import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
@@ -53,6 +55,10 @@ const Menu = () => {
               <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
               <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
               <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
+
+              <Route path={'/Notification'} element={<Notification/>}/>
+              <Route path={'/complaint'} element={<Complaints/>}/>
+
               <Route path={"/manageUsers"} element={<ManageUsers/>}/>
               </Routes>
             </div>
@@ -73,6 +79,8 @@ const Menu = () => {
                 <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
                 <Route path={'./ReportPaper'} element={<ReportPaper/>}/>
                 <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
+                <Route path={'/Notification'} element={<Notification/>}/>
+              <Route path={'/complaint'} element={<Complaints/>}/>
                 <Route path={'./'}/>
             </Routes>
           )}

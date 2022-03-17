@@ -23,17 +23,20 @@ import WelcomeScreen from './source/screens/welcome';
 import Lessons from './source/screens/Lessons';
 import QuestionPaper from './source/screens/QuestionPapers';
 import Pro from './source/screens/Pro';
+import Education from './source/screens/education';
+import Files from './source/screens/Files';
 
 const Menu = () => {
     const Stack = createNativeStackNavigator()
     return (
 
 
-        <NavigationContainer>
+        <NavigationContainer >
             <Stack.Navigator initialRouteName={'welcomeScreen'} screenOptions={{ headerShown: false }}
             >
                 
                 <Stack.Screen name={'Pro'} component={Pro}/>
+                <Stack.Screen name={'Files'} component={Files}/>
                 <Stack.Screen name={'welcomeScreen'} component={WelcomeScreen} />
                 <Stack.Screen name={'home'} component={HomeScreen} />
                 <Stack.Screen name={'SplashScreen'} component={Splash} />
@@ -51,6 +54,7 @@ const Menu = () => {
                 <Stack.Screen name={'downloads'} component={DownloadFiles} />
                 <Stack.Screen name={'videos'} component={VideoFiles} />
                 <Stack.Screen name={'search'} component={Search} />
+                <Stack.Screen name={'education'} component={Education}/>
                 <Stack.Screen name={'StarredReplies'} component={StarredReplies} />
                 <Stack.Screen name={'lessonscreen'} component={Lessons} />
                 <Stack.Screen name={'questionpaperscreen'} component={QuestionPaper} />

@@ -100,10 +100,10 @@ class Users {
       !item ||
       !filename
     )
-      return {
+     { return {
         status: "Error",
         message: "Please enter all the information!"
-      };
+      };}
     console.log(id, "------=-=---------========---------=---------=", item);
 
     if (!id) {
