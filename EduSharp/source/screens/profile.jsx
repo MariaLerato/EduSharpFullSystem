@@ -6,85 +6,61 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  ImageBackground,TouchableOpacity
+  ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Checkbox, Snackbar, TextInput } from "react-native-paper";
+import { TextInput } from "react-native-gesture-handler";
+// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+// import { Checkbox, Snackbar, TextInput } from "react-native-paper";
 import { Icon, Input, Avatar } from "react-native-elements";
 import Styles from "../style/signinScreen";
 import { COLORS, SIZES, FONTS } from "../constants";
-import { db,auth } from "../BackendFirebase/configue/Firebase";
+import { db, auth } from "../BackendFirebase/configue/Firebase";
 import firebase from "firebase";
 import { Button } from "react-native-elements/dist/buttons/Button";
-const imagesize=100
-const imageradius=imagesize/2
+const imagesize = 100;
+const imageradius = imagesize / 2;
 const height = Dimensions.get("screen").height;
 const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const Profile = ({navigation, route}) => {
+const Profile = ({ navigation, route }) => {
   const [name, setName] = useState(route.params.userName);
   const [email, setEmail] = useState(route.params.userEmail);
-  const [phone, setPhone] = useState(route.params.userPhone);
+  const [phonenumber, setPhone] = useState(route.params.userPhonenumber);
   const [location, setLocation] = useState(route.params.userLocation);
   const userId = auth.currentUser.uid;
+  const [isLoading, setisLoading] = useState(false);
+
   const db = firebase.firestore();
 
-  const updateUser = ()=>{
-    db.collection('users').doc(userId).update({name:name, email:email,location:location})
-  }
+  const updateUser = () => {
+    db.collection("users")
+      .doc(userId)
+      .update({ 
+        name: name,
+         email: email,
+         phonenumber: phonenumber,
+         location: location });
 
-
-// useEffect(()=>{
-//   let item = [];
-//   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-//   console.log(name)
-
-// },[])
-
-//   const Update = () => {
-//     firebase
-//       .database()
-//       .ref(`/users/${firebase.auth().currentUser.uid}`)
-//       .update({
-//         name: name,
-//         Email: Email,
-//       })
-//       .then(() => {
-//         Alert.alert("Update", "Your Profile was successfully Updated");
-//         // setisLoading(false);
-//       })
-//       .catch((err) => {
-//         // setisLoading(false);
-//         SetErrMessage(err.message);
-//         // setdisplayFormErr(true);
-//       });
-//   };
-
-  function OnnameChange(value) {
-    setName(value);
-  }
- 
-  function OnEmailChange(value) {
-    setEmail(value);
-  }
-
-  const Logout = () => {
-    navigation.navigate("Login");
-    firebase.auth().signOut();
+      // .then(() => {
+      //   alert("Update", "Your Profile was successfully Updated");
+      //   setisLoading(false);
+      // })
+      // .catch((err) => {
+      //   setisLoading(false);
+      //   SetErrMessage(err.message);
+      //   setdisplayFormErr(true);
+      // });
   };
 
-//   useEffect(() => {
-//     db.ref('/users/' + userId).on('value', value => {
-//         console.log(value, 'value')
-//         setName(value?.val().name)
-        
-//         setemail(value.val().email)
 
-//     })
-// }, [])
+ 
 
+  
 
   const LocationArray = ["Home", "Profile", "Education"];
   const backgroundImg = {
@@ -94,27 +70,47 @@ const Profile = ({navigation, route}) => {
     uri: "https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   };
 
-  const profilimg={uri:'https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'}
+  const profilimg = {
+    uri: "https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  };
   return (
     <View style={styles.container}>
-      <ImageBackground source={backgroundImg} resizeMode="cover" style={styles.row1}></ImageBackground>
+      <ImageBackground
+        source={backgroundImg}
+        resizeMode="cover"
+        style={styles.row1}
+      ></ImageBackground>
       <View style={styles.row2}>
         <View style={styles.imgContainer}>
-            <Avatar      source={profilimg}  style={styles.image} rounded/>
-            <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/>
+          <Avatar source={profilimg} style={styles.image} rounded />
+          <Button
+            icon={{
+              name: "camera",
+              type: "font-awesome",
+              size: 15,
+              color: "black",
+            }}
+            containerStyle={{ position: "absolute", bottom: -10, right: 0 }}
+          />
         </View>
-       
-        </View>
-       
-        
-     
-     
-      <View style={{flex: 1,
-    marginBottom: 390,backgroundColor:'#fff'}}>
-                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Profile</Text>
+      </View>
 
-<View style={{paddingHorizontal:20}}>
-      <TextInput
+      <View style={{ flex: 1,  backgroundColor: "#fff", bottom:190 }}>
+        <Text
+          style={{
+            color: "rgba(0,0,0,5)",
+            fontSize: 16,
+            fontWeight: "bold",
+            marginBottom: 20,
+            textAlign: "center",
+            fontSize: 20,
+          }}
+        >
+          Personal Info
+        </Text>
+
+        <View style={{ paddingHorizontal: 20 }}>
+          {/* <TextInput
       style={{width: '100%'}}
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
@@ -129,9 +125,9 @@ const Profile = ({navigation, route}) => {
       value={email}
       onChangeText={(text)=>setEmail(text)}
 
-    />
+    /> */}
 
-{/* <TextInput style={{marginTop:20, width: '100%'}}
+          {/* <TextInput style={{marginTop:20, width: '100%'}}
       
       left={<TextInput.Icon name="email" />}
       right={<TextInput.Icon name="pencil" />}
@@ -140,7 +136,7 @@ const Profile = ({navigation, route}) => {
 
     /> */}
 
-<TextInput style={{marginTop:20, width: '100%'}}
+          {/* <TextInput style={{marginTop:20, width: '100%'}}
       
       left={<TextInput.Icon name="email" />}
       right={<TextInput.Icon name="pencil" />}
@@ -148,35 +144,109 @@ const Profile = ({navigation, route}) => {
       onChangeText={(text)=>setLocation(text)}
 
     />
+ */}
 
+          <TextInput
+            style={{
+              height: 50,
+              width: "90%",
+              borderColor: "black",
+              paddingHorizontal: 20,
+              borderWidth: 2,
+              borderRadius: 10,
+              marginLeft: 15,
+              color: "black",
+              fontWeight: "bold",
+            }}
+            placeholder="Michael"
 
-</View>
+            value={name}
+            onChangeText={(text) => setName(text)}
+          />
 
-              <Button
-                  title="Update"
-                  containerStyle={{
-                    marginTop: 30,
-                    borderRadius: 20,
-                  }}
-                  buttonStyle={{
-                    borderRadius: 5,
-                    marginHorizontal: 20,
-                    backgroundColor: COLORS.primary,
-                  }}
-                  titleStyle={{
-                    color: COLORS.White,
-                  }}
-                  onPress={updateUser()}
-                />
+          <TextInput
+            style={{
+              height: 50,
+              width: "90%",
+              borderColor: "black",
+              paddingHorizontal: 20,
+              marginTop: 20,
+              borderWidth: 2,
+              borderRadius: 10,
+              marginLeft: 15,
+              color: "black",
+              fontWeight: "bold",
+            }}
+            placeholder="Smith@webmail.co.za"
+
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+                      />
+
+          <TextInput
+            style={{
+              height: 50,
+              width: "90%",
+              borderColor: "black",
+              paddingHorizontal: 20,
+              marginTop: 20,
+              borderWidth: 2,
+              borderRadius: 10,
+              marginLeft: 15,
+              color: "black",
+              fontWeight: "bold",
+            }}
+
+            placeholder="12 Bork Str Plk"
+
+            value={location}
+            onChangeText={(text) => setLocation(text)}
+          />
+
+          <TextInput
+            style={{
+              height: 50,
+              width: "90%",
+              borderColor: "black",
+              paddingHorizontal: 20,
+              marginTop: 20,
+              borderWidth: 2,
+              borderRadius: 10,
+              marginLeft: 15,
+              color: "black",
+              fontWeight: "bold",
+            }}
+            placeholder="079 247 6117"
+            value={phonenumber}
+            onChangeText={(text) => setPhone(text)}
+            maxLength={10}
+          />
+        </View>
+
+        <Button
+          title="Update"
+          containerStyle={{
+            marginTop: 30,
+            borderRadius: 20,
+          }}
+          buttonStyle={{
+            borderRadius: 5,
+            marginHorizontal: 20,
+            backgroundColor: COLORS.primary,
+          }}
+          titleStyle={{
+            color: COLORS.White,
+          }}
+          onPress={updateUser()}
+        />
       </View>
-    
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white'
+    backgroundColor: "white",
   },
   row1: {
     height: row1Height,
@@ -196,17 +266,14 @@ const styles = StyleSheet.create({
     borderRadius: imageradius,
     borderWidth: 2,
     borderColor: "white",
-    overflow:'hidden'
-    
+    overflow: "hidden",
   },
   usernames: {
     alignItems: "center",
   },
-  image:{
-      width:'100%',
-      height:'100%'
-  }
+  image: {
+    width: "100%",
+    height: "100%",
+  },
 });
 export default Profile;
-
-

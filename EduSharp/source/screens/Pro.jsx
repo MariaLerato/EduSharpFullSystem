@@ -64,6 +64,8 @@ const userName = name.name
 const userPhonenumber = name.phonenumber
 const userLocation = name.location
  const userEmail = name.email
+const userGrade = name.grade
+
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -83,6 +85,11 @@ const userLocation = name.location
 
 
     setSelectedImage({ localUri: pickerResult.uri });
+  };
+
+  const Logout = () => {
+    navigation.navigate("SignInScreen");
+    firebase.auth().signOut();
   };
 
   const backgroundImg = {
@@ -106,73 +113,12 @@ const userLocation = name.location
               style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
             >
               {userName}
-              User Name
 
             </Text>
             <Text style={{ fontSize: 16, textAlign: "center" }}>
               {" "}
-              Learner: Grade(0)
+              Grade(0)
             </Text>
-        </View>
-<View
-        style={{ flex: 1, backgroundColor: "#ffffff" }}
-        showsVerticalScrollIndicator={false}
-      >
-        
-
-        <View >
-         
-         
-           <View style={styles.innerBottom}>
-            {/* <Text
-              style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
-            >
-              {userName}
-              User Name
-
-            </Text>
-            <Text style={{ fontSize: 16, textAlign: "center" }}>
-              {" "}
-              Learner: Grade(0)
-            </Text> */}
-
-        </View> 
-
-
-       <View style={styles.elevated}>
-       
-
-             <View style={{ marginLeft: 120, top: -50 }}>
-              {selectedImage ? (
-                <Image
-                  source={{ uri: selectedImage.localUri }}
-                  style={{ height: 120, width: 120, borderRadius: 60 }}
-                />
-              ) : (
-                <Image
-                   source={profilimg}
-                  style={{
-                    height: 120,
-                    width: 120,
-                    borderRadius: 60,
-                    top: -120,
-                    left: -20,
-                    justifyContent: "center",
-                  }}
-                />
-              )}
-              {/* <Image source={{ uri: 'https://image.shutterstock.com/image-vector/male-avatar-profile-picture-use-600w-193292033.jpg'}}
-                style={{height:120,width:120,borderRadius:60,}}/>
-              <TouchableOpacity
-                style={{ marginLeft: 70, marginTop: -160 }}
-                mode="contained"
-                onPress={openImagePickerAsync}
-              >
-                <FontAwesome name="camera" size={29} color="grey" />
-              </TouchableOpacity> */}
-            </View> 
-            
-
             <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
 
            <View style={styles.boxcontainer}>
@@ -181,53 +127,49 @@ const userLocation = name.location
 
               <Text style={styles.boxText}>Personal Information</Text>
 
-              <Icon name="arrow-forward-ios" size={20} style={{ color: COLORS.gray, marginTop: 14, paddingLeft: 90 }} />
+              <Icon name="arrow-forward-ios" size={20} style={{ color: '#4B7BE8', marginTop: 14, paddingLeft: 90 }} />
             </View> 
 
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('education', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber, userGrade:userGrade})} >
 
-
-
-
-              <View style={styles.boxcontainer}>
+            <View style={styles.boxcontainer}>
               <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14, }} />
 
-              <TouchableOpacity onPress={() => navigation.navigate('education')} >
 
 
 
                 <Text style={styles.boxText}>Educational Information</Text>
-                </TouchableOpacity>
-                <Icon name="arrow-forward-ios" size={20} style={{ color: COLORS.gray, marginTop: 14, paddingLeft: 70 }} />
+                <Icon name="arrow-forward-ios" size={20} style={{ color: '#4B7BE8', marginTop: 14, paddingLeft: 70 }} />
 
               </View> 
-
-
-
-              <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
-              <Text>Touchable</Text>
-             </TouchableOpacity>
+              </TouchableOpacity>
 
               
-              <View style={{top:500,position:'absolute', alignContent:'center', paddingHorizontal:20}}>
+              
+              <View style={{bottom:20,position:'absolute', alignContent:'center', paddingHorizontal:20}}>
+            
+              <TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')} >
+
               <Icon
                 name="logout"
                 size={25}
                 color="red"
-                onPress={navigation.goBack}
               />
-            </View> 
+
+              </TouchableOpacity>
+            {/* </View>  */}
              
       
   
 
 
           </View>
-
-     
-        </View> 
-
         </View>
+
+        
+
+       
       
      
      <View/>
@@ -286,7 +228,7 @@ borderTopEndRadius: 40,
 },
 elevated: {
   paddingHorizontal: 20,
-top: -280
+  top:-120
 },
 boxcontainer: {
   width: width / 1.1,

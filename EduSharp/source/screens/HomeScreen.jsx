@@ -155,10 +155,10 @@ const HomeScreen = ({ navigation }) => {
 
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight:'normal',
                 textAlign: "center",
-                top: 30,
+                top: 30, left:30,
               }}
             >
               Material            </Text>
@@ -211,7 +211,7 @@ const HomeScreen = ({ navigation }) => {
 
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: "normal",
                 textAlign: "center",
                 top: 30,
@@ -236,7 +236,7 @@ const HomeScreen = ({ navigation }) => {
 
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: "normal",
                 textAlign: "center",
                 top: 30,
