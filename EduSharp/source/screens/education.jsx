@@ -9,9 +9,11 @@ import {
   ImageBackground
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Checkbox, Snackbar, TextInput } from "react-native-paper";
+// import { Checkbox, Snackbar, TextInput } from "react-native-paper";
 import { Icon, Input, Avatar } from "react-native-elements";
 import Styles from "../style/signinScreen";
+import { TextInput } from "react-native-gesture-handler";
+
 import { COLORS, SIZES, FONTS } from "../constants";
 import { db,auth } from "../BackendFirebase/configue/Firebase";
 
@@ -26,41 +28,19 @@ const row1Height = height * 0.3;
 const row2Height = height * 0.7;
 const Stack = createNativeStackNavigator();
 
-const education = () => {
+const Education = ({navigation, route}) => {
 
   const [modalVisible, setVisible] = useState(false)
 
-  const [name, setName] = useState();
-  
-  const [email, setemail] = useState();
+  const [name, setName] = useState(route.params.userName);
+  const [email, setEmail] = useState(route.params.userEmail);
+  const [phonenumber, setPhone] = useState(route.params.userPhonenumber);
+  const [grade, setGrade] = useState(route.params.userGrade);
  const [url,seturl] = useState();
   //
  
   const userId = auth.currentUser.uid;
-  // const updateUser = () => {
-  //     db.collection('/users/' + userId).update({
-  //         name: name,
-  //         email: email,
-
-  //     });
-  // };
-
-  // useEffect(()=>{
-  //   let item = [];
-  //   db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-  //   console.log(name)
   
-  // },[])
-
-//   useEffect(() => {
-//     db.ref('/users/' + userId).on('value', value => {
-//         console.log(value, 'value')
-//         setName(value?.val().name)
-        
-//         setemail(value.val().email)
-
-//     })
-// }, [])
 
 
   const LocationArray = ["Home", "Profile", "Education"];
@@ -89,26 +69,42 @@ const education = () => {
      
       <View style={{flex: 1,
     marginBottom: 390,backgroundColor:'#fff'}}>
-                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Education</Text>
+                <Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Educational Info</Text>
 
 <View style={{paddingHorizontal:20}}>
-      <TextInput
+      {/* <TextInput
       style={{width: '100%', shadowColor:'white'}}
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
       value={name}
       onChangeText={text =>setName(text)}
-    />
+    /> */}
 
+<TextInput
+            style={{
+              height: 50,
+              width: "90%",
+              borderColor: "black",
+              paddingHorizontal: 20,
+              borderWidth: 2,
+              borderRadius: 10,
+              marginLeft: 15,
+              color: "black",
+              fontWeight: "bold",
+            }}
+            placeholder="Grade 8"
+
+            value={grade}
+            onChangeText={(text) => setGrade(text)}
+          />
 <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20 }}>
-<Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text>
+{/* <Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text> */}
 
 
-<TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
+{/* <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
                     <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
-                </TouchableOpacity>
-                <View></View>
-<Text style={{fontSize:16, color:'blue'}}> + Add Subject
+                </TouchableOpacity> */}
+{/* <Text style={{fontSize:16, color:'blue'}}> + Add Subject */}
 
 {/* <Modal
                         animationType={'slide'}
@@ -129,7 +125,6 @@ const education = () => {
 
                         </View>
                     </Modal> */}
-</Text>
 </View>
 </View>
 
@@ -189,16 +184,6 @@ const styles = StyleSheet.create({
       height:'100%'
   }
 });
-export default education;
+export default Education;
 
-{
-  /* <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="HotelsView" component={HotelsView} /> 
-      <Stack.Screen name="Search" component={Search} />
-    </Stack.Navigator> */
-}
+

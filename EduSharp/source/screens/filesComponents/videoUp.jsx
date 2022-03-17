@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {Text, View, FlatList, Image, TouchableOpacity, Linking, StyleSheet, ScrollView} from 'react-native';
 import { Icon, Input, Avatar, Button } from "react-native-elements";
+import Video from 'react-native-video';
 
 import firebase from "firebase";
 
-const Videos=()=>{
+const VideoUp=()=>{
 
     const [materials, setmaterials] =  useState([]);
 
@@ -35,22 +36,44 @@ const backgroundImg = {
     return(
         <View>
 
-            <ScrollView>
+            <ScrollView> 
             <Text style={{fontSize:18, fontWeight:'bold'}}>My Videos</Text>
              
            {materials.map((element) =>(
                <>
-               <View style={{height: 230,
-        width: 210,
+               <View style={{height: 160,
+        width: 150,
         backgroundColor: 'white',
         elevation: 15,
         marginHorizontal: 10,
         borderRadius: 10,
         marginTop:20}}>
-            <TouchableOpacity onPress={() => {Linking.openURL(element.downloadUrl)}} >
-               <Avatar size={50} source={{uri: element.downloadUrl}} style={{height: 190,
-        width: 210}}></Avatar>
-               </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => {Linking.openURL(element.downloadUrl)}} >
+               <Avatar size={50} source={{uri: element.downloadUrl}} style={{height: 120,
+        width: 150}}></Avatar>
+               </TouchableOpacity> */}
+
+<Video
+source={{ uri: 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4?_=1' }}
+style={{ width: 300, height: 300 }}
+controls={true}
+ref={(ref) => {
+this.player = ref
+}} />
+
+               {/* <TouchableOpacity onPress={() => {Linking.openURL(element.downloadUrl)}} >
+               <Video  source={{uri: element.downloadUrl}}
+                ref={(ref) => {
+                    this.player = ref
+                  }} 
+               style={{height: 120,
+        width: 150}} 
+        onBuffer={this.Buffer}
+        onError={this.videoError}
+        />
+               </TouchableOpacity> */}
+
+
                 <View>
                 <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Subject: {element.subject}</Text>
                 <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Grade: {element.grade}</Text>
@@ -68,5 +91,5 @@ const backgroundImg = {
     )
 }
 
-export default Videos
+export default VideoUp
 
