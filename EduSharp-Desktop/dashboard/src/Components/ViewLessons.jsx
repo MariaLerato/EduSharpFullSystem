@@ -4,19 +4,15 @@ import books from "./images/books-book-pages-read-literature-159866.webp"
 import Users from './Authentication-firebase/reuse'
 export const ViewLesson = () => {
    const [items,setItems] = useState([])
-  
+   
    const ViewLessons = ()=>{ 
-    Users.viewItems()
-    .then((res)=>{
-      console.log('data',res.data)
-    })
-    .catch((e)=>{
-      console.log('err',e)
-    })
-    useEffect(()=>{
-      Users.viewItems()
-    })
+     Users.viewItems("lessons").then(({data})=>
+     setItems(data)
+     )
   }
+  useEffect(()=>{
+    ViewLessons()
+  },[])
   return<div className="Cont">
   <div className="sidenav">
     <div className="header">
@@ -34,20 +30,27 @@ export const ViewLesson = () => {
  
   </div>
   <div className='contentContainer'>
+   
+   
     <div >
       <i className='fa fa-search fa-2x'/> 
      <input type={'search'} placeholder={'Search Lessons ..'} className={'search'}/>
-      <div class="card" style={{width: "18rem"}}>
+
+     {items.map(data=>
+          <div class="card" style={{width: "18rem"}}>
   <img src={books} class="card-img-top" alt="..."/>
   <div class="card-body">
     <p class="card-text">
-     Subject
-     <p>Topic</p>
-     <p>Grade</p>
+  Subject:   {data.subject}
+     <p>Topic: {data.topic}</p>
+     <p>Grade: {data.grade}</p>
       </p>
     
   </div>
 </div>
+    
+    )}
+
     </div>
   </div>
   </div>;

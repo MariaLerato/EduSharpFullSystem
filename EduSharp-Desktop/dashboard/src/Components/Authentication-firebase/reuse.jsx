@@ -98,7 +98,8 @@ class Users {
       !topic ||
       !file ||
       !item ||
-      !filename
+      !filename||
+      !id
     )
      { return {
         status: "Error",
@@ -113,7 +114,7 @@ class Users {
       };
     }
     var uploadTask = storageref.child(`${item}/${id}/${filename}`).put(file);
-    uploadTask.on(
+  return  uploadTask.on(
       "state_changed",
       (snapshot) => {},
       (error) => {},
@@ -121,7 +122,8 @@ class Users {
         const url = uploadTask.snapshot.ref
           .getDownloadURL()
           .then((downloadURL) => {
-            firestore.collection(item).doc(id).set({
+            alert('Successfully Added A New File')
+           return firestore.collection(item).doc().set({
               createdAt: new Date(),
               description: description,
               downloadURL,
@@ -136,8 +138,9 @@ class Users {
             });
             console.log("File available at", downloadURL);
           });
-      }
-    );
+      },
+      console.log(id,'------=-=---------========---------=---------=',item)
+  )
   }
   viewItems(item) {
     const id = localStorage.getItem("userid");
