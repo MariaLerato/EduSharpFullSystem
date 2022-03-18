@@ -65,6 +65,9 @@ const QList = ({ navigation }) => {
             })
     }
 
+
+     
+
     const handleShare = (key) => {
         const data = {
             user: auth.currentUser.uid,

@@ -21,13 +21,36 @@ import { COLORS, SIZES } from "../constants";
 import { Switch } from "react-native-switch";
 import Info from "../mock/Q&A";
 import Post from "./PostQuestion";
+import { auth,db } from "../BackendFirebase/configue/Firebase";
 
 const Starred = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [share, setShare] = useState(false);
   const [modalVisible, setVisible] = useState(false);
 
-  const Postcard = () => {
+  //retrieving stared posts
+
+  const [postkey, setPostKey] = useState("");
+  const [user, setUser] = useState("");
+
+ const userId = auth.currentUser.uid;
+ console.log('melva',userId)
+
+  const GetUser=()=>{
+
+    console.log('nkamaaaaaaaaa');
+    db.collection("stares").doc(auth.currentUser.uid).get().then(res=>{
+      console.log('detail',res.data().postKey,  auth.currentUser.uid);
+      setPostKey(res.data().postKey);
+      setUser(res.data().user);
+      
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+  //
+
+  const Postcard = ({stares}) => {
     return (
       <View>
         {Info.info.map((data) => (
@@ -46,7 +69,7 @@ const Starred = ({ navigation }) => {
                 >
                   <View>
                     <Text style={Styles.headertext}>{data.username}</Text>
-                    <Text style={{ marginLeft: 20 }}>{data.time}</Text>
+                    <Text style={{ marginLeft: 20 }}>{user}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => setIsVisible(true)}
