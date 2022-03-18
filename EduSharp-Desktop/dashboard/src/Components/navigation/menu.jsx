@@ -2,27 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route ,Navigate,Link} from "react-router-dom";
 import  AddBook  from "../AddBook";
-
 import { ViewBooks } from "../../Components/ViewBooks";
-
-
-
 import  AddLesson  from "../AddLesson";
-
 import  ViewLesson  from "../ViewLessons";
-
-
-
 import  AddQuestion  from "../AddQuestion";
-
 import { ViewPaper } from "../ViewPaper";
-
-
 import  Home  from "../GetStarted/home";
 import LogIn from "../GetStarted/signIn";
 import  Register  from"../GetStarted/signUp";
 import { Notification } from "../Notification";
-import { Complaints } from "../Complains";
 // import Notification from "./Notification/Notification.jsx";
 import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
@@ -54,7 +42,7 @@ const Menu = () => {
               <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
               <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
               <Route path={'/Notification'} element={<Notification/>}/>
-              <Route path={'/complaint'} element={<Complaints/>}/>
+            
               <Route path={"/manageUsers"} element={<ManageUsers/>}/>
               </Routes>
             </div>
@@ -76,7 +64,7 @@ const Menu = () => {
                 
                 <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
                 <Route path={'/Notification'} element={<Notification/>}/>
-              <Route path={'/complaint'} element={<Complaints/>}/>
+        
                 <Route path={'./'}/>
             </Routes>
           )}

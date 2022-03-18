@@ -204,7 +204,7 @@ a{
 }
 .screens{
     /* background-color: red; */
-    width: 30%;
+    width: 25%;
     margin-top: auto;
 }
 .screens ul{
@@ -308,10 +308,15 @@ a{
     padding:4%;
     margin-right: 4%;
     background-color: #eddeb4;
-    height: 90%;
+    height: 98%;
     width: 98%;
+    transition: 250ms ease-in-out;
 }
-
+.card1:hover{
+    /* width: 105%;
+    height: 105%; */
+    box-shadow: 2px 2px 10px  rgba(0,0,0,.5);
+}
 .card1 h2{
     color: white;
     text-decoration: underline;
@@ -326,7 +331,7 @@ a{
     padding:4%;
     margin-right: 4%;
     background-color: #d4ddf8;
-    height: 90%;
+    height: 98%;
     width: 98%;
 }
 .card2 p{
@@ -347,7 +352,7 @@ a{
 .card3{
     border:  1px solid #9cf0c6;
     padding:4% ;
-    height: 90%;
+    height: 98%;
     width: 98%;
     background-color: #9cf0c6;
 }

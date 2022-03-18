@@ -1,22 +1,21 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
 import './Styles.css'
+import LinkNav from "../navigation/linkNav";
+
 const Notificationcard = () => {
-
-
 
     const Message=({filename,icon})=>(
     
         <div className="iconandname">
                     <i class={icon} aria-hidden="true"></i>
                     <p>{filename}</p>
-              </div>
-        
+              </div>   
     )
-
-
   return (
     <div className="NotifCard">
+      <LinkNav/>
+      
       <div className="notifimageconatainer">
         <Avatar
           alt="Remy Sharp"

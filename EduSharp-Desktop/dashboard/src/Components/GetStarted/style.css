@@ -134,15 +134,16 @@ margin-left: 50%;
     padding:1%;
     margin:2%;
     border-radius: 5px;
+    background-color: #175273;
     box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
 }
 .banner p{
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 600;
     padding-top: 4%;
-   color: rgba(94, 93, 93, 0.5);
-   
+   color: #ffffff;
 }
+
 .banner a{
     padding:2%
 
@@ -156,7 +157,6 @@ margin-left: 50%;
 .manageHeader h3{
     font-weight: 400;
     font-family: cursive;
-    /* color: rgba(8, 8, 8, 0.5); */
     font-size: 20px;
     text-decoration: underline;
 }
@@ -166,11 +166,9 @@ margin-left: 50%;
 }
 .iconsActive i{
     margin-top: 1%;
-
-    /* margin-left: 5%; */
 }
 .delete{
-    /* margin-right: 8%; */
+
     color:blue;   
     display: flex;
 }
