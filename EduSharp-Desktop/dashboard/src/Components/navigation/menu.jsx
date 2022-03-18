@@ -68,7 +68,7 @@ const Menu = () => {
                 <Route path="/" element={<Landing/>}/>
                 <Route path={'/home'} element={<Home/>}/>
                 <Route path={'/AddBook'} element={<AddBook/>}/>
-               
+                <Route path={"/manageUsers"} element={<ManageUsers/>}/>
                 <Route path={'/ReportBooks'} element={<ReportBooks/>}/>
                 <Route path={'/AddLesson'} element={<AddLesson/>}/>
                 <Route path={'/ViewLessons'} element={<ViewLesson/>}/>

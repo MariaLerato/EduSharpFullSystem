@@ -5,9 +5,6 @@ import LinkNav from '../navigation/linkNav';
 
 
 const ManageUsers = () => {
-    const LogOut = ()=>{
-        Users.signOut(navigate)
-          }
     return (
 
     <div className='ContentContainer'>

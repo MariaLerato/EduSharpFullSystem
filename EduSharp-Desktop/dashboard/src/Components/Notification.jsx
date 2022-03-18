@@ -10,11 +10,9 @@ import Users from "./Authentication-firebase/reuse"
 import "./notification.css";
 import { Button } from "bootstrap";
 import LinkNav from "./navigation/linkNav";
+
 export const Notification = () => {
-  const navigate = useNavigate()
-  const LogOut = ()=>{
-    Users.signOut(navigate)
-      }
+ 
 
   return (
     <>
