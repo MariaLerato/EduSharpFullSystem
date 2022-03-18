@@ -21,13 +21,13 @@ import { COLORS, SIZES } from "../constants";
 import { Switch } from "react-native-switch";
 import Info from "../mock/Q&A";
 import Post from "./PostQuestion";
-import { auth,db } from "../BackendFirebase/configue/Firebase";
+import { auth, firestore } from "../BackendFirebase/configue/Firebase";
 
 const Starred = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [share, setShare] = useState(false);
   const [modalVisible, setVisible] = useState(false);
-  const loc = db.collection("stares");
+  const loc = firestore.collection("stares");
   
 useEffect(()=> {Starred()},[])
   //retrieving stared posts
