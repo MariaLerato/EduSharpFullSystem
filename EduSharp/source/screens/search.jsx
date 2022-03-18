@@ -32,16 +32,13 @@ const width = Dimensions.get("window").width / 2 - 30;
 const Search = ({ navigation }) => {
 
   const [categoryIndex, setCategoryIndex] = React.useState(0);
-  
-  const categories = [{item:"Q As",location:'QList'}, {item:"Material",location:'Material'},{ item:"Lesson",location:'QList'}, {item:"Papers",location:'QList'}];
+  const [query, setquery] = useState('');
 
+  const [code, setcode] = useState(0);
 
-const [code, setcode] = useState(0);
-
- 
   return (
     <View style={Styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',paddingHorizontal:10 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10 }}>
         <Icon
           name="arrow-back-ios"
           size={28}
@@ -49,72 +46,71 @@ const [code, setcode] = useState(0);
           onPress={navigation.goBack}
         />
         <View style={Styles.touchable}>
-          <TextInput placeholder="Search" style={{ fontSize:SIZES.h3, color: COLORS.grey }} />
+          <TextInput placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={{ fontSize: SIZES.h3, color: COLORS.grey }} />
           <Icon name="search" color={COLORS.primary} size={28} />
         </View>
       </View>
 
-      <View style={{flexDirection:'row' ,justifyContent:'space-between',marginVertical:10 }}>
-      <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(0)}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 10 }}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 0 ? COLORS.primary : 'white' }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(0)}>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+            ]}
+          >
+            {"QA's "}
+          </Text>
+        </TouchableOpacity>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
-              ]}
-            >
-              {"QA's "}
-            </Text>
-          </TouchableOpacity>
-         
-          <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(1)}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 1 ? COLORS.primary : 'white' }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(1)}>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
-              ]}
-            >
-              {"Material "}
-            </Text>
-          </TouchableOpacity>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+            ]}
+          >
+            {"Material "}
+          </Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(2)}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 2 ? COLORS.primary : 'white' }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(2)}>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
-              ]}
-            >
-              {"Lessons"}
-            </Text>
-          </TouchableOpacity>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+            ]}
+          >
+            {"Lessons"}
+          </Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(3)}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 3 ? COLORS.primary : 'white' }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(3)}>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h3,fontWeight:'800'}
-              ]}
-            >
-              {"Question Papers"}
-            </Text>
-          </TouchableOpacity>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+            ]}
+          >
+            {"Question Papers"}
+          </Text>
+        </TouchableOpacity>
       </View>
-     {code == 0?<SearchQList />:null}
-     {code == 1?<SearchLessons/>:null}
-     {code == 2?<SearchMaterial/>:null}
-     {code == 3?<SearchQuestionPaper/>:null} 
+      {code == 0 ? <SearchQList query={query} /> : null}
+      {code == 1 ? <SearchLessons query={query} /> : null}
+      {code == 2 ? <SearchMaterial query={query} /> : null}
+      {code == 3 ? <SearchQuestionPaper query={query} /> : null}
     </View>
   );
 };
@@ -135,7 +131,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     padding: "2%",
     opacity: 1,
-    paddingTop:10
+    paddingTop: 10
   },
   header: {
     display: "flex",
@@ -306,8 +302,8 @@ const Styles = StyleSheet.create({
     padding: 10,
     height: 30,
     borderRadius: 20,
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 10,
   },
   headerContainer: {

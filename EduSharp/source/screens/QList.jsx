@@ -16,7 +16,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import * as Notifications from 'expo-notifications';
 import * as DocumentPicker from 'expo-document-picker';
-// import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 
 const QList = ({ navigation }) => {
@@ -85,11 +85,12 @@ const QList = ({ navigation }) => {
     };
 
     const pickImage = async () => {
-        let result = await DocumentPicker.getDocumentAsync({
-            multiple: false, type: 'image/*',
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-        });
+            quality: 1,
+          });
 
         if (!result.cancelled) {
 
