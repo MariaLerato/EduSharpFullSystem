@@ -74,9 +74,11 @@ class Users {
         console.log("reset password error:" + error);
       });
   }
-  signOut() {
+  signOut(navigate) {
     localStorage.removeItem("userid");
     auth.signOut();
+    console.log('=======================================');
+    navigate('/signIn')
   }
   isLogIn() {
     const id = localStorage.getItem("userid");
@@ -98,10 +100,10 @@ class Users {
       !item ||
       !filename
     )
-      return {
+     { return {
         status: "Error",
         message: "Please enter all the information!"
-      };
+      };}
     console.log(id, "------=-=---------========---------=---------=", item);
 
     if (!id) {
@@ -139,7 +141,7 @@ class Users {
   }
   viewItems(item) {
     const id = localStorage.getItem("userid");
-    
+    console.log("amariamariamariaamariamairiaamiair")
     var res=[];
    return firestore
       .collection(item)

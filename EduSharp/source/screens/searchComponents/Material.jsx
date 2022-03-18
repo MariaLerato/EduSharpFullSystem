@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker, FlatList } from 'react-native'
 import { Icon, Card, BottomSheet, Input, ListItem, Divider } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
-import ProgressIndicator from '../components/progressIndicator';
-import { COLORS, FONTS, SIZES, icons } from "../constants";
+import ProgressIndicator from '../../components/progressIndicator';
+import { COLORS, FONTS, SIZES, icons } from "../../constants";
 import * as DocumentPicker from 'expo-document-picker';
 import { v4 as uuidv4 } from 'uuid'
-import Info from '../mock/Q&A'
 import { useEffect } from 'react';
-import { auth, firestore, storage } from '../BackendFirebase/configue/Firebase';
-import MaterialComponent from '../components/materialcomponent';
-import GeneralService from '../BackendFirebase/services/GeneralService';
+import { auth, firestore, storage } from '../../BackendFirebase/configue/Firebase';
+import MaterialComponent from '../../components/materialcomponent';
+import GeneralService from '../../BackendFirebase/services/GeneralService';
 
 
-const Material = ({ navigation }) => {
+const SearchMaterial = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
     //     setToggle(!toggle)
@@ -339,9 +338,7 @@ const Material = ({ navigation }) => {
                     />
 
                 </ScrollView>
-                <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
-                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
-                </TouchableOpacity>
+                
                 <View>
 
                     <Modal
@@ -656,4 +653,4 @@ const Styles = StyleSheet.create({
 
 
 })
-export default Material
+export default SearchMaterial

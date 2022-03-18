@@ -1,25 +1,268 @@
-import * as React from 'react';
-import { Button, View, Text } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { Icon } from 'react-native-elements';
-import Slideshow from 'react-native-image-slider-show';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Card } from 'react-native-paper';
-//import Icon from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions, ScrollView,
+  ImageBackground
+} from "react-native";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Checkbox, Snackbar, TextInput } from "react-native-paper";
+import { Icon, Input, Avatar, Button } from "react-native-elements";
+import Styles from "../style/signinScreen";
+import { COLORS, SIZES, FONTS } from "../constants";
+import { db,auth } from "../BackendFirebase/configue/Firebase";
+import firebase from "firebase";
+
+import ProfileHome from "../components/ProfileHome";
+import EditProfile from "../components/EditProfile";
+import EducProfile from "../components/EducProfile";
+// import { Button } from "react-native-elements/dist/buttons/Button";
+
+// import Icon from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+// import * as ImagePicker from "expo-image-picker";
 
 
-const Pro = ({ navigation }) => {
+const imagesize=100
+const imageradius=imagesize/2;
+const height = Dimensions.get("screen").height;
+const width = Dimensions.get("screen").width;
+const row1Height = height * 0.3;
 
+const row2Height = height * 0.7;
+const Stack = createNativeStackNavigator();
+
+const Pro = ({navigation}) => {
+  const [name, setName] = useState({});
+  
+  const [email, setemail] = useState({});
+ const [url,seturl] = useState();
+ const db = firebase.firestore();
+
+ 
+  const userId = auth.currentUser.uid;
+  const updateUser = () => {
+      db.ref('/users/' + userId).update({
+          name: name,
+          email: email,
+
+      });
+  };
+
+  useEffect(()=>{
+    let item = [];
+    db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
+    console.log(name,'thap')
+  
+  },[])
+
+const userName = name.name
+const userPhonenumber = name.phonenumber
+const userLocation = name.location
+ const userEmail = name.email
+const userGrade = name.grade
+
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  let openImagePickerAsync = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+
+    setSelectedImage({ localUri: pickerResult.uri });
+  };
+
+  const Logout = () => {
+    navigation.navigate("SignInScreen");
+    firebase.auth().signOut();
+  };
+
+  const backgroundImg = {
+    uri: "https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  };
+  const backgroundImg2 = {
+    uri: "https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  };
+
+  const profilimg = { uri: 'https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' }
   return (
-    <View>
-      <View style={{ top: 10, margin: 30, borderTopRadius: 5, borderTopRightRadius: 5 }}>
-        <Text>Welcome to my profile page</Text>
-      </View>
+
+    <View style={styles.container}>
+   <ImageBackground source={backgroundImg} resizeMode="cover" style={styles.row1}></ImageBackground>
+      <View style={styles.row2}>
+        <View style={styles.imgContainer}>
+            <Avatar      source={profilimg}  style={styles.image} rounded/>
+            {/* <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/> */}
+        </View>
+        <Text
+              style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
+            >
+              {userName}
+
+            </Text>
+            <Text style={{ fontSize: 16, textAlign: "center" }}>
+              {" "}
+              Grade(0)
+            </Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
+
+           <View style={styles.boxcontainer}>
+
+              <Icon name="person" size={22} style={{ color: COLORS.secondary, marginTop: 14, }} />
+
+              <Text style={styles.boxText}>Personal Information</Text>
+
+              <Icon name="arrow-forward-ios" size={20} style={{ color: '#4B7BE8', marginTop: 14, paddingLeft: 90 }} />
+            </View> 
+
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('education', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber, userGrade:userGrade})} >
+
+            <View style={styles.boxcontainer}>
+              <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14, }} />
+
+
+
+
+                <Text style={styles.boxText}>Educational Information</Text>
+                <Icon name="arrow-forward-ios" size={20} style={{ color: '#4B7BE8', marginTop: 14, paddingLeft: 70 }} />
+
+              </View> 
+              </TouchableOpacity>
+
+              
+              
+              <View style={{bottom:20,position:'absolute', alignContent:'center', paddingHorizontal:20}}>
+            
+              <TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')} >
+
+              <Icon
+                name="logout"
+                size={25}
+                color="red"
+              />
+
+              </TouchableOpacity>
+            {/* </View>  */}
+             
+      
+  
+
+
+          </View>
+        </View>
+
+        
+
+       
+      
+     
+     <View/>
     </View>
+      )
+};
 
-    )
-  }
 
-export default Pro    
+
+      
+const styles = StyleSheet.create({
+  container: {
+  flex: 1,
+backgroundColor: 'white'
+},
+row1: {
+  height: row1Height,
+},
+row2: {
+  backgroundColor: "white",
+  height:20,
+flex: 1,
+marginTop: -80,
+borderTopRightRadius: 30,
+borderTopLeftRadius: 30,
+alignItems: "center",
+},
+imgContainer: {
+  width: imagesize,
+height: imagesize,
+marginTop: -50,
+borderRadius: imageradius,
+borderWidth: 2,
+borderColor: "white",
+overflow: 'hidden'
+
+},
+usernames: {
+  alignItems: "center",
+},
+image: {
+  width: '100%',
+height: '100%'
+},
+innerBottom: {
+  paddingHorizontal: 15,
+top: 50,
+},
+
+bottomView: {
+  flex: 1.5,
+backgroundColor: "#fff",
+bottom: 40,
+borderTopStartRadius: 40,
+borderTopEndRadius: 40,
+},
+elevated: {
+  paddingHorizontal: 20,
+  top:-120
+},
+boxcontainer: {
+  width: width / 1.1,
+height: height / 12.3,
+elevation: 15,
+borderRadius: 10,
+backgroundColor: "#fff",
+marginTop: 20,
+paddingHorizontal: 20,
+flexDirection: "row",
+},
+logOut: {
+  paddingTop: 130,
+},
+containerStyle: {
+  width: 300,
+marginVertical: 10,
+borderColor: "gray",
+elevation: 12,
+},
+buttonStyle: {
+  backgroundColor: "white",
+borderColor: "transparent",
+borderWidth: 0,
+borderRadius: 10,
+borderWidth: 1,
+borderColor: "rgba(0,0,0,.2)",
+},
+
+boxText: {
+  fontSize: 16,
+marginTop: 15,
+},
+});
+
+  export default Pro;
+  
