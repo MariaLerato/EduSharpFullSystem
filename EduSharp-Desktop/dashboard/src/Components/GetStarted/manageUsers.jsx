@@ -5,9 +5,6 @@ import LinkNav from '../navigation/linkNav';
 
 
 const ManageUsers = () => {
-    const LogOut = ()=>{
-        Users.signOut(navigate)
-          }
     return (
 
     <div className='ContentContainer'>
@@ -19,8 +16,7 @@ const ManageUsers = () => {
             <i className='fa fa-search fa-2x'/> 
      <input type={'search'} placeholder={'Search Lessons ..'} className={'searchIcon'}/>
             </div>
-            <div className = 'delete'>
-            <input type="checkbox" class="form-check-input" id="exampleCheck1"/>Delete </div>
+         
         </div>
         <div className='banner'>
             <p>Name</p>

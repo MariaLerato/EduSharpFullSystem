@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddLesson.css";
+
 import logo from "./images/image.png";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -18,7 +18,7 @@ const AddQuestion = () => {
   const [description,setDescription ] = useState()
 
   const onSubmit = ()=>{
-    Users.addItem(subject,grade,description,topic,file,'question')
+    Users.addItem(subject,grade,description,topic,file,file.name,'question')
   }
   const navigate = useNavigate()
   return (
@@ -49,22 +49,22 @@ const AddQuestion = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={subject}
-              onChange={()=>setSubject()}
+              onChange={(e)=>setSubject(e.target.value)}
             >
               <option selected>Select Subjects</option>
-              <option value="1">Physical Science</option>
-              <option value="2">Life Science</option>
-              <option value="3">Consumer Studies</option>
-              <option value="4">Mathematics</option>
-              <option value="5">Business Studies</option>
-              <option value="6">Economics</option>
-              <option value="7">Accounting</option>
-              <option value="8">Geography</option>
-              <option value="9">Agriculture</option>
-              <option value="10">Sepedi</option>
-              <option value="11">English</option>
-              <option value="12">Life Orientation</option>
-              <option value="13">Technical Science</option>
+              <option value="Physical Science">Physical Science</option>
+              <option value="Life Science">Life Science</option>
+              <option value="Consumer Studies">Consumer Studies</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Business Studies">Business Studies</option>
+              <option value="Economics">Economics</option>
+              <option value="Accounting">Accounting</option>
+              <option value="Geography">Geography</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Sepedi">Sepedi</option>
+              <option value="English">English</option>
+              <option value="Life Orientation">Life Orientation</option>
+              <option value="Technical Science">Technical Science</option>
             </select>
           </div>
           <br />
@@ -75,14 +75,15 @@ const AddQuestion = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={grade}
-              onChange={()=>setGrade()}
+              onChange={(e)=>setGrade(e.target.value)}
+
             >
               <option selected>Select Grade</option>
-              <option value="1">08</option>
-              <option value="2">09</option>
-              <option value="3">10</option>
-              <option value="3">11</option>
-              <option value="3">12</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
             </select>
           </div>
           <div class="mb-3">
@@ -95,7 +96,8 @@ const AddQuestion = () => {
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
               value={topic}
-              onChange={(t)=>setTop()}
+              onChange={(e)=>setTop(e.target.value)}
+
             />
           </div>
           <div class="mb-3">
@@ -107,7 +109,7 @@ const AddQuestion = () => {
               id="exampleFormControlTextarea1"
               rows="3"
               value={description}
-              onChange={(t)=>setDescription(t)}
+              onChange={(e)=>setDescription(e.target.value)}
             ></textarea>
           </div>
           <label className="upload">Upload Question Paper</label>
@@ -118,8 +120,7 @@ const AddQuestion = () => {
               id="inputGroupFile03"
               aria-describedby="inputGroupFileAddon03"
               aria-label="Upload"
-              value={file}
-              // onChange={()}
+              onChange={(e)=>setFile(e.target.files[0])}
             />
           </div>
           <button type="submit" className="button">
