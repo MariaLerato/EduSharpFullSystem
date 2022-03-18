@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -27,30 +27,39 @@ const Starred = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [share, setShare] = useState(false);
   const [modalVisible, setVisible] = useState(false);
-
+  const loc = db.collection("stares");
+  
+useEffect(()=> {Starred()},[])
   //retrieving stared posts
+  const Starred = () => {
+    
+    console.log('RUUNING',queries)
 
-  const [postkey, setPostKey] = useState("");
-  const [user, setUser] = useState("");
 
- const userId = auth.currentUser.uid;
- console.log('melva',userId)
+      loc.where("user", "==",auth.currentUser.uid ).get()
+        .then(async(querySnapshot) => {
+          let results=[];
+  
+         await querySnapshot.forEach((doc) => {
 
-  const GetUser=()=>{
+            
+            console.log(doc.id, "============= => ", doc.data());
+            results.push(doc.data())
+          });
 
-    console.log('nkamaaaaaaaaa');
-    db.collection("stares").doc(auth.currentUser.uid).get().then(res=>{
-      console.log('detail',res.data().postKey,  auth.currentUser.uid);
-      setPostKey(res.data().postKey);
-      setUser(res.data().user);
+          setHotel(results)
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    
       
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+
+  };
+  
   //
 
-  const Postcard = ({stares}) => {
+  const Postcard = () => {
     return (
       <View>
         {Info.info.map((data) => (
@@ -69,7 +78,7 @@ const Starred = ({ navigation }) => {
                 >
                   <View>
                     <Text style={Styles.headertext}>{data.username}</Text>
-                    <Text style={{ marginLeft: 20 }}>{user}</Text>
+                    <Text style={{ marginLeft: 20 }}>{postkey}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => setIsVisible(true)}
