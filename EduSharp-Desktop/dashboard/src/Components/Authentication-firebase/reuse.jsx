@@ -88,6 +88,7 @@ class Users {
 
     return false;
   }
+<<<<<<< Updated upstream
   addItem(subject,grade,description,topic,file,filename,item){
       //item=>{lessons,question paper,books}
       const id=localStorage.getItem('userid')
@@ -101,6 +102,58 @@ class Users {
           'status':'Error',
           'message':'Please enter all the information!'
         }
+=======
+  addItem(subject, grade, description, topic, file, filename, item) {
+    //item=>{lessons,question paper,books}
+    const id = localStorage.getItem("userid");
+    console.log("llllll");
+    if (
+      !subject ||
+      !grade ||
+      !description ||
+      !topic ||
+      !file ||
+      !item ||
+      !filename||
+      !id
+    )
+     { return {
+        status: "Error",
+        message: "Please enter all the information!"
+      };}
+    console.log(id, "------=-=---------========---------=---------=", item);
+
+    if (!id) {
+      return {
+        status: "Error",
+        message: "Please log in!"
+      };
+    }
+    var uploadTask = storageref.child(`${item}/${id}/${filename}`).put(file);
+  return  uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {},
+      () => {
+        const url = uploadTask.snapshot.ref
+          .getDownloadURL()
+          .then((downloadURL) => {
+           return firestore.collection(item).doc().set({
+              createdAt: new Date(),
+              description: description,
+              downloadURL,
+              downloadable: true,
+              grade: grade,
+              illustrationURL: null,
+              status: true,
+              subject: subject,
+              topic: topic,
+              isAdmin: true,
+              userID: id
+            });
+            console.log("File available at", downloadURL);
+          });
+>>>>>>> Stashed changes
       }
       console.log(id,'------=-=---------========---------=---------=',item)
      

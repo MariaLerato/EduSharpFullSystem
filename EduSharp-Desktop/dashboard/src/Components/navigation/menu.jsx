@@ -29,9 +29,13 @@ import '../StyleSheet.css'
 import reuse from "../Authentication-firebase/reuse";
 
 const Menu = () => {
+<<<<<<< Updated upstream
 
  
   
+=======
+console.log(reuse.isLogIn() ,"<<<<<<reuse.isLogIn() ")
+>>>>>>> Stashed changes
     return (
         <BrowserRouter>
           {reuse.isLogIn() ? (
@@ -57,9 +61,30 @@ const Menu = () => {
             </div>
           ) : (
             <Routes>
+<<<<<<< Updated upstream
                 <Route path={'/signIn'} element={<LogIn setEmail={setEmail} setPassword={setPassword}/>}/>
                 <Route path={'/signUp'} element={<Register setEmail={setEmail} setPassword={setPassword} />}/>
                 <Route path="/" element={<Landing/>}/> 
+=======
+                <Route path={'/signIn'} element={<LogIn />}/>
+                <Route path={'/signUp'} element={<Register />}/>
+                <Route path="/resetPassword" element={<ResetPassword/>}/>
+                <Route path="/" element={<Landing/>}/>
+                {/* <Route path={'/home'} element={<Home/>}/>
+                <Route path={'/AddBook'} element={<AddBook/>}/>
+               
+                <Route path={'/ReportBooks'} element={<ReportBooks/>}/>
+                <Route path={'/AddLesson'} element={<AddLesson/>}/>
+                <Route path={'/ViewLessons'} element={<ViewLesson/>}/>
+                <Route path={'./ReportLesson'} element={<ReportLesson/>}/>
+                <Route path={'/AddQuestion'} element={<AddQuestion/>}/>
+                <Route path={'/ViewPaper'} element={<ViewPaper/>}/>
+                <Route path={'./ReportPaper'} element={<ReportPaper/>}/>
+                <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
+                <Route path={'/Notification'} element={<Notification/>}/>
+              <Route path={'/complaint'} element={<Complaints/>}/>
+                <Route path={'./'}/> */}
+>>>>>>> Stashed changes
             </Routes>
           )}
     </BrowserRouter>
