@@ -29,9 +29,8 @@ import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'
 import reuse from "../Authentication-firebase/reuse";
-import ResetPassword from "../GetStarted/resetPassword";
-import ManageUsers from "../GetStarted/manageUsers";
-
+import Notification from "../Notification/Notification";
+import Manageusers from "../Manageusers/Manageusers";
 const Menu = () => {
 
     return (
