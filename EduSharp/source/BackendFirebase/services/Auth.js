@@ -13,16 +13,11 @@ class Auth {
           auth.currentUser.sendEmailVerification().then(() => {
             Service.post("users", data, userCredential.user.uid, navigation);
           }).catch((err) => {
-
             obj = { status: 'Failed', details: err };
-
           });
-
         })
         .catch((err) => {
-
           obj = { status: 'Failed', details: err };
-
         });
     } catch (err) {
       console.log(err);
