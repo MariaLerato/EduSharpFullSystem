@@ -165,32 +165,30 @@ class Users {
       });
 
   }
-  // getLoggedData(id){
-  //     return firebase.ref(`/user/${id}`)
-  // }
+  
+  getUser(){
+    return firestore.collection("users")
+          .get()
+          .then((querySnapshot)=>{
+            var arr=[]
+            querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              arr.push(doc.data())
+              console.log(doc.id, " => ", doc.data());
+            });
+           return {
+             'status':'success',
+             message:'successfuly retrived data',
+             data:arr,
+           }
+          }).catch((error)=>{
+            return{
+              'status':'Error',
+              message:error,
+              data:[],
+            }
+          })
 
-  // getData(){
-  //     return db
-  // }
-  // createData(userinfo){
-  //     return db.push(userinfo)
-  // }
-  // getDataById(ref){
-  //     return firebase.ref(`/users/${ref}`);
-  // }
-  // updateData(key,value){
-  //     console.log(value)
-  //     return db.child(key).update(value)
-  // }
-
-  // upDateBio(ref,info){
-  //     firebase.ref('/user').child(ref).update({
-  //         dsc:info
-  //     }).then(()=>{
-  //         console.log('Update Complete')
-  //     }).catch(err=>{
-  //         console.log(err.message)
-  //     })
-  // }
+  }
 }
 export default new Users();
