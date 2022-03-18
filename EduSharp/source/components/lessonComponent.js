@@ -4,8 +4,14 @@ import { Divider, Icon, Image, Input } from 'react-native-elements';
 import { auth } from '../BackendFirebase/configue/Firebase';
 import GeneralService from '../BackendFirebase/services/GeneralService';
 import { COLORS, SIZES } from '../constants';
+import { Video, AVPlaybackStatus } from 'expo-av';
+import { Button } from 'react-native-paper';
 
-const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, sterePress, sharePress, commentsPress, navigation }) => {
+
+const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, sterePress, sharePress, commentsPress, navigation }) => {
+
+    const video = React.useRef(null);
+    const [status, setStatus] = React.useState({});
     const [commenting, setcommenting] = useState(false);
     const [days, setdays] = useState('');
     const [comment, setcomment] = useState('');
@@ -88,7 +94,26 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
             </View>
 
             <Text style={{ fontSize: SIZES.h4 }}>{data.item.description}</Text>
-            <Image source={require('../../assets/images/pdf.png')} style={{ height: 210, width: '100%', borderRadius: 7 }}/>
+            <Image source={require('../../assets/images/pdf.png')} />
+            <Video
+                ref={video}
+                style={{ height: 210, width: '100%', borderRadius: 7 }}
+                source={{
+                    uri: data.item.downloadUrl,
+                }}
+                useNativeControls
+                resizeMode="contain"
+                isLooping
+                onPlaybackStatusUpdate={status => setStatus(() => status)}
+            />
+            {/* <View style={{}}>
+                <Button
+                    title={status.isPlaying ? 'D' : 'Play'}
+                    onPress={() =>
+                        status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
+                    }
+                />
+            </View> */}
             <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
 
             <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto' }}>
@@ -116,4 +141,4 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
     );
 }
 
-export default QAComponent;
+export default LessonComponent;

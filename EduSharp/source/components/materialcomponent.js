@@ -4,6 +4,7 @@ import { Divider, Icon, Image, Input } from 'react-native-elements';
 import { auth } from '../BackendFirebase/configue/Firebase';
 import GeneralService from '../BackendFirebase/services/GeneralService';
 import { COLORS, SIZES } from '../constants';
+import { WebView } from 'react-native-webview';
 
 const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, sterePress, sharePress, commentsPress, navigation }) => {
     const [commenting, setcommenting] = useState(false);
@@ -88,7 +89,12 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
             </View>
 
             <Text style={{ fontSize: SIZES.h4 }}>{data.item.description}</Text>
-            <Image source={require('../../assets/images/pdf.png')} style={{ height: 210, width: '100%', borderRadius: 7 }}/>
+            <View style={{ height: 210, width: '100%', borderRadius: 7 }}>
+                <WebView
+
+                    source={{ uri: 'http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf' }}
+                />
+            </View>
             <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
 
             <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto' }}>

@@ -54,8 +54,6 @@ const SearchQList = ({ navigation }) => {
 
     const [myName, setmyName] = useState('');
 
-
-
     const starWarching = async () => {
         try {
 

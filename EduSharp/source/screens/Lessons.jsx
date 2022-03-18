@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker, FlatList } from 'react-native'
-import { Icon, Card, BottomSheet, Input, ListItem } from 'react-native-elements';
+import { Icon, Card, BottomSheet, Input, ListItem, Divider } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
 import ProgressIndicator from '../components/progressIndicator';
 import { COLORS, FONTS, SIZES, icons } from "../constants";
-import * as DocumentPicker from 'expo-document-picker';
 import MaterialComponent from '../components/materialcomponent';
+import * as ImagePicker from 'expo-image-picker';
 
 import Info from '../mock/Q&A'
 import { auth, firestore } from '../BackendFirebase/configue/Firebase';
 import GeneralService from '../BackendFirebase/services/GeneralService';
+import LessonComponent from '../components/lessonComponent';
+
 
 const Lessons = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
@@ -32,7 +34,8 @@ const Lessons = ({ navigation }) => {
     const [fileUrl, setfileUrl] = useState('');
     const [filename, setfilename] = useState('');
     const [userID, setuserID] = useState('');
-    const [key, setkey] = useState('')
+    const [key, setkey] = useState('');
+    const [postObject, setpostObject] = useState(null);
 
  
     const handleLike = (key, token, topic,desc) => {
@@ -260,11 +263,12 @@ const Lessons = ({ navigation }) => {
 
     const SelectFile = async () => {
 
-        let result = await DocumentPicker.getDocumentAsync({
-            multiple: false, type: 'application/pdf',
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-        });
+            quality: 1,
+          });
 
         if (!result.cancelled) {
 
@@ -339,7 +343,7 @@ const Lessons = ({ navigation }) => {
                         /> */}
                     </View>
                     <FlatList data={post} renderItem={(data, index) => (
-                        <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                        <LessonComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}
                     />

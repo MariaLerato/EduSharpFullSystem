@@ -18,6 +18,7 @@ const SearchLessons = ({ navigation }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [share, setShare] = useState(false);
     const [modalVisible, setVisible] = useState(false);
+    const [postObject, setpostObject] = useState(null);
 
     const [alertColor, setalertColor] = useState('');
     const [selectedGrade, setselectedGrade] = useState('Grade 8');

@@ -341,9 +341,7 @@ const SearchQuestionPaper = ({ navigation }) => {
                     />
 
                 </ScrollView>
-                <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
-                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
-                </TouchableOpacity>
+
                 <View>
 
                     <Modal
