@@ -12,6 +12,10 @@
 .headBar{
     background:rgba(131, 131, 131, 0.5);  
 }
+.ContainerBody{
+    background:rgba(150, 149, 149, 0.5); 
+    height: 100vh;
+}
 .Bar{
    display: flex;
    background-size:cover;
@@ -39,6 +43,10 @@ width: 100%;
     display: flex;
     justify-content: space-between;
     color: white;
+    /* margin-top: -1px; */
+}
+.body h2{
+    margin-top: -2%;
 }
 .logo{
     display: flex;
@@ -55,7 +63,8 @@ width: 100%;
 
 .head h3{
     color:rgb(226, 226, 219);
-    margin-top: 1%;
+    margin-top: 2%;
+    font-size: 20px;
 }
 
 .imgContainer{
@@ -104,14 +113,23 @@ margin-left: 50%;
 }
 
 .backBody{
-    /* background:rgba(44, 44, 44, 0.5); */
+    background:rgba(126, 124, 124, 0.5);
     height: 100vh;  
 }
 .buttons{
     padding: 1%;
     margin-left: -5%;
 }
-
+.progressLoader{
+    position: absolute;
+    /* left: -20; */
+    top: 0;
+    align-content: center;
+    margin-top: 20%;
+    /* background:rgba(250, 248, 248, 0.5); */
+    /* height: 100vh; */
+   
+}
 .forgotButton{
     margin-left:25%;
     /* margin:1%; */
@@ -129,7 +147,7 @@ margin-left: 50%;
 }
 .banner{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     padding:1%;
     margin:2%;
     border-radius: 5px;
@@ -189,7 +207,7 @@ margin-left: 50%;
 }
 .listUsers{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     padding:1%;
     margin:2%;
     border-radius: 5px;
@@ -232,7 +250,7 @@ margin-left: 50%;
     color: rgb(199, 46, 46);
 }
 .Register input{
-    width: 395px;
+    width: 400px;
     margin-left: 2%;
 padding: 2%;
 font-weight: 600
@@ -328,10 +346,10 @@ input{
 
 .sub{
     align-items: flex-end;
-    width: 40%;
+    width: 45%;
     margin-top: 20%;
-    font-size: 20px;
-    padding-right: 3%;
+    font-size: 16px;
+    padding-right: 2%;
     font-weight: 500;
 
 }

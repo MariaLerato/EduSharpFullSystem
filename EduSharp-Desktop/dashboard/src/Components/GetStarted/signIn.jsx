@@ -7,7 +7,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 // import Button from '@mui/material/Button';
 
 const LogIn = () => {
-
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [load, setLoad] = useState(false);
@@ -30,12 +29,12 @@ const LogIn = () => {
           <h3>Administration</h3>
         </div>
         <div className="signBody" style={{ marginTop: "8%" }}>
-          <div className="headings">
-            <h1>Sign In To Your Account.</h1>
+          <div className="headings" >
+            <h1 style={{fontSize:35}}>Sign In To Your Account.</h1>
           </div>
 
           <form className="Register" onSubmit={SignIn}>
-            <div></div>
+          
             {/* other inputs */}
             <div className="input-icons">
               {/* <i className='fa fa-envelope fa-2x'></i> */}
@@ -64,7 +63,11 @@ const LogIn = () => {
               Forgot Password?
             </button>
             <div className="buttons">
-              {load && <CircularProgress color="success"/>}
+              {load && 
+              <div className="progressLoader">
+              <CircularProgress color="primary"/>
+              </div>
+              }
               <button className="logButton" onClick={SignIn} type={"submit"}>
                 Log In To Account
               </button>

@@ -23,9 +23,10 @@ const ManageUsers = () => {
         <div className='banner'>
             <p>Name</p>
             <p>Email</p>
-            <p>Location</p>
-            <p>Last Seen</p>
+            <p>Phone Number</p>
+            <p>Joined Date</p>
             <p>Roles</p>
+            <p>Manage</p>
         </div>
         {users.map(data=>
       

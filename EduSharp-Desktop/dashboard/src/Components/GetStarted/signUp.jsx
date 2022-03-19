@@ -2,15 +2,18 @@ import React,{useState} from 'react'
 import './style.css'
 import logo from '../images/image.png'
 import Users from '../Authentication-firebase/reuse'
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Register = () => {
   const [firstname, setName] = useState();
   const [lastname, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [load, setLoad] = useState(false);
 
   const SignUp = (e) => {
     e.preventDefault();
+    setLoad(true);
     Users.signUp(email, password, firstname, lastname);
     console.log("sent");
   };
@@ -75,6 +78,11 @@ const Register = () => {
             </div>
             <div className="buttons">
               {/* <button className='forgotButton'>Forgot Password</button> */}
+              {load && 
+              <div className="progressLoader">
+              <CircularProgress color="primary"/>
+              </div>
+              }
               <button className="create" onClick={SignUp} type={"submit"}>
                 Create Account
               </button>

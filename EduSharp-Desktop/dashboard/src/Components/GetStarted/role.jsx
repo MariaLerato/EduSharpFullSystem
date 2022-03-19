@@ -10,7 +10,7 @@ const Role = ({data}) => {
             <input type="checkbox" class="form-check-input" id="exampleCheck1"/>
                 {data.name}</p>
             <p>{data.email}</p>
-            <p>{data.location}</p>
+            <p>{data.phonenumber}</p>
             <p>20 min ago</p>
             <select
               class="form-select"
@@ -24,6 +24,9 @@ const Role = ({data}) => {
               <option value="Teacher">Teacher</option>
               <option value="Student">Student</option>
             </select>
+            <div className='deleteIcon'>
+            <i class="fa fa-trash " >Delete User</i>
+            </div>
         </div>
     </div>
   )
