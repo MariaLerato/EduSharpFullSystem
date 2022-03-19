@@ -1,0 +1,60 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.notification{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.NotifCard{
+    background-color: white;
+    height: 180px;
+    display: flex;
+    justify-content: first baseline;
+    padding: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,.2);
+    /* align-items: flex-start; */
+}
+.names{
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.time{
+    color: #4B7BE8;
+    font-weight: 800;
+}
+.Notifcontainer{
+    flex: 1;
+    margin-left: 20px;
+    min-height: 20px;
+}
+.message{
+    margin-top: 10px;
+}
+.message h4 span{
+    color: #4B7BE8;
+}
+.iconandname{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: silver;
+    width: 180px;
+    padding: 10px;
+    margin-left: 5px;
+    
+}
+.iconandname p{
+    font-weight: 900;
+}
+.detailsNotifContainer{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}

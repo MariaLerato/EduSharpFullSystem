@@ -19,6 +19,7 @@ export const Sidemenu = () => {
   
   }
   const fileType=['application/pdf']
+  
   const handleFileChange=(e)=>{
     let selectedfile=e.target.files[0]
     if(selectedfile){

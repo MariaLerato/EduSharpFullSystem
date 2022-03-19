@@ -74,6 +74,7 @@ const SignIn = ({ navigation }) => {
       setalert(true);
       setloading(false)
       setalertMessage(err);
+      
     });
   }
 
