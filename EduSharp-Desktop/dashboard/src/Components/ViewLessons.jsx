@@ -43,7 +43,6 @@ export const ViewLesson = () => {
     Users.viewItems("lessons").then(async(data) => {
       if (data.status === "success") {
         setItems(data.data);
-
         setLoading(false)
       } else {
         console.log(data);

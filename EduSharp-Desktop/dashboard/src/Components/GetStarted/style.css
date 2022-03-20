@@ -403,22 +403,21 @@ input{
 }
 .app{
     flex: 6;
-    padding:2%;
-    /* margin-top: 1%; */
+    padding-left:2%;
+    margin-top: 1%;
 
 }
 .app h3{
-    font-size: 35px;
+    font-size: 25px;
     margin-bottom: 3%;
     /* text-align: center; */
 }
 .form{
-margin-top: 2%;
+margin-top: 1%;
 width: 55%;
 /* margin:auto */
-
+overflow-x: hidden;
 }
-
 
 select{
     width: 40%;
@@ -516,7 +515,6 @@ select{
     font-size: 35px;
     font-weight: 400;
 }
-
 .picker{
     display: flex;
 }
@@ -531,7 +529,7 @@ select{
     margin-top: -1%;
     border-radius: 5px; */
     text-align: start;
-    margin-top: 3%;
+    margin-top: 1%;
     /* padding:2% */
 }
 

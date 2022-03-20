@@ -11,6 +11,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+
 const AddLesson = () => {
   const navigate = useNavigate();
   const [subject, setSubject] = useState();
@@ -74,20 +75,6 @@ const AddLesson = () => {
   return (
     <div className="Cont">
       <Sidenav sidebtns={btns} />
-      {/* <div className="sidenav">
-        <div className="header">
-          <img src={logo} alt={"edusharp"} width={50} height={50} />
-          <p>EduSharp</p>
-        </div>
-        <div className="lessonLink">
-          <a href="/AddLesson">
-            <p>Add Lesson</p>
-          </a>
-          <a href="/ViewLessons">
-            <p>View Lessons</p>
-          </a>
-        </div>
-      </div> */}
       <div className="app">
         <h3>Add Lessons</h3>
         {/* <div className="form"> */}
@@ -98,7 +85,7 @@ const AddLesson = () => {
             <select
               class="form-select"
               aria-label="Default select example"
-              style={{ width: "50%" }}
+              style={{ width: 600 }}
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             >
@@ -126,7 +113,7 @@ const AddLesson = () => {
             <select
               class="form-select"
               aria-label="Default select example"
-              style={{ width: "50%" }}
+              style={{ width: 600 }}
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
             >
