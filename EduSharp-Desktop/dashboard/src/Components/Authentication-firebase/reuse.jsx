@@ -244,5 +244,21 @@ class Users {
         };
       });
   }
+  updateItem(item,itemKey,updateData){
+    if (!item || !itemKey||!updateData) {
+      return {
+        status: "error",
+        message: "missing some fields"
+      };
+    }
+    firestore.collection(item).doc(itemKey).update(updateData).then(()=>{
+      return{
+        staus:'Success',
+        message:'Data updatedd'
+      }
+    }).catch((error)=>{
+
+    })
+  }
 }
 export default new Users();
