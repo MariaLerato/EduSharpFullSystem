@@ -4,32 +4,76 @@ import logo from "./images/image.png";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 
-import {useNavigate} from 'react-router-dom'
-import Users from './Authentication-firebase/reuse'
+import { useNavigate } from "react-router-dom";
+import Users from "./Authentication-firebase/reuse";
 import Sidenav from "./Sidenav/Sidenav";
-
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 const AddLesson = () => {
-  const navigate = useNavigate()
-  const [subject,setSubject] = useState()
-  const [grade,setGrade] =useState()
-  const [topic,setTop] = useState()
-  const [file,setFile] = useState()
-  const [description,setDescription ] = useState()
+  const navigate = useNavigate();
+  const [subject, setSubject] = useState();
+  const [grade, setGrade] = useState();
+  const [topic, setTop] = useState();
+  const [file, setFile] = useState();
+  const [description, setDescription] = useState();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState();
+  const [isError, setIsError] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [ee,setee]=useState()
 
-  const onSubmit = (e)=>{
-    e.preventDefault()
-    Users.addItem(subject,grade,description,topic,file,file.name,'lessons')
+  const filesetter=(e)=>{
+    setFile(e.target.files[0])
+    setee(e)
   }
 
-  const btns=[{href:'/AddLesson',text:'Add Lesson'},{href:'/ViewLessons',text:'View Lessons'}]
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log("waiting");
+    setOpen(true);
+    Users.addItem(
+      subject,
+      grade,
+      description,
+      topic,
+      file,
+      file.name,
+      "lessons"
+    )
+      .then((res) => {
+        if(res.status==='Success'){
+          setMessage(res.message)
+          setOpen(false);
+          setTop("");
+          setDescription("");
+          setSubject("");
+          setGrade("");
+          setOpenSnackbar(true)
+          console.log("added", res);
+        }else{
+          setMessage(res.message)
+          setIsError(true)
+        }
+      })
+      .catch((error) => {
+        console.log("some error happened", error);
+      });
+  };
+
+  const btns = [
+    { href: "/AddLesson", text: "Add Lesson" },
+    { href: "/ViewLessons", text: "View Lessons" }
+  ];
 
   //How to get viewlessons
   // reuse.viewItems("lessons").then(res=>console.log('promis',res))
 
-
   return (
     <div className="Cont">
-      <Sidenav sidebtns={btns}/>
+      <Sidenav sidebtns={btns} />
       {/* <div className="sidenav">
         <div className="header">
           <img src={logo} alt={"edusharp"} width={50} height={50} />
@@ -56,9 +100,11 @@ const AddLesson = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={subject}
-              onChange={(e)=>setSubject(e.target.value)}
+              onChange={(e) => setSubject(e.target.value)}
             >
-              <option selected>Select Subjects</option>
+              <option value={""} selected>
+                Select Subjects
+              </option>
               <option value="Physical Science">Physical Science</option>
               <option value="Life Science">Life Science</option>
               <option value="Consumer Studies">Consumer Studies</option>
@@ -82,10 +128,11 @@ const AddLesson = () => {
               aria-label="Default select example"
               style={{ width: "50%" }}
               value={grade}
-              onChange={(e)=>setGrade(e.target.value)}
-
+              onChange={(e) => setGrade(e.target.value)}
             >
-              <option selected>Select Grade</option>
+              <option value={""} selected>
+                Select Grade
+              </option>
               <option value="08">08</option>
               <option value="09">09</option>
               <option value="10">10</option>
@@ -95,7 +142,7 @@ const AddLesson = () => {
           </div>
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">
-            Topic
+              Topic
             </label>
             <input
               type="text"
@@ -103,8 +150,7 @@ const AddLesson = () => {
               id="exampleFormControlInput1"
               placeholder="Lesson Topic"
               value={topic}
-              onChange={(e)=>setTop(e.target.value)}
-
+              onChange={(e) => setTop(e.target.value)}
             />
           </div>
           <div class="mb-3">
@@ -116,7 +162,7 @@ const AddLesson = () => {
               id="exampleFormControlTextarea1"
               rows="3"
               value={description}
-              onChange={(e)=>setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
           <label className="upload">Upload Lesson</label>
@@ -127,18 +173,42 @@ const AddLesson = () => {
               id="inputGroupFile03"
               aria-describedby="inputGroupFileAddon03"
               aria-label="Upload"
-              onChange={(e)=>setFile(e.target.files[0])}
+              onChange={(e) => filesetter(e)}
             />
           </div>
           <button type="submit" className="button">
             Save
           </button>
-          <button type="submit" className="button" onClick={()=>navigate('/home')} id="back">
+          <button
+            type="submit"
+            className="button"
+            onClick={() => navigate("/home")}
+            id="back"
+          >
             Go Back
           </button>
         </form>
         {/* </div> */}
       </div>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={`${!isError ? "success" : "error"}`}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -464,6 +464,11 @@ select{
     padding:2%;
     margin-top: -2%;
 }
+.cardholder{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 .search{
     height: 50px;
     margin-left: -1%;

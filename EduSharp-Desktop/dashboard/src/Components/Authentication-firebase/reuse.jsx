@@ -77,8 +77,8 @@ class Users {
   signOut(navigate) {
     localStorage.removeItem("userid");
     auth.signOut();
-    console.log('=======================================');
-    navigate('/signIn')
+    console.log("=======================================");
+    navigate("/signIn");
   }
   isLogIn() {
     const id = localStorage.getItem("userid");
@@ -87,7 +87,7 @@ class Users {
 
     return false;
   }
-  addItem(subject, grade, description, topic, file, filename, item) {
+  async addItem(subject, grade, description, topic, file, filename, item) {
     //item=>{lessons,question paper,books}
     const id = localStorage.getItem("userid");
     console.log("llllll");
@@ -98,13 +98,14 @@ class Users {
       !topic ||
       !file ||
       !item ||
-      !filename||
+      !filename ||
       !id
-    )
-     { return {
+    ) {
+      return {
         status: "Error",
         message: "Please enter all the information!"
-      };}
+      };
+    }
     console.log(id, "------=-=---------========---------=---------=", item);
 
     if (!id) {
@@ -113,85 +114,135 @@ class Users {
         message: "Please log in!"
       };
     }
-    var uploadTask = storageref.child(`${item}/${id}/${filename}`).put(file);
-  return  uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {},
-      () => {
-        const url = uploadTask.snapshot.ref
-          .getDownloadURL()
-          .then((downloadURL) => {
-            alert('Successfully Added A New File')
-           return firestore.collection(item).doc().set({
-              createdAt: new Date(),
-              description: description,
-              downloadURL,
-              downloadable: true,
-              grade: grade,
-              illustrationURL: null,
-              status: true,
-              subject: subject,
-              topic: topic,
-              isAdmin: true,
-              userID: id
+
+    const results = new Promise(async (resolutionFunc, rejectionFunc) => {
+      var uploadTask = storageref.child(`${item}/${id}/${filename}`).put(file);
+      await uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {resolutionFunc({
+          status: "Error",
+          message: error,
+        })},
+        () => {
+          const url = uploadTask.snapshot.ref
+            .getDownloadURL()
+            .then((downloadURL) => {
+              alert("Successfully Added A New File");
+              console.log("File available at", downloadURL);
+              firestore.collection(item).doc().set({
+                createdAt: new Date(),
+                description: description,
+                downloadURL,
+                downloadable: true,
+                grade: grade,
+                illustrationURL: null,
+                status: true,
+                subject: subject,
+                topic: topic,
+                isAdmin: true,
+                userID: id
+              });
+              resolutionFunc({
+                status: "Success",
+                message: "Data added",
+                newData: {
+                  createdAt: new Date(),
+                  description: description,
+                  downloadURL,
+                  downloadable: true,
+                  grade: grade,
+                  illustrationURL: null,
+                  status: true,
+                  subject: subject,
+                  topic: topic,
+                  isAdmin: true,
+                  userID: id
+                }
+              });
             });
-            console.log("File available at", downloadURL);
-          });
-      },
-      console.log(id,'------=-=---------========---------=---------=',item)
-  )
+        }
+      );
+    });
+
+    return results;
   }
   viewItems(item) {
     const id = localStorage.getItem("userid");
-    console.log("amariamariamariaamariamairiaamiair")
-    var res=[];
-   return firestore
+    console.log("amariamariamariaamariamairiaamiair");
+    var res = [];
+    return firestore
       .collection(item)
       .where("userID", "==", id)
       .get()
       .then((querySnapshot) => {
-        var arr=[]
+        var arr = [];
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
-          arr.push(doc.data())
-          console.log(doc.id, " => ", doc.data());
+          const data = { itemKey: doc.id, ...doc.data() };
+          arr.push(data);
+          //console.log(doc.id, " => ", doc.data());
         });
-       return {
-         'status':'success',
-         message:'successfuly retrived data',
-         data:arr,
-       }
+        return {
+          status: "success",
+          message: "successfuly retrived data",
+          data: arr
+        };
       })
       .catch((error) => {
-        return error
+        return error;
       });
-
   }
-  
-  getUser(){
-    return firestore.collection("users")
-          .get()
-          .then((querySnapshot)=>{
-            var arr=[]
-            querySnapshot.forEach((doc) => {
-              // doc.data() is never undefined for query doc snapshots
-              arr.push(doc.data())
-              console.log(doc.id, " => ", doc.data());
-            });
-           return {
-             'status':'success',
-             message:'successfuly retrived data',
-             data:arr,
-           }
-          }).catch((error)=>{
-            return{
-              'status':'Error',
-              message:error,
-              data:[],
-            }
-          })
 
+  getUser() {
+    return firestore
+      .collection("users")
+      .get()
+      .then((querySnapshot) => {
+        var arr = [];
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          arr.push(doc.data());
+          console.log(doc.id, " => ", doc.data());
+        });
+        return {
+          status: "success",
+          message: "successfuly retrived data",
+          data: arr
+        };
+      })
+      .catch((error) => {
+        return {
+          status: "Error",
+          message: error,
+          data: []
+        };
+      });
+  }
+
+  deleteItem(item, itemKey) {
+    if (!item || !itemKey) {
+      return {
+        status: "error",
+        message: "missing some fields"
+      };
+    }
+    return firestore
+      .collection(item)
+      .doc(itemKey)
+      .delete()
+      .then(() => {
+        return {
+          status: "success",
+          message: "Document successfully deleted! "
+        };
+      })
+      .catch((error) => {
+        return {
+          status: "error",
+          message: `Error removing document: ${error}`
+        };
+      });
   }
 }
 export default new Users();
