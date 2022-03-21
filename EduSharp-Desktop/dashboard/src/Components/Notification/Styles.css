@@ -1,41 +1,55 @@
 *{
-    padding: 0;
-    margin: 0;
+   
     box-sizing: border-box;
 }
 
 .notification{
-    padding-left: 20px;
-    padding-right: 20px;
+    /* padding-left: 20px;
+    padding-right: 20px; */
+    padding:2%;
+    padding: auto;
+    margin: auto;
+    /* justify-content: center; */
 }
 
 .NotifCard{
     background-color: white;
-    height: 180px;
+    height: 160px;
+    /* width: 80%; */
     display: flex;
     justify-content: first baseline;
     padding: 10px;
+    border-radius: 10px;
     box-shadow: 2px 2px 10px rgba(0,0,0,.2);
     /* align-items: flex-start; */
 }
+
 .names{
     display: flex;
-    flex: 1;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
 
+}
+.names h3{
+    font-size: 25px;
 }
 .time{
     color: #4B7BE8;
     font-weight: 800;
 }
+.notifimageconatainer{
+    margin-left: 2%;
+}
 .Notifcontainer{
-    flex: 1;
-    margin-left: 20px;
+ flex: 1;
+    margin-left: 5%;
     min-height: 20px;
 }
 .message{
-    margin-top: 10px;
+    margin-top: 5px;
+}
+.message h4{
+    font-size: 20px;
 }
 .message h4 span{
     color: #4B7BE8;
@@ -44,12 +58,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: silver;
-    width: 180px;
+    background-color: rgb(223, 222, 222);
+    width: 200px;
     padding: 10px;
     margin-left: 5px;
     
 }
+
 .iconandname p{
     font-weight: 900;
 }
