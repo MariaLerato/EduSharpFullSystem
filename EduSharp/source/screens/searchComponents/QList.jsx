@@ -17,8 +17,9 @@ import * as DocumentPicker from 'expo-document-picker';
 // import * as ImagePicker from 'expo-image-picker';
 
 
-const SearchQList = ({ navigation }) => {
+const SearchQList = ({ navigation, query }) => {
 
+    console.log(query.params);
     const [isVisible, setIsVisible] = useState(false)
     const [share, setShare] = useState(false)
     const [modalVisible, setVisible] = useState(false)
@@ -195,7 +196,8 @@ const SearchQList = ({ navigation }) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
-            createdAt: new Date()
+            createdAt: new Date(),
+            post:'questionAndAnswers'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -325,11 +327,14 @@ const SearchQList = ({ navigation }) => {
     }
 
     const DeletePost = async (key) => {
+        setloading(true)
         await firestore.collection("questionAndAnswers").doc(key).delete().then(async (querySnapshot) => {
             console.log(" Post deleted successfully ,querySnapshot");
             console.log(key);
+            setloading(false)
             setIsVisible(false);
         }).catch(err => {
+            setloading(false);
             console.log(err);
         })
     }
@@ -345,8 +350,7 @@ const SearchQList = ({ navigation }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("questionAndAnswers").get().then(async (querySnapshot) => {
-            console.log('Total users: ', querySnapshot.size);
+        await firestore.collection("questionAndAnswers").where('topic',"==",query).where('description',"==",query).get().then(async (querySnapshot) => {
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
@@ -358,7 +362,6 @@ const SearchQList = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            console.log(reslikes.size, rescomments.size, "==>>==>");
                             let dataset = {
                                 key: documentSnapshot.id,
                                 likes: reslikes.size,
@@ -420,27 +423,15 @@ const SearchQList = ({ navigation }) => {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
             </View>
-            <View style={Styles.header}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                    <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
-                        <Icon type="material-community" name="arrow-left" size={26} />
-                        <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
-                            Q' As
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.touchable} onPress={() => navigation.navigate("search")}>
-                    <Icon name='search' type='font-awesome' size={23} color={COLORS.primary} />
-                </TouchableOpacity>
-            </View>
+           
             <ScrollView>
                 <View>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
-                    </View>
+                    
                     <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-                            likePress={() => { handleLike(data.item.key,data.item.token,data.item.topic,data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key,data.item.token,data.item.topic,data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
+                            likePress={() => { handleLike(data.item.key,data.item.token,data.item.topic,data.item.description) }} sterePress={() => { handleStare(data.item.key) }}
+                            sharePress={() => { handleShare(data.item.key,data.item.token,data.item.topic,data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }}
+                             navigation={navigation} deletePress={() => { DeletePost(data.item.key) }}/>
                     )}
                     />
 

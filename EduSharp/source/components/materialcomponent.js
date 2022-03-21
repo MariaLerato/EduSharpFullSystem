@@ -5,6 +5,8 @@ import { auth } from '../BackendFirebase/configue/Firebase';
 import GeneralService from '../BackendFirebase/services/GeneralService';
 import { COLORS, SIZES } from '../constants';
 import { WebView } from 'react-native-webview';
+import PDFReader from 'rn-pdf-reader-js';
+import { DataTable } from 'react-native-paper';
 
 const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, sterePress, sharePress, commentsPress, navigation }) => {
     const [commenting, setcommenting] = useState(false);
@@ -90,10 +92,15 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
 
             <Text style={{ fontSize: SIZES.h4 }}>{data.item.description}</Text>
             <View style={{ height: 210, width: '100%', borderRadius: 7 }}>
-                <WebView
+                <View style={{ flex: 1,backgroundColor: '#ecf0f1' }}>
+                    <PDFReader
+                        source={{ uri: "http://gahp.net/wp-content/uploads/2017/09/sample.pdf" }}
+                        onError={(err)=>{console.log(err);}}
+                        onLoad={(res)=>{console.log("res");}}
+                        onLoadEnd={(res)=>{console.log("res");}}
+                    />
+                </View>
 
-                    source={{ uri: 'http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf' }}
-                />
             </View>
             <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
 
@@ -104,7 +111,7 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
                     </TouchableOpacity>
                     <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                         <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <Icon onPress={likePress} name={'thumb-up'} type={'material-community'} size={26} color={'#3D93D1'} />
+                            <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ?'thumb-up':'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
                             <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{data.item.likes}</Text>
                         </View>
                         <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />

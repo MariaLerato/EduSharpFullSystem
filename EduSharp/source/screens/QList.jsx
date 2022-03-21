@@ -17,6 +17,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Notifications from 'expo-notifications';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
+import { LottieView } from 'lottie-react-native';
+import Anim from "../components/LottieComponent";
 
 
 const QList = ({ navigation }) => {
@@ -90,7 +92,7 @@ const QList = ({ navigation }) => {
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-          });
+        });
 
         if (!result.cancelled) {
 
@@ -200,7 +202,8 @@ const QList = ({ navigation }) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
-            createdAt: new Date()
+            createdAt: new Date(),
+            post:'questionAndAnswers'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -440,11 +443,18 @@ const QList = ({ navigation }) => {
                     <View style={Styles.subtitle}>
                         <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
                     </View>
-                    <FlatList data={post} renderItem={(data, index) => (
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
                     )}
-                    />
+                    /> :
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{  paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+                                <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
+                            </View>
+                        </View>
+
+                    }
 
                 </View>
             </ScrollView >
@@ -726,7 +736,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     headingtext: {
-        fontSize: SIZES.h1,
+        fontSize: SIZES.h3,
         fontWeight: '100'
     },
     touchable: {

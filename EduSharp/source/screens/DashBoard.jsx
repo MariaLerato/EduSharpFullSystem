@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, StatusBar } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
@@ -12,13 +12,15 @@ import Preference from './Preference';
 import About from './about';
 import HomeScreen from './HomeScreen';
 import CustomDrawer from './../components/CustomDrawer';
+import { COLORS } from '../constants';
 
 const Drawer = createDrawerNavigator();
 
 export default function DashBoard() {
 
   return (
-
+    <>
+      <StatusBar backgroundColor={COLORS.primary} barStyle={'light-content'}/>
       <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}
       drawerActiveBackgroundColor='#4B7BE8'
       drawerActiveInColor='#fff'
@@ -137,6 +139,7 @@ export default function DashBoard() {
           }}
         />
       </Drawer.Navigator>
+      </>
   )
 }
 

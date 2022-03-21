@@ -10,6 +10,7 @@ import { useRoute } from "@react-navigation/native";
 import { Divider } from "react-native-paper";
 import * as Notifications from 'expo-notifications';
 import CommentComponent from "../components/commentComponent";
+import Anim from './../components/LottieComponent';
 
 const RepliesContainer = ({ navigation }) => {
 
@@ -454,11 +455,17 @@ const RepliesContainer = ({ navigation }) => {
                     <CommentComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                         likePress={() => { handleCommentLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
                 )}
-                /> : <View>
-                    <Text style={[Styles.subtext, { fontSize: SIZES.body3, fontWeight: '900' }]}>No comments are made yet! Stay put.</Text>
-                </View>}
+                />  :
+                <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{  paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+                        <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
+                    </View>
+                </View>
+            }
             </View>
-            {commenting ? <View style={{ position: 'absolute', bottom: 0, width: '100%', flexDirection: 'row', alignItems: 'center', paddingRight: 30 }}>
+            {commenting ? <View style={{backgroundColor:COLORS.White, position: 'absolute', bottom: 0, width: '100%', flexDirection: 'row', alignItems: 'center', paddingRight: 30 ,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,}}>
                 <Input style={{ maxHeight: 180, minHeight: 45, }} values={comment} onChangeText={(e) => { setcomment(e) }} keyboardType={"default"} multiline />
                 <Icon type='material-community' name='send' onPress={() => { handleComment(post.key) }} />
             </View> : null}
@@ -587,7 +594,7 @@ const Styles = StyleSheet.create({
     container: {
         backgroundColor: '#F4F4F4',
         flex: 1,
-        padding: '1%'
+        
     },
     cardHeader: {
         display: 'flex',

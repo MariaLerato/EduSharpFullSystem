@@ -10,6 +10,7 @@ class Service {
             name: data.name,
             location: "",
             phonenumber: "",
+            createdAt: new Date().toString(),
         };
 
         console.log(userdata);

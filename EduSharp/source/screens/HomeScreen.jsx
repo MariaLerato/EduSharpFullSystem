@@ -58,8 +58,8 @@ const HomeScreen = ({ navigation }) => {
   const responseListener = useRef();
 
 
-// Function that request no
- const registerForPushNotificationsAsync=async()=> {
+  // Function that request no
+  const registerForPushNotificationsAsync = async () => {
     let token;
     if (Constants.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -74,11 +74,11 @@ const HomeScreen = ({ navigation }) => {
       }
       token = (await Notifications.set()).data;
       console.log(token);
-      await Notifications.subscribe(token); 
+      await Notifications.subscribe(token);
     } else {
       alert('Must use physical device for Push Notifications');
     }
-  
+
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -87,18 +87,18 @@ const HomeScreen = ({ navigation }) => {
         lightColor: '#FF231F7C',
       });
     }
-  
+
     UpdateToken(token);
   }
 
   const UpdateToken = async (token) => {
-    await firestore.collection("users").doc(auth.currentUser.uid).update({ token: token}).then(async (querySnapshot) => {
-        console.log(querySnapshot);
-        console.log(key);
+    await firestore.collection("users").doc(auth.currentUser.uid).update({ token: token }).then(async (querySnapshot) => {
+      console.log(querySnapshot);
+      console.log(key);
     }).catch(err => {
-        console.log(err);
+      console.log(err);
     })
-}
+  }
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -119,134 +119,127 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View>
-      <View
-        style={{ margin: 30, borderTopRadius: 5, borderTopRightRadius: 5 }}
-      >
+      <View style={{ margin: 30, borderTopRadius: 5, borderTopRightRadius: 5 }} >
         <Slideshow
           style={{ borderTopRightRadius: 20 }}
           dataSource={dataSource}
           containerStyle={{ borderRadius: 15, overflow: "hidden" }}
-          height={180}
+          height={210}
           titleStyle={{ color: "white", fontSize: 20, fontWeight: "700" }}
           captionStyle={{ color: "white" }}
-          arrow={false}
+          arrow={true}
         />
       </View>
 
       <View
         style={{
-          flex: 1,
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-evenly",
-          padding: '2%',
         }}
       >
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Material")}>
-            <View style={{ alignSelf: 'center', top: 20, }}>
-              <FontAwesome5
-                name="folder-open"
-                size={30}
-                color="#4B7BE8"
-                margin={20}
-              />
+        <TouchableOpacity onPress={() => navigation.navigate("Material")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center',justifyContent: 'center',paddingVertical:5}}>
+            <FontAwesome5
+              name="folder-open"
+              size={30}
+              color="#4B7BE8"
+              
+            />
             </View>
+            <Text style={{fontSize: 18,fontWeight: 'normal',textAlign: "center",}}>
+              Material  
+              </Text>
+          </View>
 
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight:'normal',
-                textAlign: "center",
-                top: 30, left:30,
-              }}
-            >
-              Material            </Text>
-          </TouchableOpacity>
-        </Card>
 
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20, }}>
-          <TouchableOpacity onPress={() => navigation.navigate("lessonscreen")}>
-            <View style={{ alignSelf: 'center', top: 20, }} >
-              <FontAwesome5
-                name="edit"
-                size={30}
-                color="#4B7BE8"
-                margin={20}
-              />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("lessonscreen")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center',justifyContent: 'center',paddingVertical:5}}>
+            <FontAwesome5
+              name="edit"
+              size={30}
+              color="#4B7BE8"
+              
+            />
             </View>
-            <Text
-              style={{
-                fontSize: 18,
-                textAlign: "center",
-                top: 30,
-              }}
-            >
-              Lessons
-            </Text>
-          </TouchableOpacity>
-        </Card>
+            <Text style={{fontSize: 18,fontWeight: 'normal',textAlign: "center",}}>
+            Lessons  
+              </Text>
+          </View>
+
+
+        </TouchableOpacity>
+       
       </View>
 
       <View
         style={{
-
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-evenly",
-          marginTop: '30%',
-          padding: '2%'
+          marginTop: 25,
         }}
       >
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("QList")}>
-            <View style={{ top: 20, alignSelf: 'center' }}>
-              <FontAwesome5
-                name="question-circle"
-                size={30}
-                color="#4B7BE8"
-                margin={20}
-              />
+        
+        <TouchableOpacity onPress={() => navigation.navigate("QList")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center',justifyContent: 'center',paddingVertical:5}}>
+            <FontAwesome5
+              name="question-circle"
+              size={30}
+              color="#4B7BE8"
+              
+            />
             </View>
+            <Text style={{fontSize: 18,fontWeight: 'normal',textAlign: "center",}}>
+            Q'As  
+              </Text>
+          </View>
 
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "normal",
-                textAlign: "center",
-                top: 30,
 
-              }}
-            >
-              Q'As
-            </Text>
-          </TouchableOpacity>
-        </Card>
+        </TouchableOpacity>
+        
 
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("questionpaperscreen")}>
-            <View style={{ top: 20, alignSelf: 'center' }}>
-              <FontAwesome5
-                name="copy"
-                size={30}
-                color="#4B7BE8"
-                margin={20}
-              />
+        <TouchableOpacity onPress={() => navigation.navigate("questionpaperscreen")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center',justifyContent: 'center',paddingVertical:5}}>
+            <FontAwesome5
+              name="copy"
+              size={30}
+              color="#4B7BE8"
+              
+            />
             </View>
-
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "normal",
-                textAlign: "center",
-                top: 30,
-
-              }}
-            >
-              Papers
-            </Text>
-          </TouchableOpacity>
-        </Card>
+            <Text style={{fontSize: 18,fontWeight: 'normal',textAlign: "center",}}>
+            Papers  
+              </Text>
+          </View>
+        </TouchableOpacity>
+       
       </View>
     </View>
   );
