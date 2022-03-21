@@ -3,20 +3,41 @@ import "./style.css";
 import logo from "../images/image.png";
 import { useNavigate } from "react-router-dom";
 import Users from "../Authentication-firebase/reuse";
+import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-// import Button from '@mui/material/Button';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const LogIn = () => {
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [load, setLoad] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState();
+  const [isError, setIsError] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const SignIn = (e) => {
     e.preventDefault();
     setLoad(true);
-      Users.login(email, password, navigate,setLoad);
+      Users.login(email, password, navigate,setLoad)
+      .then((res) => {
+        console.log('status',res.status)
+        if(res.status==='success'){
+          // setMessage(res.message)
+          setOpen(false);
+          setOpenSnackbar(true)
+          console.log("signedUp", res);
+        }else{
+          setMessage(res.message)
+          setIsError(true)
+        }
+      })
+      .catch((error) => {
+        console.log("some error happened", error);
+      });
       
   };
   return (
@@ -30,12 +51,12 @@ const LogIn = () => {
           <h3>Administration</h3>
         </div>
         <div className="signBody" style={{ marginTop: "8%" }}>
-          <div className="headings">
-            <h1>Sign In To Your Account.</h1>
+          <div className="headings" >
+            <h1 style={{fontSize:35}}>Sign In To Your Account.</h1>
           </div>
 
           <form className="Register" onSubmit={SignIn}>
-            <div></div>
+          
             {/* other inputs */}
             <div className="input-icons">
               {/* <i className='fa fa-envelope fa-2x'></i> */}
@@ -64,7 +85,6 @@ const LogIn = () => {
               Forgot Password?
             </button>
             <div className="buttons">
-              {load && <CircularProgress color="success"/>}
               <button className="logButton" onClick={SignIn} type={"submit"}>
                 Log In To Account
               </button>
@@ -74,6 +94,25 @@ const LogIn = () => {
             </p>
           </form>
         </div>
+        <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={`${!isError ? "success" : "error"}`}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       </div>
     </div>
   );

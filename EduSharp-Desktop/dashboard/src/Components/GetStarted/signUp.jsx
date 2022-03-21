@@ -2,18 +2,43 @@ import React,{useState} from 'react'
 import './style.css'
 import logo from '../images/image.png'
 import Users from '../Authentication-firebase/reuse'
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Register = () => {
   const [firstname, setName] = useState();
   const [lastname, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [load, setLoad] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState();
+  const [isError, setIsError] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const SignUp = (e) => {
     e.preventDefault();
-    Users.signUp(email, password, firstname, lastname);
-    console.log("sent");
+    setOpen(true);
+    Users.signUp(email, password, firstname, lastname)
+    .then((res) => {
+      console.log('status',res.status)
+      if(res.status==='success'){
+        // setMessage(res.message)
+        setOpen(false);
+        setOpenSnackbar(true)
+        console.log("signedUp", res);
+      }else{
+        setMessage(res.message)
+        setIsError(true)
+      }
+    })
+    .catch((error) => {
+      console.log("some error happened", error);
+    });
   };
+
   return (
     <div className="ContainerRegister">
       <div className="backBody">
@@ -32,7 +57,6 @@ const Register = () => {
           <form className="Register" onSubmit={SignUp}>
             <div>
               <div className="input-icons">
-                {/* <i className='fa fa-id-card fa-2x'></i> */}
                 <input
                   type="text"
                   placeholder="First name"
@@ -42,7 +66,6 @@ const Register = () => {
                 />
               </div>
               <div className="input-icons">
-                {/* <i className='fa fa-id-card fa-2x'></i> */}
                 <input
                   type="text"
                   placeholder="last name"
@@ -74,7 +97,6 @@ const Register = () => {
               />
             </div>
             <div className="buttons">
-              {/* <button className='forgotButton'>Forgot Password</button> */}
               <button className="create" onClick={SignUp} type={"submit"}>
                 Create Account
               </button>
@@ -84,6 +106,25 @@ const Register = () => {
             </p>
           </form>
         </div>
+        <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={`${!isError ? "success" : "error"}`}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       </div>
       
     </div>

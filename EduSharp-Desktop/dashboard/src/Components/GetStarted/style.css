@@ -9,9 +9,12 @@
     display: flex;
     justify-content: space-between;
 }
-
 .headBar{
     background:rgba(131, 131, 131, 0.5);  
+}
+.ContainerBody{
+    background:rgba(150, 149, 149, 0.5); 
+    height: 100vh;
 }
 .Bar{
    display: flex;
@@ -40,6 +43,10 @@ width: 100%;
     display: flex;
     justify-content: space-between;
     color: white;
+    /* margin-top: -1px; */
+}
+.body h2{
+    margin-top: -2%;
 }
 .logo{
     display: flex;
@@ -56,7 +63,8 @@ width: 100%;
 
 .head h3{
     color:rgb(226, 226, 219);
-    margin-top: 1%;
+    margin-top: 2%;
+    font-size: 20px;
 }
 
 .imgContainer{
@@ -105,14 +113,23 @@ margin-left: 50%;
 }
 
 .backBody{
-    /* background:rgba(44, 44, 44, 0.5); */
+    background:rgba(126, 124, 124, 0.5);
     height: 100vh;  
 }
 .buttons{
     padding: 1%;
     margin-left: -5%;
 }
-
+.progressLoader{
+    position: absolute;
+    /* left: -20; */
+    top: 0;
+    align-content: center;
+    margin-top: 20%;
+    /* background:rgba(250, 248, 248, 0.5); */
+    /* height: 100vh; */
+   
+}
 .forgotButton{
     margin-left:25%;
     /* margin:1%; */
@@ -130,19 +147,20 @@ margin-left: 50%;
 }
 .banner{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     padding:1%;
     margin:2%;
     border-radius: 5px;
+    background-color: #175273;
     box-shadow: 2px 2px 2px 2px rgba(0,0,0,.3);
 }
 .banner p{
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 600;
     padding-top: 4%;
-   color: rgba(94, 93, 93, 0.5);
-   
+   color: #ffffff;
 }
+
 .banner a{
     padding:2%
 
@@ -156,7 +174,6 @@ margin-left: 50%;
 .manageHeader h3{
     font-weight: 400;
     font-family: cursive;
-    /* color: rgba(8, 8, 8, 0.5); */
     font-size: 20px;
     text-decoration: underline;
 }
@@ -166,11 +183,9 @@ margin-left: 50%;
 }
 .iconsActive i{
     margin-top: 1%;
-
-    /* margin-left: 5%; */
 }
 .delete{
-    /* margin-right: 8%; */
+
     color:blue;   
     display: flex;
 }
@@ -192,7 +207,7 @@ margin-left: 50%;
 }
 .listUsers{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     padding:1%;
     margin:2%;
     border-radius: 5px;
@@ -235,7 +250,7 @@ margin-left: 50%;
     color: rgb(199, 46, 46);
 }
 .Register input{
-    width: 395px;
+    width: 400px;
     margin-left: 2%;
 padding: 2%;
 font-weight: 600
@@ -331,10 +346,10 @@ input{
 
 .sub{
     align-items: flex-end;
-    width: 40%;
+    width: 45%;
     margin-top: 20%;
-    font-size: 20px;
-    padding-right: 3%;
+    font-size: 16px;
+    padding-right: 2%;
     font-weight: 500;
 
 }
@@ -388,22 +403,21 @@ input{
 }
 .app{
     flex: 6;
-    padding:2%;
-    /* margin-top: 1%; */
+    padding-left:2%;
+    margin-top: 1%;
 
 }
 .app h3{
-    font-size: 35px;
+    font-size: 25px;
     margin-bottom: 3%;
     /* text-align: center; */
 }
 .form{
-margin-top: 2%;
+margin-top: 1%;
 width: 55%;
 /* margin:auto */
-
+overflow-x: hidden;
 }
-
 
 select{
     width: 40%;
@@ -448,6 +462,11 @@ select{
     flex: 6;
     padding:2%;
     margin-top: -2%;
+}
+.cardholder{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .search{
     height: 50px;
@@ -496,7 +515,6 @@ select{
     font-size: 35px;
     font-weight: 400;
 }
-
 .picker{
     display: flex;
 }
@@ -511,7 +529,7 @@ select{
     margin-top: -1%;
     border-radius: 5px; */
     text-align: start;
-    margin-top: 3%;
+    margin-top: 1%;
     /* padding:2% */
 }
 
