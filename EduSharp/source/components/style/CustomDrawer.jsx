@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-lblUserName:{color:'#fff', fontSize:18, fontWeight:'bold', margin:20,bottom:20}
+lblUserName:{color:'#fff', fontSize:18, fontWeight:'bold', margin:20,bottom:20},
+bottomView:{
+    top:0
+}
 });
 export default styles;

@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
 import './Styles.css'
-import LinkNav from "../navigation/linkNav";
+
 
 const Notificationcard = () => {
 
@@ -14,7 +14,7 @@ const Notificationcard = () => {
     )
   return (
     <div className="NotifCard">
-      <LinkNav/>
+    
       
       <div className="notifimageconatainer">
         <Avatar
@@ -34,7 +34,7 @@ const Notificationcard = () => {
           <div className="detailsNotifContainer">
               <Message icon="fa fa-television" filename="video.mp4"/>
               <Message icon="fa fa-book" filename="book.pdf"/>
-              <Message icon="fa fa-television" filename="video.mp4"/>
+            
           </div>
       </div>
     </div>

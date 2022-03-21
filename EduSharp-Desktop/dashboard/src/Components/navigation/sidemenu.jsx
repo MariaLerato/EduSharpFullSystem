@@ -12,6 +12,7 @@ export const Sidemenu = () => {
 
   const[pdffile,setPdfFile]=useState()
   const navigate = useNavigate()
+
   const handlesubmit=()=>{
    // console.log('adasdada')
   reuse.addItem("LO",12,"something","topic",pdffile,pdffile.name,"books")
@@ -57,35 +58,32 @@ Users.signOut(navigate)
       
     </div>
     <div className="grids">
+        <Link to={'/AddLesson'}>
       <div className="card1">
-    <Link to={'/AddLesson'}>
       <h2>Lessons</h2>
-    </Link> 
-
         <p>
           Adding different types of lessons that are available for the client to view or participate in. This section includes, uploading lessons, editing them and deleting the lesson that is no longer used
         </p>
-
       </div>
+        </Link> 
+ <Link to={'/AddQuestion'}>
       <div className="card2">
-       <Link to={'/AddQuestion'}>
        <h2>Question Papers</h2>
-       </Link> 
         <p>
           Adding different types of question papers that are available for the client to view or download. This section includes, uploading question paper, editing them and deleting the question papers that is no longer used
         </p>
-
       </div>
+         </Link>
+          <Link to={'/AddBook'}>
       <div className="card3">
-        <Link to={'/AddBook'}>
              <h2>Books</h2>
-        </Link>
-   
+       
         <p>
           Adding different types of books that are relevant to the registered subjects and are available for the client to view or participate in. This section includes, uploading books, managing them and deleting the books that is no longer used
         </p>
 
       </div>
+       </Link>
     </div>
     </>
   );

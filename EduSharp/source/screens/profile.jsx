@@ -95,7 +95,7 @@ const Profile = ({ navigation, route }) => {
         </View>
       </View>
 
-      <View style={{ flex: 1,  backgroundColor: "#fff", bottom:190 }}>
+      <View style={{ flex: 1,  backgroundColor: "#fff", bottom:80 }}>
         <Text
           style={{
             color: "rgba(0,0,0,5)",

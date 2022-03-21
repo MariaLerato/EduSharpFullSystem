@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View, Text,
     ImageBackground, Image,
@@ -9,19 +9,38 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import style from './style/CustomDrawer';
+import { COLORS, SIZES } from './../constants';
+import { auth, firestore } from '../BackendFirebase/configue/Firebase';
 
 
 const CustomDrawer = (props) => {
+
+    const [name, setName] = useState('');
+
+    const getProfile = async () => {
+        await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
+            setName(documentSnapshot.data().name);
+        })
+    }
+
+    useEffect(() => {
+      getProfile();
+    }, [])
+
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, padding:0 }}>
 
             <DrawerContentScrollView {...props} >
 
-                <View style={style.bottomView}>
+                <View style={[style.bottomView, {
+                    backgroundColor: COLORS.primary,
+                    borderBottomRightRadius: 85, height: 210, justifyContent: 'flex-start', alignItems: 'flex-start'
+                }]}>
 
-                    <View style={{ padding: 40 }} >
-                        <Image source={require('../../assets/images/Use.png')} style={{ height: 80, width: 80, margin: 40, borderRadius: 40 }} />
-                        <Text style={[styles.lblUserName]}>Leah Makgatho</Text>
+                    <View style={{ position: 'absolute', bottom: 5, marginHorizontal: 10 }} >
+                        <Image source={require('../../assets/images/Use.png')} style={{ height: 65, width: 65, borderRadius: 65 }} />
+                        <Text style={[styles.lblUserName, { fontWeight: 'bold', marginVertical: 5, color: COLORS.White, fontSize: SIZES.h2 }]}>{name}</Text>
                     </View>
                 </View>
 
@@ -29,20 +48,21 @@ const CustomDrawer = (props) => {
             </DrawerContentScrollView>
 
 
-            <View style={{ flexDirection: 'row', padding: 20, borderTopWidth: 1, borderTopColor: 'gray' }}>
-                <TouchableOpacity onPress={() => { }} >
-                    <View style={{ left: 180 }}>
+            <View style={{ flexDirection: 'row', padding: 10, borderTopWidth: 1, borderTopColor: 'gray', justifyContent: 'space-between' }}>
+
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                    <Text style={{ fontSize:SIZES.h5,fontWeight:'800' }}>T's & Cs</Text>
+                </View>
+
+                <View style={{justifyContent:'center',alignItems:'center',width:50}}>
+                    <View style={{height:25,}}>
                         <FontAwesome5 name="power-off" size={20} color="red" />
                     </View>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text>T's & Cs</Text>
-
-                        <Text style={{ left: 110 }} >Log-out</Text>
-
+                    <View>
+                    <Text style={{ fontSize:SIZES.h5,fontWeight:'800' }} >Log-out</Text>
                     </View>
+                </View>
 
-                </TouchableOpacity>
 
             </View>
         </View>

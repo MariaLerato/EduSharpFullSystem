@@ -10,8 +10,8 @@ import { ViewPaper } from "../ViewPaper";
 import  Home  from "../GetStarted/home";
 import LogIn from "../GetStarted/signIn";
 import  Register  from"../GetStarted/signUp";
-import { Notification } from "../Notification";
-// import Notification from "./Notification/Notification.jsx";
+// import { Notification } from "../Notification";
+import Notification from "../Notification/Notification";
 import  {Sidemenu}  from "./sidemenu";
 import Landing from '../GetStarted/landingPage'
 import '../StyleSheet.css'

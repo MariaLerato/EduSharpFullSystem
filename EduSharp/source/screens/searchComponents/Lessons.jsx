@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Picker, FlatList } from 'react-native'
-import { Icon, Card, BottomSheet, Input, ListItem } from 'react-native-elements';
+import { Icon, Card, BottomSheet, Input, ListItem, Divider } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
 import ProgressIndicator from '../../components/progressIndicator';
 import { COLORS, FONTS, SIZES, icons } from "../../constants";
@@ -10,11 +10,12 @@ import MaterialComponent from '../../components/materialcomponent';
 import { auth, firestore } from '../../BackendFirebase/configue/Firebase';
 import GeneralService from '../../BackendFirebase/services/GeneralService';
 
-const SearchLessons = ({ navigation }) => {
+const SearchLessons = ({ navigation ,query}) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
     //     setToggle(!toggle)
     // }
+    console.log(query.params);
     const [isVisible, setIsVisible] = useState(false);
     const [share, setShare] = useState(false);
     const [modalVisible, setVisible] = useState(false);
@@ -76,7 +77,8 @@ const SearchLessons = ({ navigation }) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
-            createdAt: new Date()
+            createdAt: new Date(),
+            post:'lessons'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -207,14 +209,11 @@ const SearchLessons = ({ navigation }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("lessons").get().then(async (querySnapshot) => {
-            console.log('Total users: ', querySnapshot.size);
+        await firestore.collection("lessons").where('topic',"==",query).where('description',"==",query).get().then(async (querySnapshot) => {
+            
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
-                console.log('====================================');
-                console.log(documentSnapshot.data().userID);
-                console.log('====================================');
                 await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
 
 
@@ -222,7 +221,6 @@ const SearchLessons = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            console.log(reslikes.size, rescomments.size, "==>>==>");
                             let dataset = {
                                 key: documentSnapshot.id,
                                 likes: reslikes.size,
@@ -246,7 +244,7 @@ const SearchLessons = ({ navigation }) => {
 
                     })
                     setpost(data);
-                    console.log(data);
+                    
                 });
 
 
@@ -302,8 +300,8 @@ const SearchLessons = ({ navigation }) => {
     }
 
     useEffect(() => {
+        
         getPost();
-
     }, [])
 
 
@@ -313,31 +311,9 @@ const SearchLessons = ({ navigation }) => {
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
                 </View>
-                <View style={Styles.header}>
-                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                        <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
-                            <Icon type="material-community" name="arrow-left" size={26} />
-                            <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
-                                Lessons
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={Styles.touchable} onPress={() => navigation.navigate("search")}>
-                        <Icon name='search' type='font-awesome' size={23} color={COLORS.primary} />
-                    </TouchableOpacity>
-                </View>
+                
                 <ScrollView>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.body3 }]}>View only the content that is relevent to my course</Text>
-                        {/* <ToggleSwitch
-                            isOn={true}
-                            onColor={'#3D93D1'}
-                            offColor="red"
-                            labelStyle={{ color: "black", fontWeight: '900' }}
-                            size="medium"
-                            style={Styles.toggle}
-                        /> */}
-                    </View>
+                   
                     <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
