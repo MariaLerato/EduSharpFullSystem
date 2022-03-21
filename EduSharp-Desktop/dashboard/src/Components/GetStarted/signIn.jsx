@@ -21,7 +21,8 @@ const LogIn = () => {
 
   const SignIn = (e) => {
     e.preventDefault();
-    setLoad(true);
+    // setLoad(true);
+    setOpen(true)
       Users.login(email, password, navigate,setLoad)
       .then((res) => {
         console.log('status',res.status)
@@ -100,19 +101,7 @@ const LogIn = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => setOpenSnackbar(false)}
-      >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity={`${!isError ? "success" : "error"}`}
-          sx={{ width: "100%" }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
+     
       </div>
     </div>
   );
