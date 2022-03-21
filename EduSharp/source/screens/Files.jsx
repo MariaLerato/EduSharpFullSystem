@@ -103,7 +103,7 @@ const CardFiles = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={Styles.cat}
+          {/* <TouchableOpacity style={Styles.cat}
             key={0}
             activeOpacity={0.8}
             onPress={() => setcode(2)}>
@@ -115,7 +115,7 @@ const CardFiles = () => {
             >
               {"Downloads"}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity style={Styles.cat}
             key={0}

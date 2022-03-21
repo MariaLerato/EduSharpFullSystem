@@ -7,7 +7,7 @@ import {
   StatusBar,
   Dimensions,
   ImageBackground,ScrollView,
-  TouchableOpacity,Modal, Picker
+  TouchableOpacity,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import { TextInput } from "react-native-gesture-handler";
@@ -24,49 +24,16 @@ import * as ImagePicker from 'expo-image-picker';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-const Education = ({ navigation, route }) => {
+const Test = ({ navigation, route }) => {
     const [name, setName] = useState(route.params.userName);
     const [email, setEmail] = useState(route.params.userEmail);
-    const [grade, setGrade] = useState(route.params.userGrade);
-    const [subject, setSubject] = useState(route.params.userSubject);
-  
-  const userId = auth.currentUser.uid;
-    
-  const [isLoading, setisLoading] = useState(false);
+    const [phonenumber, setPhone] = useState(route.params.userPhonenumber);
+    const [location, setLocation] = useState(route.params.userLocation);
+    const userId = auth.currentUser.uid;
+    const [isLoading, setisLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [modalVisible, setVisible] = useState(false)
-    const [selectedSubject, setselectedSubject] = useState('Mathematics');
-    const [selectedValue, setSelectedValue] = useState("java");
 
-   
-   const [url,seturl] = useState();
     const db = firebase.firestore();
-    
-    useEffect(()=>{
-      let item = [];
-      db.collection('education').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-    
-    },[])
-  
-    const updateUser = () => {
-     
-      db.collection("education")
-        .doc(userId)
-        .update({ 
-          subject: subject,
-           grade: grade,
-           
-          
-          })
-
-          //  .then((res) =>{
-          //    alert('updated');
-
-          //   }).catch((err) =>{
-          //     alert(err)
-              // history.push('/switch')
-          // })  
-    };
 
     let openImagePickerAsync = async () => {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -84,27 +51,27 @@ const Education = ({ navigation, route }) => {
       setSelectedImage({ localUri: pickerResult.uri });
   }
 
+    const updateUser = () => {
+     
+      db.collection("users")
+        .doc(userId)
+        .update({ 
+          name: name,
+           email: email,
+           phonenumber: phonenumber,
+           location: location 
+          
+          })
+
+          //  .then((res) =>{
+          //    alert('updated');
+
+          //   }).catch((err) =>{
+          //     alert(err)
+              // history.push('/switch')
+          // })  
+    };
   
-  
-   
-    const addGrade = () => {
-
-
-      db.collection('education').add({
-          grade:grade,
-          subject:subject,
-         userId:userId
-      }).then((res) =>{
-          alert("Success")
-          // history.push('/switch')
-
-
-      }).catch((err) =>{
-          alert(err)
-          // history.push('/switch')
-      })
-
-  }
   
    
   
@@ -123,7 +90,7 @@ const Education = ({ navigation, route }) => {
     };
         return(
 
-<View style={{flex:1}} >
+<ScrollView style={{flex:1, backgroundColor:'#ffffff'}} showsVerticalScrollIndicator={false}>
 <ImageBackground source={backgroundImg2}
 style={{height:Dimensions.get('window').height / 3.5}}>
 </ImageBackground>
@@ -150,56 +117,47 @@ style={{height:Dimensions.get('window').height / 3.5}}>
                         <FontAwesome name='camera' size={29} color='grey' />
                     </TouchableOpacity>
                 </View>
-<ScrollView style={{top:80,}}>
-<Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Educational Info</Text>
+<View style={styles.innerBottom}>
+<Text style={{color:"rgba(0,0,0,5)",fontSize:16,fontWeight:'bold', marginBottom:20, textAlign:'center', fontSize:20}}>Personal Info</Text>
 
 
-<View style={{paddingHorizontal:20 }}>
+<View style={{flex:1 }}>
 <TextInput
       style={{width: '100%', height:50}}
-      left={<TextInput.Icon name="account" type="material-community" /> } 
-      value={grade}
-      onChangeText={text=>setGrade(text)}
-    />
-
-<TextInput
-      style={{width: '100%', height:50, marginTop:20}}
-      left={<TextInput.Icon name="account" type="material-community" /> } 
-      value={subject}
-      onChangeText={text=>setSubject(text)}
-    />
-<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:20}}>
-{/* <Text style={{fontSize:16, color:'black'}}>Encrolled Subjects</Text> */}
-
-
-{/* <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
-                    <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
-                </TouchableOpacity> */}
-
-{/* <Picker
-        selectedValue={selectedValue}
-        style={{ height: 50, width: 150, color:'blue' }}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      > 
-        <Picker.Item label="java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
-      </Picker> */}
-
-<View>
-
-
-</View>
-
-</View>
-{/* <TextInput
-      style={{width: '100%', height:50, marginTop:20}}
       left={<TextInput.Icon name="account" type="material-community" /> } 
       right={<TextInput.Icon name="pencil" />}
       value={name}
       onChangeText={text=>setName(text)}
-    /> */}
+    />
+
+<TextInput style={{marginTop:20, width: '100%', height:50}}
+      
+      left={<TextInput.Icon name="email" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={email}
+      onChangeText={(text)=>setEmail(text)}
+
+    /> 
+
+           <TextInput style={{marginTop:20, width: '100%', height:50}}
+      
+      left={<TextInput.Icon name="phone" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={phonenumber}
+      onChangeText={(text)=>setPhone(text)}
+
+    /> 
+
+         <TextInput style={{marginTop:20, width: '100%', height:50}}
+      
+      left={<TextInput.Icon name="map" />}
+      right={<TextInput.Icon name="pencil" />}
+      value={location}
+      onChangeText={(text)=>setLocation(text)}
+
+    />
   <Button
-          title="Add"
+          title="Update"
           containerStyle={{
             marginTop: 20,
             borderRadius: 20,
@@ -212,17 +170,17 @@ style={{height:Dimensions.get('window').height / 3.5}}>
           titleStyle={{
             color: COLORS.White,
           }}
-          onPress={addGrade}
+          onPress={updateUser()}
         />
  </View>
+ </View>
+ </View>
  </ScrollView>
- </View>
- </View>
     )
 
 }
 
-export default Education
+export default Test
 
 
 const {width, height } = Dimensions.get("screen");
@@ -237,7 +195,6 @@ const styles = StyleSheet.create({
     innerBottom: {
         paddingHorizontal:20,
         top:60,
-        backgroundColor:'red'
     },
 
     bottomView:{

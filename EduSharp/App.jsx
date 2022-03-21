@@ -27,7 +27,8 @@ import Education from './source/screens/education';
 import Files from './source/screens/Files';
 import Videos from './source/screens/videos';
 import MainContainer from './source/screens/MainContainer';
-
+import Test from './source/screens/test';
+import Switch from './source/screens/switch'
 const Menu = () => {
     const Stack = createNativeStackNavigator()
     return (
@@ -39,6 +40,7 @@ const Menu = () => {
             <Stack.Screen name={'MainContainer'} component={MainContainer}/>
 
                 <Stack.Screen name={'Pro'} component={Pro}/>
+                <Stack.Screen name={'switch'} component={Switch}/>
                 <Stack.Screen name={'Files'} component={Files}/>
                 <Stack.Screen name={'welcomeScreen'} component={WelcomeScreen} />
                 <Stack.Screen name={'home'} component={HomeScreen} />
@@ -54,6 +56,7 @@ const Menu = () => {
                 <Stack.Screen name={'Material'} component={Material} />
                 <Stack.Screen name={'MyFiles'} component={MyFiles} />
                 <Stack.Screen name={'images'} component={FileImages} />
+                <Stack.Screen name={'test'} component={Test}/>
                 <Stack.Screen name={'downloads'} component={DownloadFiles} />
                 <Stack.Screen name={'videos'} component={VideoFiles} />
                 <Stack.Screen name={'search'} component={Search} />
