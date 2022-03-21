@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Pro from './Pro';
-import MyFiles from './MyFiles';
+import Files from './Files';
 import Starred from './Starred';
 import Preference from './Preference';
 import About from './about';
@@ -28,7 +28,6 @@ export default function DashBoard() {
       >
 
         <Drawer.Screen name="Home" component={HomeScreen}
-               screenOptions={{ headerShown: false }}
 
          options={{
             title: 'Home',
@@ -47,7 +46,6 @@ export default function DashBoard() {
         />
 
         <Drawer.Screen name="Profile" component={Pro}
-                screenOptions={{ headerShown: false }}
 
           options={{
             title: 'Profile',
@@ -67,7 +65,7 @@ export default function DashBoard() {
           }}
 
         />
-        <Drawer.Screen name="MyFiles" component={MyFiles}
+        <Drawer.Screen name="Files" component={Files}
 
           options={{
             title: 'My Files',

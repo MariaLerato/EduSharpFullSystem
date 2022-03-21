@@ -7,6 +7,7 @@ import firebase from "firebase";
 const Images=()=>{
 
     const [questionAndAnswers, setquestionAndAnswers] =  useState([]);
+    const [lessons, setlessons] =  useState([]);
 
     const db = firebase.firestore();
 
@@ -28,6 +29,22 @@ const Images=()=>{
     });
 },[]);
 
+useEffect(() =>{
+    let lessonsinfo = [];
+    db.collection("lessons")
+    .get()
+    .then((res)=>{
+        res.forEach((action)=>{
+            lessonsinfo.push({...action.data(), id:
+            action.id})
+        
+    })
+
+    setlessons(lessonsinfo);
+    console.log(id)
+});
+},[]);
+
 const backgroundImg = {
     uri: "https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   };
@@ -40,21 +57,42 @@ const backgroundImg = {
              
            {questionAndAnswers.map((element) =>(
                <>
-               <View style={{height: 230,
-        width: 210,
+               <View style={{height: 280,
+        width: '100%',
         backgroundColor: 'white',
         elevation: 15,
-        marginHorizontal: 10,
         borderRadius: 10,
-        borderTopRightRadius:10,
         marginTop:20}}>
             <TouchableOpacity onPress={() => {Linking.openURL(element.downloadUrl)}} >
-               <Avatar size={50} source={{uri: element.downloadUrl}} style={{height: 190,
-        width: 210}}></Avatar>
+               <Avatar size={50} source={{uri: element.downloadUrl}} style={{height: 220, width: '100%'}}></Avatar>
                </TouchableOpacity>
                 <View>
-                <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Subject: {element.subject}</Text>
-                <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Grade: {element.grade}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Subject: {element.subject}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Grade: {element.grade}</Text>
+
+                </View>
+            </View>
+               
+
+
+            </>
+
+           ))}
+
+{lessons.map((element) =>(
+               <>
+               <View style={{height: 280,
+        width: '100%',
+        backgroundColor: 'white',
+        elevation: 15,
+        borderRadius: 10,
+        marginTop:20}}>
+            <TouchableOpacity onPress={() => {Linking.openURL(element.downloadURL)}} >
+               <Avatar size={50} source={{uri: element.downloadURL}} style={{height: 220, width: '100%'}}></Avatar>
+               </TouchableOpacity>
+                <View>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Subject: {element.subject}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Grade: {element.grade}</Text>
 
                 </View>
             </View>

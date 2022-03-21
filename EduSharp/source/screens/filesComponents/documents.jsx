@@ -34,25 +34,23 @@ const backgroundImg = {
     return(
         <View>
 
-            <ScrollView>
+            <ScrollView style={{paddingBottom:20}}>
             <Text style={{fontSize:18, fontWeight:'bold'}}>My Books and Documents</Text>
              
            {books.map((element) =>(
                <>
-               <View style={{height: 230,
-        width: 210,
+               <View style={{height: 290,
+        width: '100%',
         backgroundColor: 'white',
         elevation: 15,
-        marginHorizontal: 10,
-        borderRadius: 10,
         marginTop:20}}>
             <TouchableOpacity onPress={() => {Linking.openURL(element.downloadURL)}} >
-               <Avatar size={50} source={{uri: element.downloadURL}} style={{height: 190,
-        width: 210}}></Avatar>
+               <Avatar size={50} source={{uri: element.downloadURL}} style={{height: 210, width: '100%',}}></Avatar>
                </TouchableOpacity>
                 <View>
-                <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Subject: {element.subject}</Text>
-                <Text style={{paddingHorizontal:10, color:'#4B7BE8', fontWeight:'bold'}}>Grade: {element.grade}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Subject: {element.subject}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Grade: {element.grade}</Text>
+                <Text style={{paddingHorizontal:10, color:'#000', fontWeight:'bold', fontSize:18}}>Desc: {element.description}</Text>
 
                 </View>
             </View>

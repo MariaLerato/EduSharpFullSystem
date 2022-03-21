@@ -38,34 +38,119 @@ const Stack = createNativeStackNavigator();
 
 const Pro = ({navigation}) => {
   const [name, setName] = useState({});
-  
+  const [grade, setGrade] = useState([]);
   const [email, setemail] = useState({});
  const [url,seturl] = useState();
  const db = firebase.firestore();
 
  
   const userId = auth.currentUser.uid;
-  const updateUser = () => {
-      db.ref('/users/' + userId).update({
-          name: name,
-          email: email,
-
-      });
-  };
+ 
 
   useEffect(()=>{
     let item = [];
     db.collection('users').doc(userId).get().then((res)=>{setName({...res.data(), id: res.id })} )
-    console.log(name,'thap')
   
   },[])
+
+
+
+  // useEffect(()=>{
+  //   let item = [];
+  //   db.collection('books').doc(userId).get().then((res)=>{setGrade({...res.data(), id: res.id })} )
+  
+  // },[])
+  // console.log(grade,'testinggrade')
+
+  const getPost = async () => {
+    await db.collection("education").get().then(async (querySnapshot) => {
+        console.log('Total users: ', querySnapshot.grade);
+        const data = [];
+        await querySnapshot.forEach(async (documentSnapshot) => {
+
+            console.log('====================================');
+            console.log(documentSnapshot.data().userId);
+            console.log('====================================');
+
+            // await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
+
+
+            //   await firestore.collection("likes").where('postKey', '==', documentSnapshot.id).get().then(async (reslikes) => {
+
+            //       await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
+
+            //           console.log(reslikes.size, rescomments.size, "==>>==>");
+                      let dataset = {
+            //               key: documentSnapshot.id,
+            //               likes: reslikes.size,
+            //               comments: rescomments.size,
+            //               createdAt: documentSnapshot.data().createdAt,
+            //               description: documentSnapshot.data().description,
+            //               grade: documentSnapshot.data().grade,
+            //               downloadUrl: documentSnapshot.data().downloadUrl,
+                          grade: documentSnapshot.data().grade,
+                          subject: documentSnapshot.data().subject,
+            //               topic: documentSnapshot.data().topic,
+            //               userID: documentSnapshot.data().userID,
+            //               email: res.data().email,
+            //               location: res.data().location,
+            //               name: res.data().name,
+            //               image: res.data().profileUrl ? res.data().profileUrl : null,
+            //               phonenumber: res.data().phonenumber,
+                      }
+                      data.push(dataset);
+                  // })
+
+              // })
+              // if (userId){
+              //   const item = data.filter(function(e){
+              //     const item2 = e.userId ? e.userId:""
+              //     return item2.indexOf(userId)>-1
+              //   })
+              //   setGrade(item);
+
+
+              // }
+
+              setGrade(data);
+
+          });
+
+          console.log(userId,'stringgggggggggg==========');
+
+
+
+      }).catch(err => {
+          console.log('====================================');
+          console.log(err, "==>>==>");
+          console.log('====================================');
+      });
+  // })
+}
+
+
+
+  useEffect(()=>{
+
+    getPost()
+//     let item = [];
+// db.collection('education')
+// .get()
+// .then((res)=>{res.foreach(action=> item.push({...action.data, id: action.id})
+// )})
+// setGrade(item);
+  },[])
+
+
+// console.log(grade,'Testing')
+
 
 const userName = name.name
 const userPhonenumber = name.phonenumber
 const userLocation = name.location
  const userEmail = name.email
 const userGrade = name.grade
-
+const userSubject = name.subject
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -88,8 +173,9 @@ const userGrade = name.grade
   };
 
   const Logout = () => {
+    auth.signOut();
     navigation.navigate("SignInScreen");
-    firebase.auth().signOut();
+alert('Succesfully Logged Out')
   };
 
   const backgroundImg = {
@@ -103,23 +189,43 @@ const userGrade = name.grade
   return (
 
     <View style={styles.container}>
-   <ImageBackground source={backgroundImg} resizeMode="cover" style={styles.row1}></ImageBackground>
-      <View style={styles.row2}>
-        <View style={styles.imgContainer}>
-            <Avatar      source={profilimg}  style={styles.image} rounded/>
+
+     
+    {/* <ImageBackground source={backgroundImg} resizeMode="cover" style={styles.row1}></ImageBackground> */}
+    <View style={styles.row2}>
+      <View style={styles.imgContainer}>
+          {/* <Avatar      source={profilimg}  style={styles.image} rounded/>
+          <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/> */}
+
             {/* <Button   icon={{ name: "camera", type: "font-awesome", size: 15, color: "black" }} containerStyle={{position:'absolute',bottom:-10,right:0}}/> */}
         </View>
+
         <Text
               style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
             >
               {userName}
 
             </Text>
-            <Text style={{ fontSize: 16, textAlign: "center" }}>
-              {" "}
-              Grade(0)
-            </Text>
-            <TouchableOpacity onPress={()=>navigation.navigate('profile', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
+
+            {grade.map(element=>
+  <Text style={{ fontSize: 16, textAlign: "center" }}>
+  {" "}
+  Grade({element.grade})
+</Text>
+  )}
+           
+
+            {grade.map(element=>
+
+    userId==element.userId?(
+      <Text style={{ fontSize: 16, textAlign: "center" }}>
+      Grade({element.grade})
+    </Text>
+    ):(<></>)
+ 
+  )}
+            
+            <TouchableOpacity onPress={()=>navigation.navigate('test', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber})} >
 
            <View style={styles.boxcontainer}>
 
@@ -131,7 +237,7 @@ const userGrade = name.grade
             </View> 
 
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('education', {userName:userName, userLocation:userLocation, userEmail:userEmail, userPhonenumber:userPhonenumber, userGrade:userGrade})} >
+            <TouchableOpacity onPress={() => navigation.navigate('switch', {userSubject:userSubject, userGrade:userGrade})} >
 
             <View style={styles.boxcontainer}>
               <Icon name="book" size={22} style={{ color: COLORS.secondary, marginTop: 14, }} />
@@ -148,8 +254,8 @@ const userGrade = name.grade
               
               
               <View style={{bottom:20,position:'absolute', alignContent:'center', paddingHorizontal:20}}>
-            
-              <TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')} >
+             
+              <TouchableOpacity onPress={Logout} >
 
               <Icon
                 name="logout"
@@ -173,6 +279,7 @@ const userGrade = name.grade
       
      
      <View/>
+
     </View>
       )
 };
@@ -182,8 +289,7 @@ const userGrade = name.grade
       
 const styles = StyleSheet.create({
   container: {
-  flex: 1,
-backgroundColor: 'white'
+  flex: 1
 },
 row1: {
   height: row1Height,
@@ -192,7 +298,6 @@ row2: {
   backgroundColor: "white",
   height:20,
 flex: 1,
-marginTop: -80,
 borderTopRightRadius: 30,
 borderTopLeftRadius: 30,
 alignItems: "center",
