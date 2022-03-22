@@ -228,26 +228,39 @@ const Lessons = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            console.log(reslikes.size, rescomments.size, "==>>==>");
-                            let dataset = {
-                                key: documentSnapshot.id,
-                                likes: reslikes.size,
-                                comments: rescomments.size,
-                                createdAt: documentSnapshot.data().createdAt,
-                                description: documentSnapshot.data().description,
-                                grade: documentSnapshot.data().grade,
-                                downloadUrl: documentSnapshot.data().downloadUrl,
-                                status: documentSnapshot.data().status,
-                                subject: documentSnapshot.data().subject,
-                                topic: documentSnapshot.data().topic,
-                                userID: documentSnapshot.data().userID,
-                                email: res.data().email,
-                                location: res.data().location,
-                                name: res.data().name,
-                                image: res.data().profileUrl ? res.data().profileUrl : null,
-                                phonenumber: res.data().phonenumber,
-                            }
-                            data.push(dataset);
+                            await firestore.collection('education').doc(`${auth.currentUser.uid}`).get().then((resEdu) => {
+                                console.log(res.data(), "======");
+                                
+
+                                console.log(reslikes.size, rescomments.size, "==>>==>");
+                                let dataset = {
+                                    key: documentSnapshot.id,
+                                    likes: reslikes.size,
+                                    role: resEdu.data().role ? resEdu.data().role : null,
+                                    schoolName: resEdu.data().schoolName ? resEdu.data().schoolName : null,
+                                    stream: resEdu.data().stream ? resEdu.data().stream : null,
+                                    grade: resEdu.data().grade ? resEdu.data().grade : null,
+                                    comments: rescomments.size,
+                                    createdAt: documentSnapshot.data().createdAt,
+                                    description: documentSnapshot.data().description,
+                                    grade: documentSnapshot.data().grade,
+                                    downloadUrl: documentSnapshot.data().downloadUrl,
+                                    status: documentSnapshot.data().status,
+                                    subject: documentSnapshot.data().subject,
+                                    topic: documentSnapshot.data().topic,
+                                    userID: documentSnapshot.data().userID,
+                                    reported: documentSnapshot.data().Reported ? documentSnapshot.data().Reported : false,
+                                    visibility: documentSnapshot.data().visibility,
+                                    email: res.data().email,
+                                    token: res.data().token ? res.data().token : null,
+                                    uri: res.data().uri ? res.data().uri : null,
+                                    location: res.data().location,
+                                    name: res.data().name,
+                                    image: res.data().profileUrl ? res.data().profileUrl : null,
+                                    phonenumber: res.data().phonenumber,
+                                }
+                                data.push(dataset);
+                            })
                         })
 
                     })
@@ -590,6 +603,7 @@ const Styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderBottomColor: '#E9E9E9',
         width: '100%',
+        padding: 0,
         justifyContent: 'space-between'
     },
     headerText: {

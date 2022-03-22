@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import * as Camera from 'expo-camera';
 import { Icon } from 'react-native-elements';
-//import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 import { COLORS } from '../constants';
+import { auth, firestore, storage } from '../BackendFirebase/configue/Firebase';
+import { log } from 'react-native-reanimated';
 
 
 
-const Cam = ({ onClose }) => {
+const Cam = ({ navigation }) => {
 
 
   let cameraRef = useRef();
@@ -52,17 +54,20 @@ const Cam = ({ onClose }) => {
   };
 
   const pickImage = async () => {
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   base64: true,
-    //   allowsEditing: true,
-    //   aspect: [4, 3],
-    // });
-    // setIsPreview(true);
-    // setimageUrl(result.uri );
-    // convertBase64(result);
-    // console.log('====================================');
-    setIsPreview(true);
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+  });
+
+    if (!result.cancelled) {
+
+      setIsPreview(true);
+      setimageUrl(`file://${result.uri}`);
+
+    }
+
   }
 
   const onSnap = async () => {
@@ -73,19 +78,12 @@ const Cam = ({ onClose }) => {
 
       if (source) {
 
-
-        // let formData = new FormData();
-        // formData.append('file', {
-        //   uri: data.uri.replace("file:///", ""),
-        //   type: 'image/jpg', name: 'userProfile.jpg',
-        // });
-
         await camera.pausePreview();
-        setimageUrl(data.url);
-        console.log(data.uri , '====================================');
-
+        setimageUrl(data.uri);
+        setIsPreview(true);
+        console.log(data.uri);
       }
-      setIsPreview(true);
+      
     }
 
   };
@@ -109,6 +107,21 @@ const Cam = ({ onClose }) => {
     })
   }
 
+  const UploadProfile = async () => {
+   
+    let res = await new fetch(`${imageUrl}`);
+    const blob = await res.blob();
+
+    const ref = storage.ref().child("Image").child('Profiles').child(auth.currentUser.uid);
+    const results = await ref.put(blob);
+
+    ref.getDownloadURL().then(async (url) => {
+      await firestore.collection("users").doc(auth.currentUser.uid).update({ uri: url }).then(res => {
+        navigation.goBack();
+      })
+    })
+  }
+
   useEffect(() => {
     starWarching();
   }, [])
@@ -127,10 +140,10 @@ const Cam = ({ onClose }) => {
         {/* =================================Preview================================= */}
 
         {isPreview ?
-          <View style={{ height: '100%', width: '100%', borderRadius: 7, position: 'absolute', right: 5, top: 5, }}>
+          <View style={{ height: '100%', width: '100%', borderRadius: 7, position: 'absolute', top: 0, }}>
             <Image source={{ uri: imageUrl }} style={{ backgroundColor: COLORS.White, height: '100%', width: '100%' }} />
             <View style={{ bottom: 30, position: 'absolute', width: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-              <Icon type='material-community' name='cloud-upload-outline' onPress={cancelPreview} color={COLORS.White} size={36} style={{ position: 'absolute' }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+              <Icon type='material-community' name='cloud-upload-outline' onPress={() => { UploadProfile() }} color={COLORS.White} size={36} style={{ position: 'absolute' }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
               <Icon type='material-community' name='close' onPress={cancelPreview} color={COLORS.White} size={36} style={{ position: 'absolute' }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
             </View>
           </View> :
@@ -138,7 +151,7 @@ const Cam = ({ onClose }) => {
 
             <View style={{ height: 40, width: 40, borderRadius: 7, position: 'absolute', right: 5, top: 15, flexDirection: 'row' }}>
 
-              <Icon type='material-community' name='close' onPress={onClose} color={gallery} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+              <Icon type='material-community' name='close' onPress={() => { }} color={gallery} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
             </View>
 
             <View style={{ height: 40, width: 40, borderRadius: 7, position: 'absolute', bottom: 90, alignSelf: 'center' }}>

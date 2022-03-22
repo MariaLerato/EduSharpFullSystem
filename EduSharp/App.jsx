@@ -28,7 +28,8 @@ import Files from './source/screens/Files';
 import Videos from './source/screens/videos';
 import MainContainer from './source/screens/MainContainer';
 import Test from './source/screens/test';
-import Switch from './source/screens/switch'
+import Switch from './source/screens/switch';
+import Cam from './source/components/camera';
 const Menu = () => {
     const Stack = createNativeStackNavigator()
     return (
@@ -64,7 +65,7 @@ const Menu = () => {
                 <Stack.Screen name={'StarredReplies'} component={StarredReplies} />
                 <Stack.Screen name={'lessonscreen'} component={Lessons} />
                 <Stack.Screen name={'questionpaperscreen'} component={QuestionPaper} />
-                {/* <Stack.Screen name={'StarredReplies'} component={StarredReplies} /> */}
+                <Stack.Screen name={'camera'} component={Cam} />
             </Stack.Navigator>
         </NavigationContainer>
     )

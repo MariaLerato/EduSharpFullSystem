@@ -77,7 +77,7 @@ const SearchQuestionPaper = ({ navigation, query }) => {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date(),
-            post:'questionpapers'
+            post: 'questionpapers'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -208,7 +208,7 @@ const SearchQuestionPaper = ({ navigation, query }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("questionpapers").where('topic',"==",query).where('description',"==",query).get().then(async (querySnapshot) => {
+        await firestore.collection("questionpapers").where('topic', "==", query).where('description', "==", query).get().then(async (querySnapshot) => {
             console.log('Total users: ', querySnapshot.size);
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
@@ -314,14 +314,14 @@ const SearchQuestionPaper = ({ navigation, query }) => {
                 </View>
                 <ScrollView>
 
-                   {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}
-                    />:
-                    <View>
-                    <Text>No results found</Text>    
-                    </View>}
+                    /> :
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>No Data found yet!</Text>
+                        </View>}
 
                 </ScrollView>
 

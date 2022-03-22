@@ -33,6 +33,7 @@ const Search = ({ navigation }) => {
 
   const [categoryIndex, setCategoryIndex] = React.useState(0);
   const [query, setquery] = useState('');
+  const [postObject, setpostObject] = useState(null);
 
   const [code, setcode] = useState(0);
 
@@ -45,9 +46,11 @@ const Search = ({ navigation }) => {
           color={COLORS.Black}
           onPress={navigation.goBack}
         />
-        <View style={Styles.touchable}>
-          <TextInput placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={{ fontSize: SIZES.h3, color: COLORS.grey }} />
-          <Icon name="search" color={COLORS.primary} size={28} />
+        <View style={{flexDirection: "row",flex: 1,paddingHorizontal:5,backgroundColor:'white',marginLeft: 10,borderRadius: 15, justifyContent:'flex-start'}}>
+        <View style={{justifyContent:'center', alignItems:'center', width:'7%'}}>
+           <Icon name="search" color={COLORS.primary} size={24} onPress={()=>{}} />
+        </View>
+        <TextInput ico placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={[Styles.touchable,{ fontSize: SIZES.h3, color: COLORS.grey , width:'96%'}]} />
         </View>
       </View>
 
@@ -58,10 +61,10 @@ const Search = ({ navigation }) => {
           onPress={() => setcode(0)}>
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: 'bold', color: code === 0 ? COLORS.White : COLORS.Black, padding: 7 }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 0 ? "bold" : '300', color: code === 0 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10}
             ]}
           >
-            {"QA's "}
+            {"QA's"}
           </Text>
         </TouchableOpacity>
 
@@ -72,7 +75,7 @@ const Search = ({ navigation }) => {
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: 'bold', color: code === 1 ? COLORS.White : COLORS.Black, padding: 7 }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 1 ? "bold" : '300', padding: 5 , color: code === 1 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
             {"Material "}
@@ -86,7 +89,7 @@ const Search = ({ navigation }) => {
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: 'bold', color: code === 2 ? COLORS.White : COLORS.Black }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 2 ? "bold" : '300', color: code === 2 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
             {"Lessons"}
@@ -100,10 +103,10 @@ const Search = ({ navigation }) => {
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: 'bold', color: code === 3 ? COLORS.White : COLORS.Black, padding: 7 }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 3 ? "bold" : '300', color: code === 3 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
-            {"Question Papers"}
+            {"Papers"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -147,9 +150,7 @@ const Styles = StyleSheet.create({
   },
   touchable: {
     paddingHorizontal: 10,
-    backgroundColor: "white",
-    flexDirection: "row",
-    flex: 1,
+    backgroundColor:'white',
     marginLeft: 10,
     borderRadius: 15,
     paddingVertical: 10,
@@ -301,7 +302,7 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 30,
-    borderRadius: 20,
+    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,

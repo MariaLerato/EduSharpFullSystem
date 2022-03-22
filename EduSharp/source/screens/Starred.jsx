@@ -24,12 +24,15 @@ import Post from "./PostQuestion";
 import { auth, firestore } from "../BackendFirebase/configue/Firebase";
 import Anim from "../components/LottieComponent";
 import QAComponent from './../components/materialcomponent';
+import LessonComponent from "../components/lessonComponent";
+import MaterialComponent from "./../components/materialcomponent";
 
 const Starred = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [share, setShare] = useState(false);
   const [modalVisible, setVisible] = useState(false);
   const [post, setpost] = useState([]);
+  const [postObject, setpostObject] = useState(null);
 
 
   const getPost = async () => {
@@ -48,6 +51,7 @@ const Starred = ({ navigation }) => {
                 let dataset = {
                   key: documentSnapshot.id,
                   likes: reslikes.size,
+                  post: documentSnapshot.data().post,
                   comments: rescomments.size,
                   createdAt: documentSnapshot.data().createdAt,
                   description: documentSnapshot.data().description,
@@ -110,9 +114,17 @@ const Starred = ({ navigation }) => {
       </View>
       <ScrollView>
         {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
-          
-          <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-            likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
+          <View>
+            {data.item.post == "questionpapers" ?
+              <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}
+
+            {data.item.post == "questionAndAnswers" ?
+              <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}
+            {data.item.post == "lessons" ?
+              <LessonComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}</View>
         )}
         /> :
           <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>

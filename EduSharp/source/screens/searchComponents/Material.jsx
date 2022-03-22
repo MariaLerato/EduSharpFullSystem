@@ -311,11 +311,14 @@ const SearchMaterial = ({ navigation ,query}) => {
                
                 <ScrollView>
                    
-                    <FlatList data={post} renderItem={(data, index) => (
+                   {post.length > 0? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}
                     />
+                    : <View style={{ height: '100%', width: '100%', justifyContent:'center', alignItems:'center'}}>
+                            <Text>No Data found yet!</Text>
+                        </View>}
 
                 </ScrollView>
                 

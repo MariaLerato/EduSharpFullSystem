@@ -16,20 +16,29 @@ import { auth, firestore } from '../BackendFirebase/configue/Firebase';
 const CustomDrawer = (props) => {
 
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phonenumber, setPhone] = useState("");
+    const [location, setLocation] = useState("");
+    const [profileuri, setprofileuri] = useState('');
 
     const getProfile = async () => {
         await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
             setName(documentSnapshot.data().name);
+            setEmail(documentSnapshot.data().email);
+            documentSnapshot.data().uri ? setprofileuri(documentSnapshot.data().uri) : setprofileuri("https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+            documentSnapshot.data().location ? setLocation(documentSnapshot.data().location) : setLocation("Not updatet Yet!")
+            documentSnapshot.data().phonenumber ? setPhone(documentSnapshot.data().phonenumber) : setPhone("Not Updated Yet!")
+
         })
     }
 
     useEffect(() => {
-      getProfile();
+        getProfile();
     }, [])
 
 
     return (
-        <View style={{ flex: 1, padding:0 }}>
+        <View style={{ flex: 1, padding: 0 }}>
 
             <DrawerContentScrollView {...props} >
 
@@ -39,7 +48,7 @@ const CustomDrawer = (props) => {
                 }]}>
 
                     <View style={{ position: 'absolute', bottom: 5, marginHorizontal: 10 }} >
-                        <Image source={require('../../assets/images/Use.png')} style={{ height: 65, width: 65, borderRadius: 65 }} />
+                        <Image source={{uri: profileuri}} style={{ height: 65, width: 65, borderRadius: 65 }} />
                         <Text style={[styles.lblUserName, { fontWeight: 'bold', marginVertical: 5, color: COLORS.White, fontSize: SIZES.h2 }]}>{name}</Text>
                     </View>
                 </View>
@@ -50,16 +59,16 @@ const CustomDrawer = (props) => {
 
             <View style={{ flexDirection: 'row', padding: 10, borderTopWidth: 1, borderTopColor: 'gray', justifyContent: 'space-between' }}>
 
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-                    <Text style={{ fontSize:SIZES.h5,fontWeight:'800' }}>T's & Cs</Text>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: SIZES.h5, fontWeight: '800' }}>T's & Cs</Text>
                 </View>
 
-                <View style={{justifyContent:'center',alignItems:'center',width:50}}>
-                    <View style={{height:25,}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', width: 50 }}>
+                    <View style={{ height: 25, }}>
                         <FontAwesome5 name="power-off" size={20} color="red" />
                     </View>
                     <View>
-                    <Text style={{ fontSize:SIZES.h5,fontWeight:'800' }} >Log-out</Text>
+                        <Text style={{ fontSize: SIZES.h5, fontWeight: '800' }} >Log-out</Text>
                     </View>
                 </View>
 

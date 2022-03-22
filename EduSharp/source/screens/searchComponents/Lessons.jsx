@@ -10,7 +10,7 @@ import MaterialComponent from '../../components/materialcomponent';
 import { auth, firestore } from '../../BackendFirebase/configue/Firebase';
 import GeneralService from '../../BackendFirebase/services/GeneralService';
 
-const SearchLessons = ({ navigation ,query}) => {
+const SearchLessons = ({ navigation, query }) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
     //     setToggle(!toggle)
@@ -35,8 +35,8 @@ const SearchLessons = ({ navigation ,query}) => {
     const [userID, setuserID] = useState('');
     const [key, setkey] = useState('')
 
- 
-    const handleLike = (key, token, topic,desc) => {
+
+    const handleLike = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
@@ -45,7 +45,7 @@ const SearchLessons = ({ navigation ,query}) => {
         GeneralService.post("likes", data, navigation).then(res => {
             setalert(true);
             setalertMessage("Liked");
-            schedulePushNotification("liked your post.",token, topic,desc);
+            schedulePushNotification("liked your post.", token, topic, desc);
         })
             .catch(err => {
                 setalert(true);
@@ -54,31 +54,31 @@ const SearchLessons = ({ navigation ,query}) => {
     }
 
     // Function to schedule push notification messge => returns a callback/promise
-    async function schedulePushNotification(task,token, topic,desc) {
+    async function schedulePushNotification(task, token, topic, desc) {
 
         Notifications.scheduleNotificationAsync({})
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: `${myName} ${task}`,
-            body: `${topic}\n${desc}`,
-            data: { data: 'goes here' },
-          },
-          trigger: { seconds: 2},
-          to: token
+            content: {
+                title: `${myName} ${task}`,
+                body: `${topic}\n${desc}`,
+                data: { data: 'goes here' },
+            },
+            trigger: { seconds: 2 },
+            to: token
 
-        }).then(res=>{
-            console.log(res); 
-        }).catch(err=>{
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
             console.log(err);
         });
-      }
-      
+    }
+
     const handleStare = (key) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date(),
-            post:'lessons'
+            post: 'lessons'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -90,13 +90,13 @@ const SearchLessons = ({ navigation ,query}) => {
             })
     }
 
-    const handleShare = (key, token, topic,desc) => {
+    const handleShare = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
-        schedulePushNotification("shared your post.",token, topic,desc);
+        schedulePushNotification("shared your post.", token, topic, desc);
     }
 
 
@@ -139,12 +139,12 @@ const SearchLessons = ({ navigation ,query}) => {
 
     }
 
-    const ReportPost = async (key, token, topic,desc) => {
+    const ReportPost = async (key, token, topic, desc) => {
         await firestore.collection("questionAndAnswers").doc(key).update({ Reported: true }).then(async (querySnapshot) => {
             console.log(querySnapshot);
             console.log(key);
             setIsVisible(false);
-            schedulePushNotification("report your post for rule violation.",token, topic,desc);
+            schedulePushNotification("report your post for rule violation.", token, topic, desc);
         }).catch(err => {
             console.log(err);
         })
@@ -209,8 +209,8 @@ const SearchLessons = ({ navigation ,query}) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("lessons").where('topic',"==",query).where('description',"==",query).get().then(async (querySnapshot) => {
-            
+        await firestore.collection("lessons").where('topic', "==", query).where('description', "==", query).get().then(async (querySnapshot) => {
+
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
@@ -244,7 +244,7 @@ const SearchLessons = ({ navigation ,query}) => {
 
                     })
                     setpost(data);
-                    
+
                 });
 
 
@@ -300,7 +300,7 @@ const SearchLessons = ({ navigation ,query}) => {
     }
 
     useEffect(() => {
-        
+
         getPost();
     }, [])
 
@@ -311,14 +311,16 @@ const SearchLessons = ({ navigation ,query}) => {
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
                 </View>
-                
+
                 <ScrollView>
-                   
-                    <FlatList data={post} renderItem={(data, index) => (
+
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}
-                    />
+                    /> : <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text>No Data found yet!</Text>
+                    </View>}
 
                 </ScrollView>
                 <View>
@@ -448,72 +450,72 @@ const SearchLessons = ({ navigation ,query}) => {
 
                             </View>
                         </View>                    <View style={{ paddingBottom: '1%', borderRadius: 5 }}>
-                        <TouchableOpacity onPress={() => setIsVisible(false)}>
-                            <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
-                        </TouchableOpacity >
-
-                        <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
-
-                            <Text style={{ marginVertical: 5, fontSize: SIZES.body2,fontWeight:'800' }}>Post Menu</Text>
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={postObject ? postObject.visibility ? "account-lock" : "account-lock" : "menu"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
-                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{postObject ? postObject.visibility ? "Hide post" : "Show post" : "Hide post"}</Text>
-                                    </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
-                            </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={"pencil"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
-                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
-                                    </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
-                            </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3  }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={"share"} size={20} color={'#000000'} style={{ margin: '2%' }} />
-                                        <Text style={{ color: '#000000', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
-                                    </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
-                            </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={"view-module"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
-                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"View post"}</Text>
-                                    </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
+                            <TouchableOpacity onPress={() => setIsVisible(false)}>
+                                <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
                             </TouchableOpacity >
 
-                            <TouchableOpacity style={{ marginHorizontal: 5,  width: '100%' ,paddingVertical:3}} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key,postObject.token,postObject.topic,postObject.description) }}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={"alert-rhombus"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
-                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Report this post"}</Text>
+                            <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
+
+                                <Text style={{ marginVertical: 5, fontSize: SIZES.body2, fontWeight: '800' }}>Post Menu</Text>
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={postObject ? postObject.visibility ? "account-lock" : "account-lock" : "menu"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                            <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{postObject ? postObject.visibility ? "Hide post" : "Show post" : "Hide post"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                     </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
-                            </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
-                                <View style={{ width: '100%' }}>
-                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                        <Icon type={'material-community'} name={"delete"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
-                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={"pencil"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                            <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                     </View>
-                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
-                                </View>
-                            </TouchableOpacity >
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={"share"} size={20} color={'#000000'} style={{ margin: '2%' }} />
+                                            <Text style={{ color: '#000000', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={"view-module"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                            <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"View post"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                    </View>
+                                </TouchableOpacity >
+
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key, postObject.token, postObject.topic, postObject.description) }}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={"alert-rhombus"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                            <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Report this post"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                    </View>
+                                </TouchableOpacity >
+                                <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
+                                    <View style={{ width: '100%' }}>
+                                        <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                            <Icon type={'material-community'} name={"delete"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                            <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                        </View>
+                                        <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                    </View>
+                                </TouchableOpacity >
+
+                            </View>
 
                         </View>
-
-                    </View>
                     </BottomSheet>
                 </View>
                 <Snackbar
