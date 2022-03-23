@@ -7,10 +7,11 @@ const Landing = ()=>{
     const navigate = useNavigate()
     return(
         <div className='ContainerLanding'>
+            <div className='ContainerBody'>
             <div className='head'>
                 <div className='logo'>
                       <img src={logo} alt={'edusharp'} width={50} height={50}/>
-                <h3>EduSharp</h3>
+                     <h3>EduSharp</h3>
                 </div>
                     <h3>
                         Administration
@@ -34,6 +35,8 @@ const Landing = ()=>{
                     </div>
                     </div>
             </div>
+            </div>
+         
         </div>
     )
 }

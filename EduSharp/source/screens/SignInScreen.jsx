@@ -60,13 +60,18 @@ const SignIn = ({ navigation }) => {
   const handleSignin = (values) => {
     setloading(true);;
     Auth.SignIn(values, navigation).then(res => {
+
       console.log('====================================');
+      // navigation.navigate('MainContainer')
 
       console.log('====================================');
       if (res.status == 'Failed') {
         setalert(true);
         setalertMessage(res.details);
         setloading(false)
+
+      
+
       }
       setalertMessage(res.details);
       setloading(false)
@@ -74,6 +79,7 @@ const SignIn = ({ navigation }) => {
       setalert(true);
       setloading(false)
       setalertMessage(err);
+      
     });
   }
 

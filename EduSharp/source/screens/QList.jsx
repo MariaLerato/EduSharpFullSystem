@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList, Modal, Picker } from 'react-native'
 import { Card, Icon, Input, ListItem, BottomSheet, Divider } from 'react-native-elements'
 import { COLORS, SIZES } from "../constants";
 import { Switch } from "react-native-switch";
 import Info from '../mock/Q&A'
 import Post from "./PostQuestion";
-import Cam from "../components/camera";
 import ProgressIndicator from "../components/progressIndicator";
 import GeneralService from "../BackendFirebase/services/GeneralService";
 import Auth from "../BackendFirebase/services/Auth";
-import { auth, firestore } from "../BackendFirebase/configue/Firebase";
+import { auth, firestore, storage } from "../BackendFirebase/configue/Firebase";
 import { Snackbar } from 'react-native-paper';
 import QAComponent from "../components/qacomponent";
+import * as Camera from 'expo-camera';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import * as Notifications from 'expo-notifications';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { LottieView } from 'lottie-react-native';
+import Anim from "../components/LottieComponent";
 
 
 const QList = ({ navigation }) => {
@@ -30,10 +37,131 @@ const QList = ({ navigation }) => {
     const [alertMessage, setalertMessage] = useState('');
     const [post, setpost] = useState([]);
     const [userID, setuserID] = useState('');
-    const [key, setkey] = useState('')
+    const [key, setkey] = useState('');
+    const [postObject, setpostObject] = useState(null);
+
+    // ===========================================================================
+    // ===========================================================================
+    let cameraRef = useRef();
+    const [camera, setcamera] = useState(null)
+    const [hasPermission, setHasPermission] = useState('');
+    const [type, setType] = useState(Camera.Constants.Type.back);
+    const [err, seterr] = useState('');
+    const [captureColor, setcaptureColor] = useState(COLORS.White);
+    const [rotatoColor, setrotatoColor] = useState(COLORS.White);
+    const [gallery, setgallery] = useState(COLORS.White);
+    const [flesh, setflesh] = useState(false);
+    const [autofocus, setautofocus] = useState(0);
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const [isPreview, setIsPreview] = useState(false);
+    const [imageUrl, setimageUrl] = useState('');
+
+    const [myName, setmyName] = useState('');
 
 
-    const handleLike = (key) => {
+
+    const starWarching = async () => {
+        try {
+
+            await Camera.requestCameraPermissionsAsync();
+            //await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+            const { status } = await Camera.Camera.requestCameraPermissionsAsync();
+            setHasPermission(status)
+        } catch (err) {
+            seterr(err)
+        }
+    }
+
+    const fleshLight = async () => {
+        flesh ? setflesh(false) : setflesh(true);
+    }
+
+    const onCameraReady = () => {
+        setIsCameraReady(true);
+    };
+
+    const cancelPreview = async () => {
+        await camera.resumePreview();
+        setIsPreview(false);
+    };
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+
+            setIsPreview(true);
+            setimageUrl(result.uri);
+
+            console.log(`content://${result.uri}`);
+            let res = await new fetch(`file://${result.uri}`);
+            const blob = await res.blob();
+
+            await storage.ref().child("files").child('questionandanswers').child(uuidv4()).put(blob).then((res) => {
+                console.log(res);
+            });
+        }
+
+
+    }
+
+    const onSnap = async () => {
+        if (camera) {
+            const options = { quality: 0.7, base64: true };
+            const data = await camera.takePictureAsync(options);
+            const source = data.base64;
+
+            if (source) {
+
+
+                // let formData = new FormData();
+                // formData.append('file', {
+                //   uri: data.uri.replace("file:///", ""),
+                //   type: 'image/jpg', name: 'userProfile.jpg',
+                // });
+
+                await camera.pausePreview();
+                setimageUrl(data.uri);
+
+                console.log(data.uri, '====================================');
+
+            }
+            setIsPreview(true);
+        }
+
+    };
+
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+                console.log(fileReader.result);
+
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+                console.log('====================================');
+                console.log(error);
+                console.log('====================================');
+            };
+        })
+    }
+
+
+    // ===========================================================================
+    // ===========================================================================
+
+
+    const handleLike = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
@@ -42,6 +170,7 @@ const QList = ({ navigation }) => {
         GeneralService.post("likes", data, navigation).then(res => {
             setalert(true);
             setalertMessage("Liked");
+            schedulePushNotification("liked your post.", token, topic, desc);
         })
             .catch(err => {
                 setalert(true);
@@ -49,11 +178,32 @@ const QList = ({ navigation }) => {
             })
     }
 
+    // Function to schedule push notification messge => returns a callback/promise
+    async function schedulePushNotification(task, token, topic, desc) {
+
+        Notifications.scheduleNotificationAsync({})
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: `${myName} ${task}`,
+                body: `${topic}\n${desc}`,
+                data: { data: 'goes here' },
+            },
+            trigger: { seconds: 2 },
+            to: token
+
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
     const handleStare = (key) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
-            createdAt: new Date()
+            createdAt: new Date(),
+            post: 'questionAndAnswers'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -65,18 +215,37 @@ const QList = ({ navigation }) => {
             })
     }
 
-    const handleShare = (key) => {
+    const handleShare = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
-
+        schedulePushNotification("shared your post.", token, topic, desc);
     }
 
-    const handleAddPost = () => {
+    const handleAddPost = async () => {
 
         setloading(true);
+
+        if (imageUrl) {
+            let res = await new fetch(imageUrl);
+            const blob = await res.blob();
+            const ref = storage.ref().child("files").child('questionandanswers').child(uuidv4());
+            const results = await ref.put(blob);
+
+
+            ref.getDownloadURL().then(url => {
+                console.log('====================================');
+                console.log("===>>>>==>>", url);
+                handleSavePost(url);
+                console.log('====================================');
+            })
+
+
+            return;
+        }
+
         if (selectedGrade != null && selectedSubject != null && topic != null && description != null) {
             let values = {
                 grade: selectedGrade,
@@ -110,6 +279,77 @@ const QList = ({ navigation }) => {
             setloading(false);
             setalertMessage("Please provide enought infomation for soliderity.");
         }
+
+    }
+
+    const handleSavePost = async (downloadUri) => {
+
+
+        if (selectedGrade != null && selectedSubject != null && topic != null && description != null) {
+            let values = {
+                grade: selectedGrade,
+                subject: selectedSubject,
+                userID: auth.currentUser.uid,
+                topic: topic,
+                description: description,
+                status: true,
+                illustrationURL: null,
+                downloadUrl: downloadUri,
+                visibility: true,
+                downloadable: true,
+                createdAt: new Date().toString()
+            }
+            GeneralService.post("questionAndAnswers", values, navigation).then((res) => {
+                setloading(false);
+                setalert(true);
+                setalertMessage('Content is posted successfully.');
+                setVisible(false);
+                setalertColor(COLORS.Black)
+                console.log(res.data);
+            }).catch((err) => {
+                setalert(true);
+                setloading(false);
+                setalertColor(COLORS.Danger)
+                setalertMessage('Erroor has occured, please ry again in a moment.');
+                console.log(err);
+            })
+        } else {
+            setalert(true);
+            setloading(false);
+            setalertMessage("Please provide enought infomation for soliderity.");
+        }
+
+    }
+
+    const ReportPost = async (key, token, topic, desc) => {
+        await firestore.collection("questionAndAnswers").doc(key).update({ Reported: true }).then(async (querySnapshot) => {
+            console.log(querySnapshot);
+            console.log(key);
+            setIsVisible(false);
+            schedulePushNotification("report your post for rule violation.", token, topic, desc);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const DeletePost = async (key) => {
+        await firestore.collection("questionAndAnswers").doc(key).delete().then(async (querySnapshot) => {
+            console.log(" Post deleted successfully ,querySnapshot");
+            console.log(key);
+            setIsVisible(false);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const SetVisibility = async (key) => {
+        await firestore.collection("questionAndAnswers").doc(key).update({ visibility: postObject.visibility ? false : true }).then(async (querySnapshot) => {
+            console.log(querySnapshot);
+            console.log(key);
+            setIsVisible(false);
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     const getPost = async () => {
@@ -118,9 +358,7 @@ const QList = ({ navigation }) => {
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
-                console.log('====================================');
-                console.log(documentSnapshot.data().userID);
-                console.log('====================================');
+
                 await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
 
 
@@ -128,31 +366,42 @@ const QList = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            console.log(reslikes.size, rescomments.size, "==>>==>");
-                            let dataset = {
-                                key: documentSnapshot.id,
-                                likes: reslikes.size,
-                                comments: rescomments.size,
-                                createdAt: documentSnapshot.data().createdAt,
-                                description: documentSnapshot.data().description,
-                                grade: documentSnapshot.data().grade,
-                                downloadUrl: documentSnapshot.data().downloadUrl,
-                                status: documentSnapshot.data().status,
-                                subject: documentSnapshot.data().subject,
-                                topic: documentSnapshot.data().topic,
-                                userID: documentSnapshot.data().userID,
-                                email: res.data().email,
-                                location: res.data().location,
-                                name: res.data().name,
-                                image: res.data().profileUrl ? res.data().profileUrl : null,
-                                phonenumber: res.data().phonenumber,
-                            }
-                            data.push(dataset);
-                        })
+                            await firestore.collection('education').doc(`${auth.currentUser.uid}`).get().then((resEdu) => {
+                                console.log(res.data(), "======");
+                                
 
+                                console.log(reslikes.size, rescomments.size, "==>>==>");
+                                let dataset = {
+                                    key: documentSnapshot.id,
+                                    likes: reslikes.size,
+                                    role: resEdu.data().role ? resEdu.data().role : null,
+                                    schoolName: resEdu.data().schoolName ? resEdu.data().schoolName : null,
+                                    stream: resEdu.data().stream ? resEdu.data().stream : null,
+                                    grade: resEdu.data().grade ? resEdu.data().grade : null,
+                                    comments: rescomments.size,
+                                    createdAt: documentSnapshot.data().createdAt,
+                                    description: documentSnapshot.data().description,
+                                    grade: documentSnapshot.data().grade,
+                                    downloadUrl: documentSnapshot.data().downloadUrl,
+                                    status: documentSnapshot.data().status,
+                                    subject: documentSnapshot.data().subject,
+                                    topic: documentSnapshot.data().topic,
+                                    userID: documentSnapshot.data().userID,
+                                    reported: documentSnapshot.data().Reported ? documentSnapshot.data().Reported : false,
+                                    visibility: documentSnapshot.data().visibility,
+                                    email: res.data().email,
+                                    token: res.data().token ? res.data().token : null,
+                                    uri: res.data().uri ? res.data().uri : null,
+                                    location: res.data().location,
+                                    name: res.data().name,
+                                    image: res.data().profileUrl ? res.data().profileUrl : null,
+                                    phonenumber: res.data().phonenumber,
+                                }
+                                data.push(dataset);
+                            })
+                        })
                     })
                     setpost(data);
-                    console.log(data);
                 });
 
 
@@ -164,24 +413,35 @@ const QList = ({ navigation }) => {
         })
     }
 
+    const onClose = () => {
+        setopenCamera(false);
+    }
+
+    const getProfile = async () => {
+        await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
+            setmyName(documentSnapshot.data().name);
+        })
+    }
 
     useEffect(() => {
+        starWarching();
         getPost();
+        getProfile();
     }, [])
 
     return (
-        <View style={[Styles.container,{padding:5}]}>
+        <View style={[Styles.container, { padding: 5 }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
             </View>
             <View style={Styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
-                <View style={{paddingHorizontal:10, borderBottomRightRadius:35, borderTopRightRadius:35, borderBottomLeftRadius:15, borderTopLeftRadius:15, flexDirection:'row', alignItems:'center', backgroundColor:COLORS.LightBlack}}>
-                    <Icon type="material-community" name="arrow-left" size={26}/>
-                    <Text style={[Styles.headingtext,{marginHorizontal:5}]}>
-                        Q' As
-                    </Text>
-                </View>
+                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                    <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
+                        <Icon type="material-community" name="arrow-left" size={26} />
+                        <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
+                            Q' As
+                        </Text>
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={Styles.touchable} onPress={() => navigation.navigate("search")}>
                     <Icon name='search' type='font-awesome' size={23} color={COLORS.primary} />
@@ -190,18 +450,25 @@ const QList = ({ navigation }) => {
             <ScrollView>
                 <View>
                     <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, {fontSize:SIZES.h3}]}>View only the content that is relevent to my course</Text>
+                        <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
                     </View>
-                    <FlatList data={post} renderItem={(data, index) => (
-                        <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-                            likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies",{key: data.item.key,type:"qa"})}} navigation={navigation} />
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
+                        <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                            likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
                     )}
-                    />
+                    /> :
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{ paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+                                <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
+                            </View>
+                        </View>
+
+                    }
 
                 </View>
             </ScrollView >
-            <TouchableOpacity onPress={() => setVisible(true)} style={{marginHorizontal:20, marginVertical:20, width: 60, height: 60, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', alignSelf: 'flex-end' }}>
-                <Icon name={'plus'} type={'font-awesome'} size={30} color={COLORS.White} />
+            <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>
+                <Icon name={'plus'} type={'font-awesome'} size={25} color={COLORS.White} />
             </TouchableOpacity>
             <View>
 
@@ -215,7 +482,53 @@ const QList = ({ navigation }) => {
                     presentationStyle={'overFullScreen'}
                 >
                     {openCamera ? <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
-                        <Cam onClose={() => { setopenCamera(false) }} />
+                        <View style={styles.container}>
+                            <Camera.Camera ref={(ref) => setcamera(ref)} onCameraReady={onCameraReady} style={styles.camera} type={type} flashMode={flesh ? 2 : 0} autoFocus={autofocus} focusDepth={1} onMagicTap={() => { setautofocus(3) }} pictureSize='1200*1200' >
+
+                                {/* =================================Preview================================= */}
+
+                                {isPreview ?
+                                    <View style={{ height: 800, width: '100%', borderRadius: 7, position: 'absolute', right: 5, top: 5, }}>
+                                        <Image source={{ uri: imageUrl }} style={{ height: '100%', width: '100%' }} />
+                                        <View style={{ bottom: 30, position: 'absolute', width: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                                            <Icon type='material-community' name='cloud-upload-outline' onPress={() => setopenCamera(false)} color={COLORS.White} size={36} style={{ position: 'absolute' }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+                                            <Icon type='material-community' name='close' onPress={cancelPreview} color={COLORS.White} size={36} style={{ position: 'absolute' }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+                                        </View>
+                                    </View> :
+                                    <View style={{ height: '100%', width: '100%' }} >
+
+                                        <View style={{ height: 40, width: 40, borderRadius: 7, position: 'absolute', right: 5, top: 15, flexDirection: 'row' }}>
+
+                                            <Icon type='material-community' name='close' onPress={onClose} color={gallery} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+                                        </View>
+
+                                        <View style={{ height: 40, width: 40, borderRadius: 7, position: 'absolute', bottom: 90, alignSelf: 'center' }}>
+                                            <Icon type='material-community' name={flesh ? 'flashlight-off' : 'flashlight'} onPress={fleshLight} color={gallery} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+                                        </View>
+
+
+                                        <View style={styles.buttonContainer}>
+
+                                            <Icon type='material-community' name='folder-multiple-image' onPress={pickImage} color={gallery} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setgallery(COLORS.Danger) }} onPressOut={() => { setgallery(COLORS.White) }} />
+
+
+                                            <Icon type='feather' name='aperture' onPress={onSnap} color={captureColor} size={50} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setcaptureColor(COLORS.Danger) }} onPressOut={() => { setcaptureColor(COLORS.White) }} />
+
+                                            <Icon disabled={!isCameraReady} type='material-community' name='rotate-3d-variant' onPress={() => {
+                                                setType(
+                                                    type === Camera.Constants.Type.back
+                                                        ? Camera.Constants.Type.front
+                                                        : Camera.Constants.Type.back
+                                                );
+                                            }} color={rotatoColor} size={30} style={{ position: 'absolute', bottom: 10 }} onPressIn={() => { setrotatoColor(COLORS.Danger) }} onPressOut={() => { setrotatoColor(COLORS.White) }} />
+
+                                        </View>
+                                    </View>
+                                }
+                                {/* =================================Preview================================= */}
+
+                            </Camera.Camera>
+                        </View>
                     </View> :
                         <View style={Styles.modalContainer}>
 
@@ -306,37 +619,62 @@ const QList = ({ navigation }) => {
                             <Icon name={'arrow-down'} type={'font-awesome'} color={'#EAEAEA'} />
                         </TouchableOpacity >
 
-                        <View style={{ borderTopLeftRadius:11, borderTopRightRadius:11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
+                        <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
 
-                            <Text style={{marginVertical:5}}>Post Menu</Text>
-                            <TouchableOpacity style={{ marginHorizontal:5,}} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
-                                <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                    <Icon type={'font-awesome'} name={"eye"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                    <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Hide Post"}</Text>
+                            <Text style={{ marginVertical: 5, fontSize: SIZES.body2, fontWeight: '800' }}>Post Menu</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={postObject ? postObject.visibility ? "account-lock" : "account-lock" : "menu"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{postObject ? postObject.visibility ? "Hide post" : "Show post" : "Hide post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal:5,}} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
-                                <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                    <Icon type={'material-community'} name={"pencil"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                    <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4  }}>{"Edit Post"}</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"pencil"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Edit Post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal:5,}} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
-                                <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                    <Icon type={'material-community'} name={"share"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                    <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4  }}>{"Share"}</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"share"} size={20} color={'#000000'} style={{ margin: '2%' }} />
+                                        <Text style={{ color: '#000000', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Share"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal:5,}} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
-                                <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                    <Icon type={'material-community'} name={"item.icon"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                    <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4  }}>{"item.name"}</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"view-module"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"View post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal:5,}} disabled={userID == auth.currentUser.uid ? true : false} onPress={() => setIsVisible(false)}>
-                                <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
-                                    <Icon type={'material-community'} name={"delete"} size={20} color={'#7DB4DA'} style={{ margin: '2%' }} />
-                                    <Text style={{ color: '#7DB4DA', fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4  }}>{"Delete"}</Text>
+
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key, postObject.token, postObject.topic, postObject.description) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"alert-rhombus"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Report this post"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
+                                </View>
+                            </TouchableOpacity >
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
+                                <View style={{ width: '100%' }}>
+                                    <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
+                                        <Icon type={'material-community'} name={"delete"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
+                                        <Text style={{ color: userID == auth.currentUser.uid ? '#000000' : COLORS.Danger, fontWeight: '600', paddingLeft: '2%', fontSize: SIZES.h4 }}>{"Delete"}</Text>
+                                    </View>
+                                    <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
 
@@ -357,21 +695,58 @@ const QList = ({ navigation }) => {
     )
 }
 
+const styles = StyleSheet.create({
+    container: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: COLORS.Danger
+    },
+    camera: {
+        height: '100%',
+        width: '100%',
+    },
+    buttonContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginTop: 15,
+        bottom: 20,
+        position: 'absolute',
+    },
+    content: {
+        position: 'absolute',
+        bottom: 20,
+        width: '100%',
+        alignItems: 'center',
+
+    },
+    button: {
+
+    },
+    text: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        right: 10,
+        color: COLORS.White
+    },
+});
 const Styles = StyleSheet.create({
     container: {
         backgroundColor: COLORS.AppBackgroundColor,
         flex: 1,
         opacity: 1
     },
-     header: {
+    header: {
         flexDirection: 'row',
         borderBottomWidth: 0.5,
         borderBottomColor: '#E9E9E9',
-        width:'100%',
-        justifyContent:'space-between'
+        width: '100%',
+        padding: 5,
+        justifyContent: 'space-between'
     },
     headingtext: {
-        fontSize: SIZES.h1,
+        fontSize: SIZES.h3,
         fontWeight: '100'
     },
     touchable: {

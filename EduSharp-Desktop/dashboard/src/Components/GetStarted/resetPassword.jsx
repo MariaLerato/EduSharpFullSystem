@@ -28,7 +28,7 @@ const ResetPassword = () => {
                     <h3>Administration
                         </h3>
             </div>
-            <div className='signBody' style={{marginTop:'8%'}}>
+            <div className='signBody' style={{marginTop:'15%'}}>
                 <div className='headings' >
                 <h1>
                     Reset Your Password
@@ -48,9 +48,9 @@ const ResetPassword = () => {
                
                    <div className='buttons'>
                        
-                       <button className='logButton' style={{marginTop:'1%',}} onClick={SignIn}  type={'submit'}>Reset Password</button>
+                       <button className='logButton' style={{marginTop:'1%',}} onClick={SignIn}  type={'submit'}>Reset Your Password</button>
                    </div>
-                   <p>Remember Your Password? <a href='signUp'>Sign In</a></p>   
+                   <p>Remember Your Password? <a href='signIn'>Sign In</a></p>   
               
                 </form>
             </div>

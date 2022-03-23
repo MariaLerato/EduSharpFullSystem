@@ -20,354 +20,100 @@ import {
   BottomSheet,
   Card,
 } from "react-native-elements";
-import Info from "../mock/Q&A";
+import SearchQList from "./searchComponents/QList";
+import SearchLessons from './searchComponents/Lessons';
+import SearchMaterial from './searchComponents/Material';
+import SearchQuestionPaper from './searchComponents/QuestionPapers';
+
 const width = Dimensions.get("window").width / 2 - 30;
 
 // import { Icon } from "react-native-paper/lib/typescript/components/List/List";
 
 const Search = ({ navigation }) => {
+
   const [categoryIndex, setCategoryIndex] = React.useState(0);
-  const categories = [{item:"Q As",location:'QList'}, {item:"Material",location:'Material'},{ item:"Lesson",location:'QList'}, {item:"Papers",location:'QList'}];
+  const [query, setquery] = useState('');
+  const [postObject, setpostObject] = useState(null);
 
-  const CategoryList = () => {
-    return (
-      <View style={Styles.categoryContainer}>
-        {categories.map((item, index) => (
-          <TouchableOpacity style={Styles.cat}
-            key={index}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate(item.location)>  setCategoryIndex(index)}>
-          
-            <Text
-              style={[
-                Styles.categoryText,
-                categoryIndex === index && Styles.categoryTextSelected,
-              ]}
-            >
-              {item.item}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  };
-
-  const [isVisible, setIsVisible] = useState(false);
-  const [share, setShare] = useState(false);
-  const [modalVisible, setVisible] = useState(false);
-
-  const Qcard = () => {
-    return (
-      <View style={{ width: "100%", marginLeft: "-2%" }}>
-        {Info.info.map((data) => (
-          <Card
-            key={data.id}
-            containerStyle={{ borderRadius: 10, marginRight: "1%" }}
-          >
-            <Card.FeaturedTitle style={Styles.cardHeader}>
-              <View style={Styles.headerContainer}>
-                <Card.Image source={data.pic} style={Styles.profile} />
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    backgroundColor: "#4545ede",
-                    width: "100%",
-                  }}
-                >
-                  <View>
-                    <Text style={Styles.headertext}>{data.username}</Text>
-                    <Text style={{ marginLeft: 20 }}>{data.time}</Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => setIsVisible(true)}
-                    style={{ alignSelf: "flex-end" }}
-                  >
-                    <Icon
-                      name={"ellipsis-v"}
-                      type={"font-awesome"}
-                      style={{
-                        right: "0%",
-                        marginBottom: 20,
-                        width: 8,
-                        height: 24,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Card.FeaturedTitle>
-            <Card.FeaturedTitle style={Styles.post}>
-              <View>
-                <Text style={Styles.question}>{data.question}</Text>
-                <Text>{data.question}</Text>
-                <Text>{data.question}</Text>
-              </View>
-            </Card.FeaturedTitle>
-            <Card.FeaturedTitle style={{ padding: "1%", marginTop: "4%" }}>
-              <View style={Styles.iconContainer}>
-                <View
-                  style={{
-                    marginLeft: 5,
-                    marginBottom: -20,
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Icon
-                    name={"thumbs-up"}
-                    type={"font-awesome"}
-                    style={{ width: 45, height: 45 }}
-                    color={"#3D93D1"}
-                  />
-                  <Text>{data.number}</Text>
-                </View>
-                <View style={{ marginLeft: 35, marginBottom: -20 }}>
-                  <Icon
-                    name={"star-o"}
-                    type={"font-awesome"}
-                    style={{ width: 40, height: 40 }}
-                    color={"#3D93D1"}
-                  />
-                </View>
-                <View style={{ marginLeft: 35, marginBottom: -20 }}>
-                  <Icon
-                    name={"share-alt"}
-                    type={"font-awesome"}
-                    style={{ width: 38, height: 38 }}
-                    color={"#3D93D1"}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={{
-                    marginLeft: 35,
-                    alignSelf: "flex-end",
-                    marginBottom: -18,
-                  }}
-                  onPress={() => navigation.navigate(data.location)}
-                >
-                  <Icon
-                    name={"comment"}
-                    type={"font-awesome"}
-                    style={{ width: 38, height: 38 }}
-                    color={"#3D93D1"}
-                  />
-                </TouchableOpacity>
-              </View>
-            </Card.FeaturedTitle>
-          </Card>
-        ))}
-      </View>
-    );
-  };
+  const [code, setcode] = useState(0);
 
   return (
     <View style={Styles.container}>
-      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-        <View style={Styles.back}>
-          <Icon
-            name="arrow-back-ios"
-            size={28}
-            color={COLORS.Black}
-            onPress={navigation.goBack}
-          />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10 }}>
+        <Icon
+          name="arrow-back-ios"
+          size={28}
+          color={COLORS.Black}
+          onPress={navigation.goBack}
+        />
+        <View style={{flexDirection: "row",flex: 1,paddingHorizontal:5,backgroundColor:'white',marginLeft: 10,borderRadius: 15, justifyContent:'flex-start'}}>
+        <View style={{justifyContent:'center', alignItems:'center', width:'7%'}}>
+           <Icon name="search" color={COLORS.primary} size={24} onPress={()=>{}} />
         </View>
-        <View style={Styles.touchable}>
-          <TextInput placeholder="Search" style={{ color: COLORS.grey }} />
-          <Icon name="search" color={COLORS.primary} size={28} />
+        <TextInput ico placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={[Styles.touchable,{ fontSize: SIZES.h3, color: COLORS.grey , width:'96%'}]} />
         </View>
       </View>
 
-      <CategoryList />
-      <ScrollView>
-        <View style={Styles.subtitle}></View>
-        <Qcard />
-      </ScrollView>
-      <TouchableOpacity
-        onPress={() => setVisible(true)}
-        style={{
-          width: 60,
-          height: 60,
-          borderRadius: 40,
-          backgroundColor: "#4B7BE8",
-          justifyContent: "center",
-          alignSelf: "flex-end",
-          marginTop: "-16%",
-          marginBottom: "1%",
-        }}
-      >
-        <Icon
-          name={"plus"}
-          type={"font-awesome"}
-          size={30}
-          color={COLORS.White}
-        />
-      </TouchableOpacity>
-      <View>
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setVisible(!modalVisible);
-          }}
-          presentationStyle={"overFullScreen"}
-        >
-          <View style={Styles.modalContainer}>
-            <View style={Styles.postContainer}>
-              <Text style={Styles.modalheadertext}>Make Post</Text>
-              <View style={Styles.picker}>
-                <Picker>
-                  <Picker.Item label="Select grade" />
-                </Picker>
-              </View>
-              <View style={Styles.picker}>
-                <Picker>
-                  <Picker.Item label="Select Subject" />
-                </Picker>
-              </View>
-              <View style={Styles.modalInput}>
-                <Input
-                  placeholder={"State the topic"}
-                  containerStyle={{
-                    backgroundColor: COLORS.White,
-                    height: "100%",
-                    borderRadius: 10,
-                    padding: "1%",
-                  }}
-                  inputContainerStyle={{ borderColor: "white" }}
-                />
-              </View>
-              <View style={Styles.modalInputDes}>
-                <Input
-                  placeholder={"Description"}
-                  containerStyle={{
-                    backgroundColor: COLORS.White,
-                    height: "100%",
-                    borderRadius: 10,
-                    padding: "2%",
-                  }}
-                  inputContainerStyle={{ borderColor: "white" }}
-                />
-              </View>
-              <TouchableOpacity style={Styles.fileContainer}>
-                <Input
-                  placeholder={"Add a Photo"}
-                  containerStyle={{ height: "100%", borderRadius: 20 }}
-                  inputContainerStyle={{ borderColor: "#EAEAEA" }}
-                  rightIcon={
-                    <Icon
-                      name={"image"}
-                      type={"font-awesome"}
-                      size={18}
-                      color={COLORS.primary}
-                    />
-                  }
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.fileContainer}>
-                <Input
-                  placeholder={"Take a Picture"}
-                  containerStyle={{
-                    height: "100%",
-                    borderRadius: 1,
-                    padding: "1%",
-                  }}
-                  inputContainerStyle={{ borderColor: "#EAEAEA" }}
-                  rightIcon={
-                    <Icon
-                      name={"camera"}
-                      type={"font-awesome"}
-                      size={18}
-                      color={COLORS.primary}
-                    />
-                  }
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.fileContainer}>
-                <Input
-                  placeholder={"Add pdf,doc, or"}
-                  containerStyle={{
-                    borderRadius: 1,
-                    padding: "1%",
-                    height: "100%",
-                  }}
-                  inputContainerStyle={{ borderColor: "#EAEAEA" }}
-                  rightIcon={
-                    <Icon
-                      name={"file"}
-                      type={"font-awesome"}
-                      size={18}
-                      color={COLORS.primary}
-                    />
-                  }
-                />
-              </TouchableOpacity>
-              <View style={Styles.buttons}>
-                <TouchableOpacity
-                  onPress={() => setVisible(false)}
-                  style={Styles.cancel}
-                >
-                  <Text style={Styles.cancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => alert("Post successfully uploaded")}
-                  style={Styles.postbutton}
-                >
-                  <Text style={Styles.postText}>Post</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 10 }}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 0 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(0)}>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 0 ? "bold" : '300', color: code === 0 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10}
+            ]}
+          >
+            {"QA's"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 1 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(1)}>
+
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 1 ? "bold" : '300', padding: 5 , color: code === 1 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
+            ]}
+          >
+            {"Material "}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 2 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(2)}>
+
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 2 ? "bold" : '300', color: code === 2 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
+            ]}
+          >
+            {"Lessons"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 3 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(3)}>
+
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 3 ? "bold" : '300', color: code === 3 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
+            ]}
+          >
+            {"Papers"}
+          </Text>
+        </TouchableOpacity>
       </View>
-      <View>
-        <BottomSheet modalProps={{}} isVisible={isVisible}>
-          <View style={{ paddingBottom: "1%", borderRadius: 5 }}>
-            <TouchableOpacity onPress={() => setIsVisible(false)}>
-              <Icon
-                name={"arrow-down"}
-                type={"font-awesome"}
-                color={"#EAEAEA"}
-              />
-            </TouchableOpacity>
-            {Info.items.map((item, l) => (
-              <ListItem
-                key={item.id}
-                style={{ color: "#7DB4DA", borderRadius: 20 }}
-              >
-                <ListItem.Content
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <Icon
-                    type={"font-awesome"}
-                    name={item.icon}
-                    size={20}
-                    color={"#7DB4DA"}
-                    style={{ margin: "2%" }}
-                  />
-                  <ListItem.Title
-                    style={{
-                      color: "#7DB4DA",
-                      fontWeight: "600",
-                      paddingLeft: "2%",
-                      fontSize: 16,
-                    }}
-                  >
-                    {item.name}
-                  </ListItem.Title>
-                </ListItem.Content>
-              </ListItem>
-            ))}
-          </View>
-        </BottomSheet>
-      </View>
+      {code == 0 ? <SearchQList query={query} /> : null}
+      {code == 1 ? <SearchLessons query={query} /> : null}
+      {code == 2 ? <SearchMaterial query={query} /> : null}
+      {code == 3 ? <SearchQuestionPaper query={query} /> : null}
     </View>
   );
 };
@@ -388,7 +134,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     padding: "2%",
     opacity: 1,
-    marginTop:StatusBar.currentHeight
+    paddingTop: 10
   },
   header: {
     display: "flex",
@@ -403,13 +149,10 @@ const Styles = StyleSheet.create({
     fontWeight: "100",
   },
   touchable: {
-    paddingHorizontal: 20,
-    backgroundColor: "white",
-    flexDirection: "row",
-   flex:1,
-    marginLeft: 40,
+    paddingHorizontal: 10,
+    backgroundColor:'white',
+    marginLeft: 10,
     borderRadius: 15,
-
     paddingVertical: 10,
     justifyContent: "space-between",
   },
@@ -555,12 +298,22 @@ const Styles = StyleSheet.create({
     marginTop: "2%",
     width: "85%",
   },
-  cat:{
-      backgroundColor:'white',
-      paddingHorizontal:10,
-      height:30,
-      borderRadius:20,
-    
+  cat: {
+    backgroundColor: 'white',
+    padding: 10,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.78,
+    shadowRadius: 9.00,
+    elevation: 12,
   },
   headerContainer: {
     display: "flex",
