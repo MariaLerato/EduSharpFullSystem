@@ -222,7 +222,7 @@ const Material = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            await firestore.collection('education').doc(`${auth.currentUser.uid}`).get().then((resEdu) => {
+                            await firestore.collection('education').doc(`${documentSnapshot.data().userID}`).get().then((resEdu) => {
                                 console.log(res.data(), "======");
                                 
 

@@ -137,7 +137,7 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
                                         </TouchableOpacity>
                                         <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                                             <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'thumb-up-ooutline' : 'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
+                                                <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'heart' : 'heart'} type={'material-community'} size={26} color={'#3D93D1'} />
                                                 <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{data.item.likes}</Text>
                                             </View>
                                             <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
@@ -204,7 +204,7 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
                                 </TouchableOpacity>
                                 <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                                     <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'thumb-up-ooutline' : 'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
+                                        <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'thumb-up' : 'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
                                         <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{data.item.likes}</Text>
                                     </View>
                                     <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
@@ -219,7 +219,6 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
                             <Input style={{ maxHeight: 180, minHeight: 45, }} values={comment} onChangeText={(e) => { setcomment(e) }} keyboardType={"default"} multiline />
                             <Icon type='material-community' name='send' onPress={() => { handleComment(data.item.key, data.item.token, data.item.topic, data.item.description) }} />
                         </View> : null}
-
                     </View> :
                     <View>
                         <View style={{ height: 190 }}>

@@ -132,7 +132,6 @@ const HomeScreen = ({ navigation }) => {
     })
   }
 
-
   const getProfile = async () => {
     await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
       setName(documentSnapshot.data().name);
