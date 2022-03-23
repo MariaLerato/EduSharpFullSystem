@@ -86,6 +86,7 @@ const Starred = ({ navigation }) => {
   }
 
   useEffect(() => {
+    
     getPost();
   }, [])
 
