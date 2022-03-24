@@ -33,6 +33,7 @@ const Search = ({ navigation }) => {
 
   const [categoryIndex, setCategoryIndex] = React.useState(0);
   const [query, setquery] = useState('');
+  const [postObject, setpostObject] = useState(null);
 
   const [code, setcode] = useState(0);
 
@@ -45,65 +46,67 @@ const Search = ({ navigation }) => {
           color={COLORS.Black}
           onPress={navigation.goBack}
         />
-        <View style={Styles.touchable}>
-          <TextInput placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={{ fontSize: SIZES.h3, color: COLORS.grey }} />
-          <Icon name="search" color={COLORS.primary} size={28} />
+        <View style={{flexDirection: "row",flex: 1,paddingHorizontal:5,backgroundColor:'white',marginLeft: 10,borderRadius: 15, justifyContent:'flex-start'}}>
+        <View style={{justifyContent:'center', alignItems:'center', width:'7%'}}>
+           <Icon name="search" color={COLORS.primary} size={24} onPress={()=>{}} />
+        </View>
+        <TextInput ico placeholder="Search" velue={query} onChangeText={(e) => setquery(e)} style={[Styles.touchable,{ fontSize: SIZES.h3, color: COLORS.grey , width:'96%'}]} />
         </View>
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 10 }}>
-        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 0 ? COLORS.primary : 'white' }]}
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 0 ? COLORS.primary : 'white', padding: 5 }]}
           key={0}
           activeOpacity={0.8}
           onPress={() => setcode(0)}>
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 0 ? "bold" : '300', color: code === 0 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10}
             ]}
           >
-            {"QA's "}
+            {"QA's"}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 1 ? COLORS.primary : 'white' }]}
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 1 ? COLORS.primary : 'white', padding: 5 }]}
           key={0}
           activeOpacity={0.8}
           onPress={() => setcode(1)}>
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 1 ? "bold" : '300', padding: 5 , color: code === 1 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
             {"Material "}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 2 ? COLORS.primary : 'white' }]}
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 2 ? COLORS.primary : 'white', padding: 5 }]}
           key={0}
           activeOpacity={0.8}
           onPress={() => setcode(2)}>
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 2 ? "bold" : '300', color: code === 2 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
             {"Lessons"}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 3 ? COLORS.primary : 'white' }]}
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 3 ? COLORS.primary : 'white', padding: 5 }]}
           key={0}
           activeOpacity={0.8}
           onPress={() => setcode(3)}>
 
           <Text
             style={[
-              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: '800' }
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 3 ? "bold" : '300', color: code === 3 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
             ]}
           >
-            {"Question Papers"}
+            {"Papers"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -147,9 +150,7 @@ const Styles = StyleSheet.create({
   },
   touchable: {
     paddingHorizontal: 10,
-    backgroundColor: "white",
-    flexDirection: "row",
-    flex: 1,
+    backgroundColor:'white',
     marginLeft: 10,
     borderRadius: 15,
     paddingVertical: 10,
@@ -301,10 +302,18 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 30,
-    borderRadius: 20,
+    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.78,
+    shadowRadius: 9.00,
+    elevation: 12,
   },
   headerContainer: {
     display: "flex",

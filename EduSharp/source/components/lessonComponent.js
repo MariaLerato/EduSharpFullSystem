@@ -15,6 +15,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
     const [commenting, setcommenting] = useState(false);
     const [days, setdays] = useState('');
     const [comment, setcomment] = useState('');
+    const [muted, setMuted] = useState(status.isMuted);
 
     const handleDaysCalculation = () => {
 
@@ -85,9 +86,12 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
             elevation: 10,
         }}>
             <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', height: 60 }}>
-                <Image onPress={profilePress} source={data.item.downloadUrl ? { uri: data.item.downloadUrl } : require("../../assets/images/user.png")} style={{ borderRadius: 45, width: 45, height: 45 }} />
+                <Image onPress={profilePress} source={data.item.uri ? { uri: data.item.uri } : require("../../assets/images/user.png")} style={{ borderRadius: 45, width: 45, height: 45 }} />
                 <View style={{ paddingHorizontal: 10, width: '82%' }}>
-                    <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{data.item.name}</Text>
+                <View style={{ width: '82%' , flexDirection:'row', alignItems:'center'}}>
+                                    <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{data.item.name}</Text>
+                                    <Text style={{ fontWeight:'bold', fontSize: SIZES.h5, backgroundColor:"#9e9f9f", paddingHorizontal:15, marginLeft:5, borderRadius:3}}>{data.item.role}</Text>
+                                </View>
                     <Text style={{ fontSize: SIZES.h4, }}>{days}</Text>
                 </View>
                 <Icon onPress={menuPress} type="material-community" name="dots-vertical" />
@@ -95,25 +99,31 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
 
             <Text style={{ fontSize: SIZES.h4 }}>{data.item.description}</Text>
             <Image source={require('../../assets/images/pdf.png')} />
-            <Video
-                ref={video}
-                style={{ height: 210, width: '100%', borderRadius: 7 }}
-                source={{
-                    uri: data.item.downloadUrl,
-                }}
-                useNativeControls
-                resizeMode="contain"
-                isLooping
-                onPlaybackStatusUpdate={status => setStatus(() => status)}
-            />
-            {/* <View style={{}}>
-                <Button
-                    title={status.isPlaying ? 'D' : 'Play'}
-                    onPress={() =>
-                        status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
-                    }
-                />
-            </View> */}
+            <View>
+                <View style={{ justifyContent: "center", alignItems: 'center' }}>
+                    <Video
+                        ref={video}
+                        style={{ height: 210, width: '100%', borderRadius: 7, }}
+                        source={{
+                            uri: data.item.downloadUrl,
+                        }}
+                        rotation={360}
+                        useNativeControls
+                        resizeMode="contain"
+                        isLooping
+                        hasTVPreferredFocus
+                        isMuted={muted}
+                        posterStyle={{ height: 75, backgroundColor: COLORS.Danger }}
+                        onPlaybackStatusUpdate={status => setStatus(() => status)}
+                    />
+                    <View style={{ position: "absolute" }}>
+                        {!status.isPlaying ? <Icon type="material-community" color={"#1d1d1d"} name={status.isPlaying ? "pause" : 'play'} size={36} onPress={() => { status.isPlaying ? video.current.pauseAsync() : video.current.playAsync() }} /> : null}
+                    </View>
+                </View>
+                <View style={{ position: "absolute", right:10 }}>
+                    <Icon type="material-community" color={"#1f1e1e"} name={status.isMuted ? "volume-mute" : 'volume-high'} size={36} onPress={() => { status.isMuted ? setMuted(false) : setMuted(true) }} />
+                </View>
+            </View>
             <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
 
             <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto' }}>
@@ -123,7 +133,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
                     </TouchableOpacity>
                     <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                         <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <Icon onPress={likePress} name={'thumb-up'} type={'material-community'} size={26} color={'#3D93D1'} />
+                            <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'thumb-up' : 'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
                             <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{data.item.likes}</Text>
                         </View>
                         <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />

@@ -17,8 +17,9 @@ import * as DocumentPicker from 'expo-document-picker';
 // import * as ImagePicker from 'expo-image-picker';
 
 
-const SearchQList = ({ navigation }) => {
+const SearchQList = ({ navigation, query }) => {
 
+    console.log(query.params);
     const [isVisible, setIsVisible] = useState(false)
     const [share, setShare] = useState(false)
     const [modalVisible, setVisible] = useState(false)
@@ -154,7 +155,7 @@ const SearchQList = ({ navigation }) => {
     // ===========================================================================
 
 
-    const handleLike = (key, token, topic,desc) => {
+    const handleLike = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
@@ -163,7 +164,7 @@ const SearchQList = ({ navigation }) => {
         GeneralService.post("likes", data, navigation).then(res => {
             setalert(true);
             setalertMessage("Liked");
-            schedulePushNotification("liked your post.",token, topic,desc);
+            schedulePushNotification("liked your post.", token, topic, desc);
         })
             .catch(err => {
                 setalert(true);
@@ -172,30 +173,31 @@ const SearchQList = ({ navigation }) => {
     }
 
     // Function to schedule push notification messge => returns a callback/promise
-    async function schedulePushNotification(task,token, topic,desc) {
+    async function schedulePushNotification(task, token, topic, desc) {
 
         Notifications.scheduleNotificationAsync({})
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: `${myName} ${task}`,
-            body: `${topic}\n${desc}`,
-            data: { data: 'goes here' },
-          },
-          trigger: { seconds: 2},
-          to: token
+            content: {
+                title: `${myName} ${task}`,
+                body: `${topic}\n${desc}`,
+                data: { data: 'goes here' },
+            },
+            trigger: { seconds: 2 },
+            to: token
 
-        }).then(res=>{
-            console.log(res); 
-        }).catch(err=>{
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
             console.log(err);
         });
-      }
-      
+    }
+
     const handleStare = (key) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
-            createdAt: new Date()
+            createdAt: new Date(),
+            post: 'questionAndAnswers'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -207,34 +209,34 @@ const SearchQList = ({ navigation }) => {
             })
     }
 
-    const handleShare = (key, token, topic,desc) => {
+    const handleShare = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
-        schedulePushNotification("shared your post.",token, topic,desc);
+        schedulePushNotification("shared your post.", token, topic, desc);
     }
 
     const handleAddPost = async () => {
 
         setloading(true);
-        
+
         if (imageUrl) {
             let res = await new fetch(imageUrl);
             const blob = await res.blob();
             const ref = storage.ref().child("files").child('questionandanswers').child(uuidv4());
-           const results = await ref.put(blob);
+            const results = await ref.put(blob);
 
-         
-            ref.getDownloadURL().then(url=>{
+
+            ref.getDownloadURL().then(url => {
                 console.log('====================================');
                 console.log("===>>>>==>>", url);
-                handleSavePost( url); 
+                handleSavePost(url);
                 console.log('====================================');
             })
-                            
-         
+
+
             return;
         }
 
@@ -313,23 +315,26 @@ const SearchQList = ({ navigation }) => {
 
     }
 
-    const ReportPost = async (key, token, topic,desc) => {
+    const ReportPost = async (key, token, topic, desc) => {
         await firestore.collection("questionAndAnswers").doc(key).update({ Reported: true }).then(async (querySnapshot) => {
             console.log(querySnapshot);
             console.log(key);
             setIsVisible(false);
-            schedulePushNotification("report your post for rule violation.",token, topic,desc);
+            schedulePushNotification("report your post for rule violation.", token, topic, desc);
         }).catch(err => {
             console.log(err);
         })
     }
 
     const DeletePost = async (key) => {
+        setloading(true)
         await firestore.collection("questionAndAnswers").doc(key).delete().then(async (querySnapshot) => {
             console.log(" Post deleted successfully ,querySnapshot");
             console.log(key);
+            setloading(false)
             setIsVisible(false);
         }).catch(err => {
+            setloading(false);
             console.log(err);
         })
     }
@@ -345,8 +350,7 @@ const SearchQList = ({ navigation }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("questionAndAnswers").get().then(async (querySnapshot) => {
-            console.log('Total users: ', querySnapshot.size);
+        await firestore.collection("questionAndAnswers").where('topic', "==", query).where('description', "==", query).get().then(async (querySnapshot) => {
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
@@ -358,7 +362,6 @@ const SearchQList = ({ navigation }) => {
 
                         await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                            console.log(reslikes.size, rescomments.size, "==>>==>");
                             let dataset = {
                                 key: documentSnapshot.id,
                                 likes: reslikes.size,
@@ -400,9 +403,9 @@ const SearchQList = ({ navigation }) => {
         setopenCamera(false);
     }
 
-    const getProfile=async()=>{
+    const getProfile = async () => {
         await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
-                setmyName(documentSnapshot.data().name);
+            setmyName(documentSnapshot.data().name);
         })
     }
 
@@ -420,30 +423,20 @@ const SearchQList = ({ navigation }) => {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 {loading ? <View style={{ height: 10 }}><ProgressIndicator /></View> : null}
             </View>
-            <View style={Styles.header}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                    <View style={{ paddingHorizontal: 10, borderBottomRightRadius: 35, borderTopRightRadius: 35, borderBottomLeftRadius: 15, borderTopLeftRadius: 15, flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.LightBlack }}>
-                        <Icon type="material-community" name="arrow-left" size={26} />
-                        <Text style={[Styles.headingtext, { marginHorizontal: 5 }]}>
-                            Q' As
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.touchable} onPress={() => navigation.navigate("search")}>
-                    <Icon name='search' type='font-awesome' size={23} color={COLORS.primary} />
-                </TouchableOpacity>
-            </View>
+
             <ScrollView>
                 <View>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
-                    </View>
-                    <FlatList data={post} renderItem={(data, index) => (
+
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-                            likePress={() => { handleLike(data.item.key,data.item.token,data.item.topic,data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key,data.item.token,data.item.topic,data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
+                            likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }}
+                            sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }}
+                            navigation={navigation} deletePress={() => { DeletePost(data.item.key) }} />
                     )}
                     />
-
+                        : <View style={{ height: '100%', width: '100%', justifyContent:'center', alignItems:'center'}}>
+                            <Text>No Data found yet!</Text>
+                        </View>}
                 </View>
             </ScrollView >
             <View>
@@ -597,8 +590,8 @@ const SearchQList = ({ navigation }) => {
 
                         <View style={{ borderTopLeftRadius: 11, borderTopRightRadius: 11, alignItems: 'flex-start', justifyContent: 'flex-start', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: COLORS.White }}>
 
-                            <Text style={{ marginVertical: 5, fontSize: SIZES.body2,fontWeight:'800' }}>Post Menu</Text>
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
+                            <Text style={{ marginVertical: 5, fontSize: SIZES.body2, fontWeight: '800' }}>Post Menu</Text>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { SetVisibility(key) }}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={postObject ? postObject.visibility ? "account-lock" : "account-lock" : "menu"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
@@ -607,7 +600,7 @@ const SearchQList = ({ navigation }) => {
                                     <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={"pencil"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
@@ -616,7 +609,7 @@ const SearchQList = ({ navigation }) => {
                                     <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%',paddingVertical:3  }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => setIsVisible(false)}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={"share"} size={20} color={'#000000'} style={{ margin: '2%' }} />
@@ -625,7 +618,7 @@ const SearchQList = ({ navigation }) => {
                                     <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { navigation.navigate("Replies", { key: postObject.key, type: "qa" }) }}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={"view-module"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
@@ -635,7 +628,7 @@ const SearchQList = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity >
 
-                            <TouchableOpacity style={{ marginHorizontal: 5,  width: '100%' ,paddingVertical:3}} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key,postObject.token,postObject.topic,postObject.description) }}>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { ReportPost(postObject.key, postObject.token, postObject.topic, postObject.description) }}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={"alert-rhombus"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />
@@ -644,7 +637,7 @@ const SearchQList = ({ navigation }) => {
                                     <Divider style={{ height: 3, width: '100%', backgroundColor: COLORS.AppBackgroundColor }} />
                                 </View>
                             </TouchableOpacity >
-                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%' ,paddingVertical:3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
+                            <TouchableOpacity style={{ marginHorizontal: 5, width: '100%', paddingVertical: 3 }} disabled={userID == auth.currentUser.uid ? false : true} onPress={() => { DeletePost(key) }}>
                                 <View style={{ width: '100%' }}>
                                     <View style={{ paddingVertical: 7, display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', }}>
                                         <Icon type={'material-community'} name={"delete"} size={20} color={userID == auth.currentUser.uid ? '#000000' : COLORS.Danger} style={{ margin: '2%' }} />

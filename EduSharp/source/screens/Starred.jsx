@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -21,58 +21,87 @@ import { COLORS, SIZES } from "../constants";
 import { Switch } from "react-native-switch";
 import Info from "../mock/Q&A";
 import Post from "./PostQuestion";
+import { auth, firestore } from "../BackendFirebase/configue/Firebase";
+import Anim from "../components/LottieComponent";
+import QAComponent from './../components/materialcomponent';
+import LessonComponent from "../components/lessonComponent";
+import MaterialComponent from "./../components/materialcomponent";
 
 const Starred = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [share, setShare] = useState(false);
   const [modalVisible, setVisible] = useState(false);
+  const [post, setpost] = useState([]);
+  const [postObject, setpostObject] = useState(null);
 
-  const Postcard = () => {
-    return (
-      <View>
-        {Info.info.map((data) => (
-          <Card key={data.id} containerStyle={{ borderRadius: 10 }}>
-            <Card.FeaturedTitle style={Styles.cardHeader}>
-              <View style={Styles.headerContainer}>
-                <Card.Image source={data.pic} style={Styles.profile} />
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    backgroundColor: "#4545ede",
-                    width: "100%",
-                  }}
-                >
-                  <View>
-                    <Text style={Styles.headertext}>{data.username}</Text>
-                    <Text style={{ marginLeft: 20 }}>{data.time}</Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => setIsVisible(true)}
-                    style={{ alignSelf: "flex-end" }}
-                  >
-                    <Icon
-                      name={"ellipsis-v"}
-                      type={"font-awesome"}
-                      style={{ marginBottom: 20, width: 8, height: 24 }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Card.FeaturedTitle>
-            <Card.FeaturedTitle style={Styles.post}>
-              <TouchableOpacity onPress={()=>navigation.navigate('StarredReplies')}>
-                <Text style={Styles.question}>{data.question}</Text>
-                <Text>{data.question}</Text>
-                <Text>{data.question}</Text>
-              </TouchableOpacity>
-            </Card.FeaturedTitle>
-          </Card>
-        ))}
-      </View>
-    );
-  };
+
+  const getPost = async () => {
+    await firestore.collection("stares").where("user", "==", auth.currentUser.uid).get().then(async (starepost) => {
+      const data = [];
+      starepost.forEach(async (documentSnapshot) => {
+        await firestore.collection(documentSnapshot.data().post).doc(documentSnapshot.data().postKey).get().then(async (respost) => {
+
+          await firestore.collection("users").doc(documentSnapshot.data().user).get().then(async (res) => {
+
+            await firestore.collection("likes").where('postKey', '==', documentSnapshot.id).get().then(async (reslikes) => {
+
+              await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
+
+                await firestore.collection('education').doc(`${documentSnapshot.data().user}`).get().then((resEdu) => {
+
+                  let dataset = {
+                    key: documentSnapshot.id,
+                    likes: reslikes.size,
+                    role: resEdu.data().role ? resEdu.data().role : null,
+                    schoolName: resEdu.data().schoolName ? resEdu.data().schoolName : null,
+                    stream: resEdu.data().stream ? resEdu.data().stream : null,
+                    grade: resEdu.data().grade ? resEdu.data().grade : null,
+                    comments: rescomments.size,
+                    createdAt: respost.data().createdAt,
+                    description: respost.data().description,
+                    grade: respost.data().grade,
+                    downloadUrl: respost.data().downloadUrl,
+                    status: respost.data().status,
+                    subject: respost.data().subject,
+                    topic: respost.data().topic,
+                    userID: respost.data().userID,
+                    reported: respost.data().Reported ? respost.data().Reported : false,
+                    visibility: respost.data().visibility,
+                    email: res.data().email,
+                    token: res.data().token ? res.data().token : null,
+                    uri: res.data().uri ? res.data().uri : null,
+                    location: res.data().location,
+                    name: res.data().name,
+                    image: res.data().profileUrl ? res.data().profileUrl : null,
+                    phonenumber: res.data().phonenumber,
+                  }
+                  data.push(dataset);
+
+                  setpost(data);
+                })
+
+                setpost(data);
+              })
+
+              setpost(data);
+            })
+
+          })
+        })
+
+
+      }).catch(err => {
+        console.log('====================================');
+        console.log(err, "==>>==>");
+        console.log('====================================');
+      });
+    })
+  }
+
+  useEffect(() => {
+
+    getPost();
+  }, [])
 
   return (
     <View style={Styles.container}>
@@ -98,7 +127,27 @@ const Starred = ({ navigation }) => {
         </View>
       </View>
       <ScrollView>
-        <Postcard />
+        {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
+          <View>
+            {data.item.post == "questionpapers" ?
+              <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}
+
+            {data.item.post == "questionAndAnswers" ?
+              <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}
+            {data.item.post == "lessons" ?
+              <LessonComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
+                likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} /> : null}</View>
+        )}
+        /> :
+          <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+              <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
+            </View>
+          </View>
+
+        }
       </ScrollView>
 
       <View>

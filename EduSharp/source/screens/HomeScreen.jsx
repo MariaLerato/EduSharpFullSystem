@@ -15,7 +15,7 @@ import { Card } from "react-native-paper";
 //import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Styles from './../style/onBoarding';
-import { COLORS } from "../constants";
+import { COLORS, SIZES } from "../constants";
 import * as Notifications from 'expo-notifications';
 import { auth, firestore } from "../BackendFirebase/configue/Firebase";
 
@@ -29,37 +29,16 @@ Notifications.setNotificationHandler({
 });
 
 const HomeScreen = ({ navigation }) => {
-  const [dataSource, setDataSource] = useState([
-    {
-      caption: "Cape Town",
-      title: "Lima offer examples for water",
-      author: "by Varun Singh",
-      date: "7 Jun 2021",
-      url: "https://images.pexels.com/photos/2837863/pexels-photo-2837863.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    },
-    {
-      caption: "Johannesburg",
-      title: "Rush Hour",
-      author: "by Marget Bolepo",
-      date: "7 Sept 2021",
-      url: "http://placeimg.com/640/480/any",
-    },
-    {
-      caption: "Cape Town",
-      title: "Natural Disasters",
-      author: "by Varun Singh",
-      date: "17 Oct 2021",
-      url: "https://images.pexels.com/photos/753619/pexels-photo-753619.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    },
-  ]);
+  const [dataSource, setDataSource] = useState([]);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+  const [name, setName] = useState('');
   const notificationListener = useRef();
   const responseListener = useRef();
 
 
-// Function that request no
- const registerForPushNotificationsAsync=async()=> {
+  // Function that request no
+  const registerForPushNotificationsAsync = async () => {
     let token;
     if (Constants.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -74,11 +53,11 @@ const HomeScreen = ({ navigation }) => {
       }
       token = (await Notifications.set()).data;
       console.log(token);
-      await Notifications.subscribe(token); 
+      await Notifications.subscribe(token);
     } else {
       alert('Must use physical device for Push Notifications');
     }
-  
+
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -87,20 +66,81 @@ const HomeScreen = ({ navigation }) => {
         lightColor: '#FF231F7C',
       });
     }
-  
+
     UpdateToken(token);
   }
 
   const UpdateToken = async (token) => {
-    await firestore.collection("users").doc(auth.currentUser.uid).update({ token: token}).then(async (querySnapshot) => {
-        console.log(querySnapshot);
-        console.log(key);
+    await firestore.collection("users").doc(auth.currentUser.uid).update({ token: token }).then(async (querySnapshot) => {
+      console.log(querySnapshot);
+      console.log(key);
     }).catch(err => {
-        console.log(err);
+      console.log(err);
     })
-}
+  }
+  const getPost = async () => {
+    await firestore.collection("questionAndAnswers").get().then(async (querySnapshot) => {
+      console.log('Total users: ', querySnapshot.size);
+      const data = [];
+      await querySnapshot.forEach(async (documentSnapshot) => {
 
+
+        await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
+
+
+          await firestore.collection("likes").where('postKey', '==', documentSnapshot.id).get().then(async (reslikes) => {
+
+            await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
+
+              console.log(reslikes.size, rescomments.size, "==>>==>");
+              let dataset = {
+                key: documentSnapshot.id,
+                likes: reslikes.size,
+                comments: rescomments.size,
+                createdAt: documentSnapshot.data().createdAt,
+                caption: documentSnapshot.data().description,
+                grade: documentSnapshot.data().grade,
+                url: documentSnapshot.data().downloadUrl,
+                status: documentSnapshot.data().status,
+                subject: documentSnapshot.data().subject,
+                title: documentSnapshot.data().topic,
+                userID: documentSnapshot.data().userID,
+                reported: documentSnapshot.data().Reported ? documentSnapshot.data().Reported : false,
+                visibility: documentSnapshot.data().visibility,
+                email: res.data().email,
+                token: res.data().token ? res.data().token : null,
+                location: res.data().location,
+                name: res.data().name,
+                image: res.data().profileUrl ? res.data().profileUrl : null,
+                phonenumber: res.data().phonenumber,
+              }
+              data.push(dataset);
+
+            })
+
+          })
+          console.log(data, "====>>>");
+          setDataSource(data);
+        });
+
+
+      }).catch(err => {
+        console.log('====================================');
+        console.log(err, "==>>==>");
+        console.log('====================================');
+      });
+    })
+  }
+
+  const getProfile = async () => {
+    await firestore.collection("users").doc(auth.currentUser.uid).get().then(async (documentSnapshot) => {
+      setName(documentSnapshot.data().name);
+    })
+  }
   useEffect(() => {
+
+    getPost();
+    getProfile();
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -115,138 +155,134 @@ const HomeScreen = ({ navigation }) => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
+
   }, []);
 
   return (
     <View>
-      <View
-        style={{ margin: 30, borderTopRadius: 5, borderTopRightRadius: 5 }}
-      >
+      
+      <Text style={{ fontSize: SIZES.h4, margin: 15, }}>Hi <Text style={{ fontSize: SIZES.h4, fontWeight: 'bold' }}>{name}</Text> , Please check the latest post by friends and teachers.</Text>
+      <View style={{ marginHorizontal: 30, borderTopRadius: 5, borderTopRightRadius: 5 }} >
         <Slideshow
           style={{ borderTopRightRadius: 20 }}
           dataSource={dataSource}
           containerStyle={{ borderRadius: 15, overflow: "hidden" }}
-          height={180}
+          height={210}
           titleStyle={{ color: "white", fontSize: 20, fontWeight: "700" }}
           captionStyle={{ color: "white" }}
-          arrow={false}
+          arrow={true}
         />
       </View>
 
       <View
         style={{
-          flex: 1,
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-evenly",
-          padding: '2%',
+          marginVertical: 30
         }}
       >
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Material")}>
-            <View style={{ alignSelf: 'center', top: 20, }}>
+        <TouchableOpacity onPress={() => navigation.navigate("Material")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center', justifyContent: 'center', paddingVertical: 5 }}>
               <FontAwesome5
                 name="folder-open"
                 size={30}
                 color="#4B7BE8"
-                margin={20}
+
               />
             </View>
+            <Text style={{ fontSize: 18, fontWeight: 'normal', textAlign: "center", }}>
+              Material
+            </Text>
+          </View>
 
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight:'normal',
-                textAlign: "center",
-                top: 30, left:30,
-              }}
-            >
-              Material            </Text>
-          </TouchableOpacity>
-        </Card>
 
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20, }}>
-          <TouchableOpacity onPress={() => navigation.navigate("lessonscreen")}>
-            <View style={{ alignSelf: 'center', top: 20, }} >
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("lessonscreen")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center', justifyContent: 'center', paddingVertical: 5 }}>
               <FontAwesome5
                 name="edit"
                 size={30}
                 color="#4B7BE8"
-                margin={20}
               />
             </View>
-            <Text
-              style={{
-                fontSize: 18,
-                textAlign: "center",
-                top: 30,
-              }}
-            >
+            <Text style={{ fontSize: 18, fontWeight: 'normal', textAlign: "center", }}>
               Lessons
             </Text>
-          </TouchableOpacity>
-        </Card>
+          </View>
+
+
+        </TouchableOpacity>
+
       </View>
 
       <View
         style={{
-
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-evenly",
-          marginTop: '30%',
-          padding: '2%'
+          marginTop: 10,
         }}
       >
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("QList")}>
-            <View style={{ top: 20, alignSelf: 'center' }}>
+
+        <TouchableOpacity onPress={() => navigation.navigate("QList")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center', justifyContent: 'center', paddingVertical: 5 }}>
               <FontAwesome5
                 name="question-circle"
                 size={30}
                 color="#4B7BE8"
-                margin={20}
+
               />
             </View>
-
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "normal",
-                textAlign: "center",
-                top: 30,
-
-              }}
-            >
+            <Text style={{ fontSize: 18, fontWeight: 'normal', textAlign: "center", }}>
               Q'As
             </Text>
-          </TouchableOpacity>
-        </Card>
+          </View>
 
-        <Card style={{ width: 150, height: 100, alignContent: 'center', justifyContent: 'center', borderRadius: 20 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("questionpaperscreen")}>
-            <View style={{ top: 20, alignSelf: 'center' }}>
+
+        </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={() => navigation.navigate("questionpaperscreen")}>
+          <View style={{
+            alignSelf: 'center', width: 150, height: 100,
+            alignContent: 'center', justifyContent: 'center', borderRadius: 9,
+            backgroundColor: COLORS.White, shadowColor: "#000",
+            shadowOffset: { width: 0, height: 7 }, shadowOpacity: 0.43, shadowRadius: 9.51, elevation: 15,
+          }}>
+            <View style={{ alignSelf: 'center', justifyContent: 'center', paddingVertical: 5 }}>
               <FontAwesome5
                 name="copy"
                 size={30}
                 color="#4B7BE8"
-                margin={20}
+
               />
             </View>
-
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "normal",
-                textAlign: "center",
-                top: 30,
-
-              }}
-            >
+            <Text style={{ fontSize: 18, fontWeight: 'normal', textAlign: "center", }}>
               Papers
             </Text>
-          </TouchableOpacity>
-        </Card>
+          </View>
+        </TouchableOpacity>
+
       </View>
     </View>
   );

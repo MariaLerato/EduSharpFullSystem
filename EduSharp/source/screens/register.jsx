@@ -42,14 +42,24 @@ const Register = ({ navigation }) => {
 
   const handleRegister = (values) => {
     setloading(true);
-    Auth.SignUp(values, navigation).then(res => {
-      console.log(res.status, "====>>>>>>>");
+    Auth.SignUp(values, navigation).then(async(res) => {
       setloading(false);
 
       if (res.status == 'Failed') {
         setAlert(true);
         setalertMessage(res.details);
       }
+
+        await firestore.collection('education').doc(auth.currentUser.uid).update({
+          grade: null,
+        }).then((res) => {
+          setloading(false);
+    
+        }).catch((err) => {
+          console.log(err);
+          setloading(false);
+        })
+    
     }).catch(err => {
       setAlert(true);
       setalertMessage(err);

@@ -29,6 +29,7 @@ import Videos from './source/screens/videos';
 import MainContainer from './source/screens/MainContainer';
 import Test from './source/screens/test';
 import Switch from './source/screens/switch';
+import Cam from './source/components/camera';
 import Forgot from './source/screens/forgot';
 
 const Menu = () => {
@@ -43,7 +44,8 @@ const Menu = () => {
 
                 <Stack.Screen name={'Pro'} component={Pro}/>
                 <Stack.Screen name={'switch'} component={Switch}/>
-                <Stack.Screen name={'Files'} component={Files}/>
+                <Stack.Screen name={'forgot'} component={Forgot}/>
+                 <Stack.Screen name={'Files'} component={Files}/>
                 <Stack.Screen name={'welcomeScreen'} component={WelcomeScreen} />
                 <Stack.Screen name={'home'} component={HomeScreen} />
                 <Stack.Screen name={'SplashScreen'} component={Splash} />
@@ -51,7 +53,6 @@ const Menu = () => {
                 <Stack.Screen name={'SignInScreen'} component={SignIn} />
                 <Stack.Screen name={'terms&conditions'} component={Terms} />
                 <Stack.Screen name={'profile'} component={Profile} />
-                <Stack.Screen name={'forgot'} component={Forgot}/>
                 <Stack.Screen name={'DashBoard'} component={DashBoard} />
                 <Stack.Screen name={'QList'} component={Questions} />
                 <Stack.Screen name={'Replies'} component={RepliesContainer} />
@@ -67,7 +68,7 @@ const Menu = () => {
                 <Stack.Screen name={'StarredReplies'} component={StarredReplies} />
                 <Stack.Screen name={'lessonscreen'} component={Lessons} />
                 <Stack.Screen name={'questionpaperscreen'} component={QuestionPaper} />
-                {/* <Stack.Screen name={'StarredReplies'} component={StarredReplies} /> */}
+                <Stack.Screen name={'camera'} component={Cam} />
             </Stack.Navigator>
         </NavigationContainer>
     )
