@@ -8,26 +8,20 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Card } from 'react-native-paper';
 //import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import NotificationComponent from '../components/notificationComponent';
 
 
-const Preference = ({ navigation })=> {
-   
-    return (
-    <>
+const Preference = ({ navigation }) => {
+
+  return (
+
     <View>
-            <View style ={{top:10, margin:30, borderTopRadius: 5, borderTopRightRadius: 5 }}>
-           <Text>Welcome to Preference page</Text>
-    </View>
 
-
-
-
-
+      <NotificationComponent />
 
     </View>
 
-    </>
-    )
-  }
+  )
+}
 
-  export default Preference 
+export default Preference 

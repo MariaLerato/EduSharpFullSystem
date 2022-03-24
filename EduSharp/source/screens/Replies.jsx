@@ -439,8 +439,8 @@ const RepliesContainer = ({ navigation }) => {
                                     <Text style={{ fontSize: SIZES.h4, marginHorizontal: 5 }}>{post.likes}</Text>
                                 </View>
                             </View>
-                            <Icon onPress={handleStare} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
-                            <Icon onPress={handleShare(post.key, post.token, post.topic, post.description)} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
+                            <Icon onPress={()=>{}} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
+                            <Icon onPress={()=>{handleShare(post.key, post.token, post.topic, post.description)}} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
                             <Icon name={'comment'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
                         </View>
                     </View>

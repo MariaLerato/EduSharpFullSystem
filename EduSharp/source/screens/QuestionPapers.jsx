@@ -343,17 +343,7 @@ const QuestionPaper = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    <View style={Styles.subtitle}>
-                        <Text style={Styles.text}>View only the content that is relevent to my course</Text>
-                        {/* <ToggleSwitch
-                            isOn={true}
-                            onColor={'#3D93D1'}
-                            offColor="red"
-                            labelStyle={{ color: "black", fontWeight: '900' }}
-                            size="medium"
-                            style={Styles.toggle}
-                        /> */}
-                    </View>
+                   
                     {post.length > 0 ?
                         <FlatList data={post} renderItem={(data, index) => (
                             <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}

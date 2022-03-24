@@ -449,9 +449,7 @@ const QList = ({ navigation }) => {
             </View>
             <ScrollView>
                 <View>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
-                    </View>
+                   
                     {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />

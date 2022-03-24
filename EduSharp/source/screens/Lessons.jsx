@@ -347,17 +347,7 @@ const Lessons = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.body3 }]}>View only the content that is relevent to my course</Text>
-                        {/* <ToggleSwitch
-                            isOn={true}
-                            onColor={'#3D93D1'}
-                            offColor="red"
-                            labelStyle={{ color: "black", fontWeight: '900' }}
-                            size="medium"
-                            style={Styles.toggle}
-                        /> */}
-                    </View>
+                    
                     {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <LessonComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
