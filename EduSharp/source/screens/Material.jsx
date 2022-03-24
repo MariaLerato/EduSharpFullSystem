@@ -12,7 +12,12 @@ import MaterialComponent from '../components/materialcomponent';
 import GeneralService from '../BackendFirebase/services/GeneralService';
 import DocumentPicker from 'react-native-document-picker';
 import Anim from '../components/LottieComponent';
+import SQLite from 'react-native-sqlite-storage';
 
+const db = SQLite.openDatabase({
+    name: "localDB",
+    location: "default"
+}, () => { console.log("Database opened"); }, (err) => { console.log(err); })
 
 const Material = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
@@ -38,6 +43,7 @@ const Material = ({ navigation }) => {
     const [userID, setuserID] = useState('');
     const [key, setkey] = useState('');
 
+
     const handleLike = (key, token, topic, desc) => {
         const data = {
             user: auth.currentUser.uid,
@@ -53,6 +59,56 @@ const Material = ({ navigation }) => {
                 setalert(true);
                 setalertMessage(err)
             })
+    }
+
+    const CreateTable = () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS"
+                +"Materials"
+                +`(key TEXT, likes TEXT,role TEXT,
+                    grade TEXT, description TEXT,
+                    createdAt TEXT, stream TEXT,
+                    downloadUrl TEXT, status TEXT,
+                    subject TEXT, topic TEXT,
+                    userID TEXT, reported TEXT,
+                    visibility TEXT, email TEXT,
+                    email TEXT,
+                    token TEXT, uri TEXT,
+                    location TEXT, name TEXT,
+                    image TEXT, phonenumber TEXT)`
+            )
+                                
+        })
+    }
+
+    const SetData = (data) =>{
+        try{
+            tx.executeSql(
+                `INSERT INTO Materials
+                (key TEXT, likes TEXT,role TEXT,
+                    grade TEXT, description TEXT,
+                    createdAt TEXT, stream TEXT,
+                    downloadUrl TEXT, status TEXT,
+                    subject TEXT, topic TEXT,
+                    userID TEXT, reported TEXT,
+                    visibility TEXT, email TEXT,
+                    token TEXT, uri TEXT,
+                    location TEXT, name TEXT,
+                    image TEXT, phonenumber TEXT)
+                    VALUES (${data.key},${data.likes},${data.role},${data.grade},
+                        ${data.description},${data.createdAt},${data.stream},
+                        ${data.downloadUri},${data.status},${data.subject},${data.topic},${data.userID},
+                        ${data.reported},${data.visibility},${data.email},${data.token},${data.uri},
+                        ${data.location},${data.name},${data.image},${data.phonenumber},)`
+            ).then(res=>{
+                console.log("saved");
+            }).catch(err=>{
+                console.log(err);
+            })
+        }catch(err){
+            console.log(err);
+        }
     }
 
     // Function to schedule push notification messge => returns a callback/promise
@@ -80,7 +136,7 @@ const Material = ({ navigation }) => {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date(),
-            post:'materials'
+            post: 'materials'
         }
         GeneralService.post("stares", data, navigation).then(res => {
             setalert(true);
@@ -224,7 +280,7 @@ const Material = ({ navigation }) => {
 
                             await firestore.collection('education').doc(`${documentSnapshot.data().userID}`).get().then((resEdu) => {
                                 console.log(res.data(), "======");
-                                
+
 
                                 console.log(reslikes.size, rescomments.size, "==>>==>");
                                 let dataset = {
@@ -319,6 +375,7 @@ const Material = ({ navigation }) => {
     }
 
     useEffect(() => {
+        CreateTable()
         getPost();
 
     }, [])
@@ -351,13 +408,13 @@ const Material = ({ navigation }) => {
                             style={Styles.toggle}
                         /> */}
                     </View>
-                   {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
+                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}
-                    />:
+                    /> :
                         <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                            <View style={{  paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{ paddingVertical: 10, height: 250, justifyContent: 'center', alignItems: 'center' }}>
                                 <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
                             </View>
                         </View>

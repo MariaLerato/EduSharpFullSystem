@@ -39,7 +39,7 @@ const Starred = ({ navigation }) => {
     await firestore.collection("stares").where("user", "==", auth.currentUser.uid).get().then(async (starepost) => {
       const data = [];
       starepost.forEach(async (documentSnapshot) => {
-        await firestore.collection(documentSnapshot.data().post).doc(documentSnapshot.data().postKey).get().then(async (res) => {
+        await firestore.collection(documentSnapshot.data().post).doc(documentSnapshot.data().postKey).get().then(async (respost) => {
 
           await firestore.collection("users").doc(documentSnapshot.data().user).get().then(async (res) => {
 
@@ -47,32 +47,45 @@ const Starred = ({ navigation }) => {
 
               await firestore.collection("comments").where('postKey', '==', documentSnapshot.id).get().then(async (rescomments) => {
 
-                console.log(reslikes.size, rescomments.size, "==>>==>");
-                let dataset = {
-                  key: documentSnapshot.id,
-                  likes: reslikes.size,
-                  post: documentSnapshot.data().post,
-                  comments: rescomments.size,
-                  createdAt: documentSnapshot.data().createdAt,
-                  description: documentSnapshot.data().description,
-                  grade: documentSnapshot.data().grade,
-                  downloadUrl: documentSnapshot.data().downloadUrl,
-                  status: documentSnapshot.data().status,
-                  subject: documentSnapshot.data().subject,
-                  topic: documentSnapshot.data().topic,
-                  userID: documentSnapshot.data().userID,
-                  email: res.data().email,
-                  location: res.data().location,
-                  name: res.data().name,
-                  image: res.data().profileUrl ? res.data().profileUrl : null,
-                  phonenumber: res.data().phonenumber,
-                }
-                data.push(dataset);
+                await firestore.collection('education').doc(`${documentSnapshot.data().user}`).get().then((resEdu) => {
+
+                  let dataset = {
+                    key: documentSnapshot.id,
+                    likes: reslikes.size,
+                    role: resEdu.data().role ? resEdu.data().role : null,
+                    schoolName: resEdu.data().schoolName ? resEdu.data().schoolName : null,
+                    stream: resEdu.data().stream ? resEdu.data().stream : null,
+                    grade: resEdu.data().grade ? resEdu.data().grade : null,
+                    comments: rescomments.size,
+                    createdAt: respost.data().createdAt,
+                    description: respost.data().description,
+                    grade: respost.data().grade,
+                    downloadUrl: respost.data().downloadUrl,
+                    status: respost.data().status,
+                    subject: respost.data().subject,
+                    topic: respost.data().topic,
+                    userID: respost.data().userID,
+                    reported: respost.data().Reported ? respost.data().Reported : false,
+                    visibility: respost.data().visibility,
+                    email: res.data().email,
+                    token: res.data().token ? res.data().token : null,
+                    uri: res.data().uri ? res.data().uri : null,
+                    location: res.data().location,
+                    name: res.data().name,
+                    image: res.data().profileUrl ? res.data().profileUrl : null,
+                    phonenumber: res.data().phonenumber,
+                  }
+                  data.push(dataset);
+
+                  setpost(data);
+                })
+
+                setpost(data);
               })
 
+              setpost(data);
             })
-            setpost(data);
-            console.log(data);
+
           })
         })
 
@@ -86,7 +99,7 @@ const Starred = ({ navigation }) => {
   }
 
   useEffect(() => {
-    
+
     getPost();
   }, [])
 
