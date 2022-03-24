@@ -138,7 +138,7 @@ const SignIn = ({ navigation }) => {
                   secureTextEntry={isPasswordVisibility}
                 />
                 <View style={{ justifyContent: 'flex-end', }}>
-                  <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 15, paddingVertical: 5, }}>
+                  <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 15, paddingVertical: 5, }} onPress={()=>navigation.navigate('forgot')}>
                     <Text style={{ textAlign: "right", ...FONTS.body3, fontWeight: 'bold' }}>Forgot Password?</Text>
                   </TouchableOpacity>
                 </View>

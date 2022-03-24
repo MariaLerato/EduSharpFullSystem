@@ -30,6 +30,8 @@ import MainContainer from './source/screens/MainContainer';
 import Test from './source/screens/test';
 import Switch from './source/screens/switch';
 import Cam from './source/components/camera';
+import Forgot from './source/screens/forgot';
+
 const Menu = () => {
     const Stack = createNativeStackNavigator()
     return (
@@ -42,7 +44,8 @@ const Menu = () => {
 
                 <Stack.Screen name={'Pro'} component={Pro}/>
                 <Stack.Screen name={'switch'} component={Switch}/>
-                <Stack.Screen name={'Files'} component={Files}/>
+                <Stack.Screen name={'forgot'} component={Forgot}/>
+                 <Stack.Screen name={'Files'} component={Files}/>
                 <Stack.Screen name={'welcomeScreen'} component={WelcomeScreen} />
                 <Stack.Screen name={'home'} component={HomeScreen} />
                 <Stack.Screen name={'SplashScreen'} component={Splash} />
