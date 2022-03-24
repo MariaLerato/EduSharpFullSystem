@@ -28,7 +28,9 @@ import Files from './source/screens/Files';
 import Videos from './source/screens/videos';
 import MainContainer from './source/screens/MainContainer';
 import Test from './source/screens/test';
-import Switch from './source/screens/switch'
+import Switch from './source/screens/switch';
+import Forgot from './source/screens/forgot';
+
 const Menu = () => {
     const Stack = createNativeStackNavigator()
     return (
@@ -49,6 +51,7 @@ const Menu = () => {
                 <Stack.Screen name={'SignInScreen'} component={SignIn} />
                 <Stack.Screen name={'terms&conditions'} component={Terms} />
                 <Stack.Screen name={'profile'} component={Profile} />
+                <Stack.Screen name={'forgot'} component={Forgot}/>
                 <Stack.Screen name={'DashBoard'} component={DashBoard} />
                 <Stack.Screen name={'QList'} component={Questions} />
                 <Stack.Screen name={'Replies'} component={RepliesContainer} />
