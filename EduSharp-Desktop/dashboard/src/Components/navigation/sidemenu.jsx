@@ -47,7 +47,7 @@ Users.signOut(navigate)
 
 
     <div className="menu-container">
-      
+      <div className="homeContainer">
      <LinkNav/>
    
     
@@ -55,7 +55,7 @@ Users.signOut(navigate)
         <h2>Taking Education To new heights for learners in high school</h2>
         <p>Having access to information about all sorts of topics regarding a learner's subjects.This great website is the best option for inquisitive children who ask questions about everything.It is more than resourceful .Practice math skills by doing activities in mathematical operations, fractions, word problems, and more!</p>
       </div>
-      
+      </div>
     </div>
     <div className="grids">
         <Link to={'/AddLesson'}>

@@ -19,7 +19,9 @@ import reuse from "../Authentication-firebase/reuse";
 import ResetPassword from '../GetStarted/resetPassword'
 import ManageUsers from "../GetStarted/manageUsers";
 const Menu = () => {
-
+  useEffect(()=>{
+    reuse.deleteUser()
+  },[])
     return (
         <BrowserRouter>
          
@@ -32,8 +34,8 @@ const Menu = () => {
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/resetPassword" element={<ResetPassword/>}/> */}
                 <Route path="/" element={<Navigate to={'/home'} replace={true}/>}/>
-                <Route path="/signIn" element={<Navigate to={'/home'} replace={true}/>}/>
-                <Route path="/signUp" element={<Navigate to={'/home'} replace={true}/>}/>
+                {/* <Route path="/signIn" element={<Navigate to={'/home'} replace={true}/>}/>
+                <Route path="/signUp" element={<Navigate to={'/home'} replace={true}/>}/> */}
                 <Route path={"/home"} element={<Home />} />
                 <Route path={"/AddBook"} element={<AddBook />} />
                 <Route path={"/AddLesson"} element={<AddLesson/>} />
@@ -48,11 +50,14 @@ const Menu = () => {
             </div>
           ) : (
             <Routes>
+                <Route path="/" element={<Navigate to={'/signIn'} replace={true}/>}/>
+                {/* <Route path="/home" element={<Navigate to={'/'} replace={true}/>}/> */}
                 <Route path={'/signIn'} element={<LogIn />}/>
                 <Route path={'/signUp'} element={<Register />}/>
                 <Route path="/resetPassword" element={<ResetPassword/>}/>
-                <Route path="/" element={<Landing/>}/>
-                <Route path={'/home'} element={<Home/>}/>
+                {/* <Route path={'/home'} element={<Home/>}/> */}
+                {/* <Route path="/" element={<Landing/>}/>
+           
                 <Route path={'/AddBook'} element={<AddBook/>}/>
                 <Route path={"/manageUsers"} element={<ManageUsers/>}/>
              
@@ -65,7 +70,7 @@ const Menu = () => {
                 <Route path={'/ViewBooks'} element={<ViewBooks/>}/>
                 <Route path={'/Notification'} element={<Notification/>}/>
         
-                <Route path={'./'}/>
+                <Route path={'./'}/> */}
             </Routes>
           )}
     </BrowserRouter>
