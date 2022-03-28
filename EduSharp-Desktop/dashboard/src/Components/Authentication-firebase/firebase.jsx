@@ -4,6 +4,9 @@ import 'firebase/database'
 import "firebase/auth";
 import 'firebase/firebase-firestore'
 
+// import { getAuth } from 'firebase-admin/auth';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyDh51b15XlbShMIeETE3iroRxMpaPaUM5M",
   authDomain: "edusharp-de629.firebaseapp.com",
@@ -26,6 +29,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 
-export { auth ,firestore, storage}; 
+
+export { auth ,firestore, storage,firebase}; 
 
  

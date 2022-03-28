@@ -60,77 +60,50 @@ const CardFiles = () => {
 
   return (
     <View style={Styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',paddingHorizontal:10 }}>
-        <Icon
-          name="arrow-back-ios"
-          size={20}
-          color={COLORS.primary}
-          onPress={navigation.goBack}
-        />
-        <View >
-          <Text style={[
-                Styles.categoryText,{fontSize:SIZES.h2,fontWeight:'bold',color:COLORS.primary}
-              ]}>My Files</Text>
-        </View>
-      </View>
+     
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 10 }}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 0 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(0)}>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 0 ? "bold" : '300', color: code === 0 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10}
+            ]}
+          >
+            {"QA's"}
+          </Text>
+        </TouchableOpacity>
 
-      <View style={{flexDirection:'row' ,justifyContent:'space-between',marginVertical:10 }}>
-      <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(0)}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 1 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(1)}>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
-              ]}
-            >
-              {"Docs "}
-            </Text>
-          </TouchableOpacity>
-         
-          <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(1)}>
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 1 ? "bold" : '300', padding: 5 , color: code === 1 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
+            ]}
+          >
+            {"Material "}
+          </Text>
+        </TouchableOpacity>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
-              ]}
-            >
-              {"Images "}
-            </Text>
-          </TouchableOpacity>
+      
 
-          {/* <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(2)}>
+        <TouchableOpacity style={[Styles.cat, { backgroundColor: code === 3 ? COLORS.primary : 'white', padding: 5 }]}
+          key={0}
+          activeOpacity={0.8}
+          onPress={() => setcode(3)}>
 
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
-              ]}
-            >
-              {"Downloads"}
-            </Text>
-          </TouchableOpacity> */}
-
-          <TouchableOpacity style={Styles.cat}
-            key={0}
-            activeOpacity={0.8}
-            onPress={() => setcode(3)}>
-
-            <Text
-              style={[
-                Styles.categoryText,{fontSize:SIZES.h4,fontWeight:'800'}
-              ]}
-            >
-              {"Videos"}
-            </Text>
-          </TouchableOpacity>
-          
+          <Text
+            style={[
+              Styles.categoryText, { fontSize: SIZES.h3, fontWeight: code === 3 ? "bold" : '300', color: code === 3 ? COLORS.White : COLORS.Black, paddingVertical: 30, paddingHorizontal:10 }
+            ]}
+          >
+            {"Videos"}
+          </Text>
+        </TouchableOpacity>
       </View>
      {code == 0?<Documents />:null}
      {code == 1?<Images/>:null}

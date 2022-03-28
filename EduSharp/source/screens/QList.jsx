@@ -449,9 +449,6 @@ const QList = ({ navigation }) => {
             </View>
             <ScrollView>
                 <View>
-                    <View style={Styles.subtitle}>
-                        <Text style={[Styles.text, { fontSize: SIZES.h3 }]}>View only the content that is relevent to my course</Text>
-                    </View>
                     {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
@@ -462,9 +459,7 @@ const QList = ({ navigation }) => {
                                 <Anim json={require('../../assets/lootie/93461-loading.json')} autoplay={true} autosize={false} loop={true} speed={1} style={{ height: 65, width: 65, backgroundColor: COLORS.AppBackgroundColor }} />
                             </View>
                         </View>
-
                     }
-
                 </View>
             </ScrollView >
             <TouchableOpacity onPress={() => setVisible(true)} style={{ position: 'absolute', marginHorizontal: 20, marginVertical: 20, width: 50, height: 50, bottom: 15, right: 15, borderRadius: 40, backgroundColor: '#4B7BE8', justifyContent: 'center', }}>

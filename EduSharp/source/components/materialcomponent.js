@@ -97,8 +97,8 @@ const MaterialComponent = ({ data, onPress, profilePress, menuPress, likePress, 
             <View style={{ height: 210, width: '100%', borderRadius: 7 }}>
                 <View style={{ flex: 1,backgroundColor: '#ecf0f1' }}>
                     <PDFReader
-                        source={{ uri: data.item.downloadUrl }}
-                        onError={(err)=>{console.log(err);}}
+                        source={require('../../assets/files/doc.pdf')}
+                        onError={(err)=>{console.log("err","=======================================");}}
                         onLoad={(res)=>{console.log("res");}}
                         onLoadEnd={(res)=>{console.log("res");}}
                     />
@@ -119,7 +119,7 @@ const MaterialComponent = ({ data, onPress, profilePress, menuPress, likePress, 
                         </View>
                         <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
                         <Icon onPress={sharePress} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
-                        <Icon name={'view-gallery-outline'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
+                       
                     </View>
                 </View>
             </View>

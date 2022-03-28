@@ -256,7 +256,7 @@ const Register = ({ navigation }) => {
 
                 <View style={{ marginTop: 18 }}>
                   <Button
-                    title="Sign In"
+                    title="Sign Up"
                     containerStyle={{
                       marginTop: 10,
                       borderRadius: 20
@@ -279,7 +279,7 @@ const Register = ({ navigation }) => {
             <Text style={{ fontWeight: "500", ...FONTS.body3 }}>
               Have an account?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("signupscreen")}>
+            <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
               <Text style={{ fontWeight: "bold", ...FONTS.body3, color: COLORS.primary }}> Sign In</Text>
             </TouchableOpacity>
 

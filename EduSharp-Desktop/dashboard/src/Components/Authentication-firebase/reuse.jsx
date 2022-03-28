@@ -1,11 +1,9 @@
-import { auth, firestore, storage } from "./firebase";
+import { auth, firestore, storage,firebase, } from "./firebase";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import{getAuth}from 'firebase/auth'
+// import {} from './Authentication'
 
-//  const navi = useNavigation()
-// const db = firebase.ref('/users')
-// const _db = firebase.ref('/users')
-// const auth = firebase.app.auth()
 const admin = firestore.collection("admin");
 const storageref = storage.ref("files");
 
@@ -74,11 +72,11 @@ class Users {
         console.log("reset password error:" + error);
       });
   }
-  signOut(navigate) {
+  signOut() {
     localStorage.removeItem("userid");
     auth.signOut();
-    navigate("/signIn");
-    console.log("=======================================");
+    // navigate("/");
+    // console.log("=======================================",navigate());
     // navigate("/signIn");
   }
   isLogIn() {
@@ -129,7 +127,7 @@ class Users {
           const url = uploadTask.snapshot.ref
             .getDownloadURL()
             .then((downloadURL) => {
-              alert("Successfully Added A New File");
+              // alert("Successfully Added A New File");
               console.log("File available at", downloadURL);
               firestore.collection(item).doc().set({
                 createdAt: new Date(),
@@ -260,6 +258,22 @@ class Users {
     }).catch((error)=>{
 
     })
+  }
+  deleteUser(userid){
+    //0f5Lk6EcfqedagfcxAu4WJadQtj2
+    // getAuth()
+    // .deleteUser('FhSBNbuburSxRZWRS4Eke67eAwn2')
+    // .then(() => {
+    //   console.log('Successfully deleted user');
+    // })
+    // .catch((error) => {
+    //   console.log('Error deleting user:', error);
+    // });
+    // const user=firebase.auth().getUser('FhSBNbuburSxRZWRS4Eke67eAwn2');
+    // auth.getUser('FhSBNbuburSxRZWRS4Eke67eAwn2').then(res=>console.log(res)).catch(error=>console.log(error))
+    // auth.getUser('FhSBNbuburSxRZWRS4Eke67eAwn2').then(res=>console.log(res)).catch(error=>console.log(error))
+    console.log('_____________________________________')
+    // auth.remove('h7KIHxalwxcycgIMyf4AY5HzFwm2').then(res=>console.log(res,'=======')).catch((error)=>console.log(error))
   }
 }
 export default new Users();

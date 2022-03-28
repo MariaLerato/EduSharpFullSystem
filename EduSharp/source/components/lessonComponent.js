@@ -96,7 +96,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
                 </View>
                 <Icon onPress={menuPress} type="material-community" name="dots-vertical" />
             </View>
-
+            <Text style={{ fontSize: SIZES.h4}}>{data.item.topic}</Text>
             <Text style={{ fontSize: SIZES.h4 }}>{data.item.description}</Text>
             <Image source={require('../../assets/images/pdf.png')} />
             <View>
@@ -117,7 +117,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
                         onPlaybackStatusUpdate={status => setStatus(() => status)}
                     />
                     <View style={{ position: "absolute" }}>
-                        {!status.isPlaying ? <Icon type="material-community" color={"#1d1d1d"} name={status.isPlaying ? "pause" : 'play'} size={36} onPress={() => { status.isPlaying ? video.current.pauseAsync() : video.current.playAsync() }} /> : null}
+                        {!status.isPlaying ? <Icon style={{opacity:0.5}} type="material-community" color={"#1d1d1d"} name={status.isPlaying ? "pause" : 'play'} size={36} onPress={() => { status.isPlaying ? video.current.pauseAsync() : video.current.playAsync() }} /> : null}
                     </View>
                 </View>
                 <View style={{ position: "absolute", right:10 }}>
@@ -128,9 +128,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
 
             <View style={{ paddingHorizontal: 1, padding: '1%', marginTop: 'auto' }}>
                 <View style={{ paddingHorizontal: 10 }}>
-                    <TouchableOpacity onPress={commentsPress}>
-                        <Text style={{ fontSize: SIZES.h4, textAlign: 'right' }}>{data.item.likes} comment</Text>
-                    </TouchableOpacity>
+                   
                     <View style={[{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', }]}>
                         <View style={{ marginLeft: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <Icon onPress={likePress} name={data.item.userID == auth.currentUser.uid ? 'thumb-up' : 'thumb-up-outline'} type={'material-community'} size={26} color={'#3D93D1'} />
@@ -138,7 +136,7 @@ const LessonComponent = ({ data, onPress, profilePress, menuPress, likePress, st
                         </View>
                         <Icon onPress={sterePress} name={'star-outline'} type={'material-community'} size={26} color={'#f79f45'} />
                         <Icon onPress={sharePress} name={'share-all'} type={'material-community'} size={26} color={'#3D93D1'} />
-                        <Icon name={'view-gallery-outline'} type={'material-community'} size={26} color={'#3D93D1'} onPress={() => { commenting ? setcommenting(false) : setcommenting(true) }} />
+                        
                     </View>
                 </View>
             </View>

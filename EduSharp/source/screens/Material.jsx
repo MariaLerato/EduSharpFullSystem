@@ -14,11 +14,6 @@ import DocumentPicker from 'react-native-document-picker';
 import Anim from '../components/LottieComponent';
 import SQLite from 'react-native-sqlite-storage';
 
-const db = SQLite.openDatabase({
-    name: "localDB",
-    location: "default"
-}, () => { console.log("Database opened"); }, (err) => { console.log(err); })
-
 const Material = ({ navigation }) => {
     // const [toggle, setToggle] = useState(true)
     // const option = () => {
@@ -59,56 +54,6 @@ const Material = ({ navigation }) => {
                 setalert(true);
                 setalertMessage(err)
             })
-    }
-
-    const CreateTable = () => {
-        db.transaction((tx) => {
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS"
-                +"Materials"
-                +`(key TEXT, likes TEXT,role TEXT,
-                    grade TEXT, description TEXT,
-                    createdAt TEXT, stream TEXT,
-                    downloadUrl TEXT, status TEXT,
-                    subject TEXT, topic TEXT,
-                    userID TEXT, reported TEXT,
-                    visibility TEXT, email TEXT,
-                    email TEXT,
-                    token TEXT, uri TEXT,
-                    location TEXT, name TEXT,
-                    image TEXT, phonenumber TEXT)`
-            )
-                                
-        })
-    }
-
-    const SetData = (data) =>{
-        try{
-            tx.executeSql(
-                `INSERT INTO Materials
-                (key TEXT, likes TEXT,role TEXT,
-                    grade TEXT, description TEXT,
-                    createdAt TEXT, stream TEXT,
-                    downloadUrl TEXT, status TEXT,
-                    subject TEXT, topic TEXT,
-                    userID TEXT, reported TEXT,
-                    visibility TEXT, email TEXT,
-                    token TEXT, uri TEXT,
-                    location TEXT, name TEXT,
-                    image TEXT, phonenumber TEXT)
-                    VALUES (${data.key},${data.likes},${data.role},${data.grade},
-                        ${data.description},${data.createdAt},${data.stream},
-                        ${data.downloadUri},${data.status},${data.subject},${data.topic},${data.userID},
-                        ${data.reported},${data.visibility},${data.email},${data.token},${data.uri},
-                        ${data.location},${data.name},${data.image},${data.phonenumber},)`
-            ).then(res=>{
-                console.log("saved");
-            }).catch(err=>{
-                console.log(err);
-            })
-        }catch(err){
-            console.log(err);
-        }
     }
 
     // Function to schedule push notification messge => returns a callback/promise
@@ -375,7 +320,6 @@ const Material = ({ navigation }) => {
     }
 
     useEffect(() => {
-        CreateTable()
         getPost();
 
     }, [])
@@ -397,17 +341,7 @@ const Material = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    <View style={Styles.subtitle}>
-                        <Text style={Styles.text}>View only the content that is relevent to my course</Text>
-                        {/* <ToggleSwitch
-                            isOn={true}
-                            onColor={'#3D93D1'}
-                            offColor="red"
-                            labelStyle={{ color: "black", fontWeight: '900' }}
-                            size="medium" 
-                            style={Styles.toggle}
-                        /> */}
-                    </View>
+                    
                     {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
