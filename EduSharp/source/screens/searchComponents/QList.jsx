@@ -350,13 +350,12 @@ const SearchQList = ({ navigation, query }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("questionAndAnswers").where('topic', "==", query).where('description', "==", query).get().then(async (querySnapshot) => {
+        console.log(query, "=============");
+        await firestore.collection("questionAndAnswers").where('topic', "==", query).get().then(async (querySnapshot) => {
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
-
                 await firestore.collection("users").doc(documentSnapshot.data().userID).get().then(async (res) => {
-
 
                     await firestore.collection("likes").where('postKey', '==', documentSnapshot.id).get().then(async (reslikes) => {
 
@@ -385,9 +384,10 @@ const SearchQList = ({ navigation, query }) => {
                             }
                             data.push(dataset);
                         })
-
+                        setpost(data);
+                        console.log(data);
                     })
-                    setpost(data);
+                    
                 });
 
 

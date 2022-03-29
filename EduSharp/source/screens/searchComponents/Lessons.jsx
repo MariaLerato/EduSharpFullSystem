@@ -209,7 +209,7 @@ const SearchLessons = ({ navigation, query }) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("lessons").where('topic', "==", query).where('description', "==", query).get().then(async (querySnapshot) => {
+        await firestore.collection("lessons").where('topic', "==", query).get().then(async (querySnapshot) => {
 
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {

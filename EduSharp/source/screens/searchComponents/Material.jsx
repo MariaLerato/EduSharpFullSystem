@@ -210,7 +210,7 @@ const SearchMaterial = ({ navigation ,query}) => {
     }
 
     const getPost = async () => {
-        await firestore.collection("materials").where('topic',"==",query).where('description',"==",query).get().then(async (querySnapshot) => {
+        await firestore.collection("materials").where('topic',"==",query).get().then(async (querySnapshot) => {
             const data = [];
             await querySnapshot.forEach(async (documentSnapshot) => {
 
