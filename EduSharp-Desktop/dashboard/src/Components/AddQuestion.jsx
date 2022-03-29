@@ -131,7 +131,7 @@ const AddQuestion = () => {
               type="text"
               class="form-control"
               id="exampleFormControlInput1"
-              placeholder="Lesson Topic"
+              placeholder="Question Paper Topic"
               value={topic}
               onChange={(e)=>setTop(e.target.value)}
             />

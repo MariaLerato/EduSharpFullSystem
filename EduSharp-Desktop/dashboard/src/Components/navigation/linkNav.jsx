@@ -16,23 +16,25 @@ const LinkNav = () => {
   const [open, setOpen] = useState(false);
 
   const LogOut = ()=>{
-    setOpen(true);
-    Users.signOut(navigate)
-    .then((res) => {
-      console.log('status',res.status)
-      if(res.status==='success'){
-        // setMessage(res.message)
-        setOpen(false);
-        setOpenSnackbar(true)
-        console.log("signed out", res);
-      }else{
-        setMessage(res.message)
-        setIsError(true)
-      }
-    })
-    .catch((error) => {
-      console.log("some error happened", error);
-    });
+  
+    navigate('/signIn')
+    Users.signOut()
+    // .then((res) => {
+    //   console.log('status',res.status)
+    //   if(res.status==='success'){
+    //     // setMessage(res.message)
+    //     navigate('/')
+    //     setOpen(false);
+    //     setOpenSnackbar(true)
+    //     console.log("signed out", res);
+    //   }else{
+    //     setMessage(res.message)
+    //     setIsError(true)
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.log("some error happened", error);
+    // });
   }
   return (
     <div id="link" className='bann'>
@@ -43,9 +45,9 @@ const LinkNav = () => {
     <div className="screens">
     <ul  >  
       <li><Link to="/home">Home</Link></li>
-      <li><Link to="/Notification">Notifications</Link></li>
+      {/* <li><Link to="/Notification">Notifications</Link></li> */}
       <li><Link to="/manageUsers">Manage Users</Link></li>
-     <li><button type={"submit"} onClick={LogOut} className={'signOut'}>Sign Out</button></li>
+     <li><button  onClick={LogOut} className={'signOut'}>Sign Out</button></li>
     </ul>    
   </div>
   <Backdrop

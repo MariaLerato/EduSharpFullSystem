@@ -9,7 +9,7 @@ import Skeleton from '@mui/material/Skeleton';
 const ManageUsers = () => {
   const [users,setItems] = useState([])
   const [loading, setLoading] = useState(true);
-
+ 
   const Loading = () => (
     <div
       style={{
@@ -45,6 +45,10 @@ const ManageUsers = () => {
  useEffect(()=>{
    ViewLessons()
  },[])
+ const deleteUser = (index)=>{
+ {users.splice(index,1)}   
+ console.log('jaghfgsyugfuyhasbhyuftggads')
+}
     return (
 
     <div className='ContentContainer'>
@@ -54,7 +58,7 @@ const ManageUsers = () => {
             <p>Name</p>
             <p>Email</p>
             <p>Phone Number</p>
-            <p>Joined Date</p>
+         
             <p>Roles</p>
             <p>Manage</p>
         </div>
@@ -72,9 +76,9 @@ const ManageUsers = () => {
               </>):(
               users.length===0?(<>You have no Users</>):
               <>
-               {users.map(data=>
+               {users.map((data,index)=>
       
-      <Role data={data}/>
+      <Role data={data} index={index} deleteUser={deleteUser}/>
       )}
               </>)
             }

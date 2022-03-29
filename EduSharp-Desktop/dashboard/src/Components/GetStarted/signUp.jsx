@@ -23,12 +23,10 @@ const Register = () => {
     setOpen(true);
     Users.signUp(email, password, firstname, lastname)
     .then((res) => {
-      console.log('status',res.status)
       if(res.status==='success'){
         // setMessage(res.message)
         setOpen(false);
         setOpenSnackbar(true)
-        console.log("signedUp", res);
       }else{
         setMessage(res.message)
         setIsError(true)

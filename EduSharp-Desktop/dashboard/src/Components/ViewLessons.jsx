@@ -70,14 +70,7 @@ export const ViewLesson = () => {
         </div>
       </div>
       <div className="contentContainer">
-        <div>
-          <i className="fa fa-search fa-2x" />
-          <input
-            type={"search"}
-            placeholder={"Search Lessons .."}
-            className={"search"}
-          />
-        </div>
+     
         <div className="cardholder">
             {
               loading?(<>
