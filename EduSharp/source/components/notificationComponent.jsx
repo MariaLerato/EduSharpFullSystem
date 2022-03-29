@@ -12,11 +12,11 @@ export default function NotificationComponent({ profilePress, data }) {
 
         var one_day = 1000 * 60 * 60 * 24;
         let today = new Date();
-        let dateSent = new Date();
+        let dateSent = data.createdAt;
 
-        var diff = today.getTime() - dateSent.getTime();
-        //var hours = Math.floor(diff / 1000 / 60 / 60);
-        // diff -= hours * 1000 * 60 * 60;
+        var diff = today - dateSent;
+        var hours = Math.floor(diff / 1000 / 60 / 60);
+        diff -= hours * 1000 * 60 * 60;
         var minutes = Math.floor(diff / 1000 / 60);
 
         var hours = Math.floor(diff / 36e5),
@@ -46,26 +46,25 @@ export default function NotificationComponent({ profilePress, data }) {
 
     }
 
-
     useEffect(() => {
         handleDaysCalculation();
     }, [])
 
     return (
-        <View style={{ paddingHorizontal: 7, backgroundColor: "#9f9e9e" }}>
+        <View style={{ paddingHorizontal: 7, backgroundColor: "#ededed" }}>
             <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', height: 60 }}>
-                <Image onPress={profilePress} source={"data.item.uri" ? { uri: "data.item.uri" } : require("../../assets/images/user.png")} style={{ borderRadius: 35, width: 35, height: 35 }} />
+                <Image onPress={profilePress} source={data.image ? { uri: data.image } : require("../../assets/images/user.png")} style={{ borderRadius: 35, width: 35, height: 35 }} />
                 <View style={{ paddingHorizontal: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontSize: SIZES.h2, fontWeight: 'bold' }}>{"data.item.name"}</Text>
-                        <Text style={{ fontWeight: 'bold', fontSize: SIZES.h5, backgroundColor: "#9e9f9f", paddingHorizontal: 15, marginLeft: 5, borderRadius: 3 }}>{"data.item.role"}</Text>
+                        <Text style={{ fontSize: SIZES.h5, fontWeight: 'bold' }}>{data.title}</Text>
                     </View>
-                    <Text style={{ fontSize: SIZES.h4, }}>{days}</Text>
+                    <Text style={{ fontSize: SIZES.h5, }}>{days} </Text>
                 </View>
             </View>
             <View>
             </View>
-            <Text style={{ fontSize:SIZES.h4 }}>trial</Text>
+        
+            <Text style={{ fontSize:SIZES.h5 }}>{data.body}</Text>
             <Divider style={{ height: 5,  }} />
         </View>
     );

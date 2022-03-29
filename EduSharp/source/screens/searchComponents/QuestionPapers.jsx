@@ -314,7 +314,7 @@ const SearchQuestionPaper = ({ navigation, query }) => {
                 </View>
                 <ScrollView>
 
-                    {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
+                    {post.length < 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <MaterialComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
                             likePress={() => { handleLike(data.item.key) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "file" }) }} navigation={navigation} />
                     )}

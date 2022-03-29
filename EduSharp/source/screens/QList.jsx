@@ -161,21 +161,37 @@ const QList = ({ navigation }) => {
     // ===========================================================================
 
 
-    const handleLike = (key, token, topic, desc) => {
+    const handleLike = (key, token, topic, desc, userID) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
         GeneralService.post("likes", data, navigation).then(res => {
-            setalert(true);
-            setalertMessage("Liked");
-            schedulePushNotification("liked your post.", token, topic, desc);
-        })
-            .catch(err => {
+           
+            const task = "liked your post.";
+            const notification = {
+                user: auth.currentUser.uid,
+                postKey: key,
+                title:`${myName} ${task}`,
+                body: `${topic}\n${desc}`,
+                userID: userID,
+                createdAt: new Date()
+            }
+
+            GeneralService.post("notifications", notification, navigation).then(res => {
+                setalert(true);
+                setalertMessage("Liked");
+    
+                schedulePushNotification(task, token, topic, desc);
+            }).catch(err => {
                 setalert(true);
                 setalertMessage(err)
             })
+        }).catch(err => {
+            setalert(true);
+            setalertMessage(err)
+        })
     }
 
     // Function to schedule push notification messge => returns a callback/promise
@@ -215,13 +231,31 @@ const QList = ({ navigation }) => {
             })
     }
 
-    const handleShare = (key, token, topic, desc) => {
+    const handleShare = (key, token, topic, desc, userID) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
             createdAt: new Date()
         }
-        schedulePushNotification("shared your post.", token, topic, desc);
+        const task = "shared your post.";
+        const notification = {
+            user: auth.currentUser.uid,
+            postKey: key,
+            title:`${myName} ${task}`,
+            body: `${topic}\n${desc}`,
+            userID: userID,
+            createdAt: new Date()
+        }
+
+        GeneralService.post("notifications", notification, navigation).then(res => {
+            setalert(true);
+            setalertMessage("Liked");
+
+            schedulePushNotification(task, token, topic, desc);
+        }).catch(err => {
+            setalert(true);
+            setalertMessage(err)
+        })
     }
 
     const handleAddPost = async () => {
@@ -368,7 +402,7 @@ const QList = ({ navigation }) => {
 
                             await firestore.collection('education').doc(`${documentSnapshot.data().userID}`).get().then((resEdu) => {
                                 console.log(res.data(), "======");
-                                
+
 
                                 console.log(reslikes.size, rescomments.size, "==>>==>");
                                 let dataset = {
@@ -451,7 +485,7 @@ const QList = ({ navigation }) => {
                 <View>
                     {post.length > 0 ? <FlatList data={post} renderItem={(data, index) => (
                         <QAComponent data={data} onPress={() => { }} profilePress={() => { }} menuPress={() => { setpostObject(data.item); console.log(data.item); setkey(data.item.key); setuserID(data.item.userID); setIsVisible(true) }}
-                            likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
+                            likePress={() => { handleLike(data.item.key, data.item.token, data.item.topic, data.item.description,data.item.userID) }} sterePress={() => { handleStare(data.item.key) }} sharePress={() => { handleShare(data.item.key, data.item.token, data.item.topic, data.item.description,data.item.userID) }} commentsPress={() => { navigation.navigate("Replies", { key: data.item.key, type: "qa" }) }} navigation={navigation} />
                     )}
                     /> :
                         <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>

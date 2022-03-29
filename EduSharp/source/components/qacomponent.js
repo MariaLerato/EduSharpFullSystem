@@ -51,7 +51,7 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
 
     }
 
-    const handleComment = (key, token, topic, desc) => {
+    const handleComment = (key, token, topic, desc, userID) => {
         const data = {
             user: auth.currentUser.uid,
             postKey: key,
@@ -63,16 +63,34 @@ const QAComponent = ({ data, onPress, profilePress, menuPress, likePress, stereP
 
             setcommenting(false);
 
-            schedulePushNotification(token, topic, desc);
+            const task = "commented your post.";
+            const notification = {
+                user: auth.currentUser.uid,
+                postKey: key,
+                userID: userID,
+                title:`${myName} ${task}`,
+                body: `${topic}\n${desc}`,
+                createdAt: new Date()
+            }
+    
+            GeneralService.post("notifications", notification, navigation).then(res => {
+                setalert(true);
+                setalertMessage("Liked");
+    
+                schedulePushNotification(task, token, topic, desc);
+            }).catch(err => {
+                setalert(true);
+                setalertMessage(err)
+            })
         }).catch(err => {
             console.log(err);
         })
     }
 
-    async function schedulePushNotification(token, topic, desc) {
+    async function schedulePushNotification(task,token, topic, desc) {
         await Notifications.scheduleNotificationAsync({
             content: {
-                title: `${myName} ${"commented on your post"}`,
+                title: `${myName} ${task}`,
                 body: `${topic}\n\n"${comment}"`,
                 data: { data: 'goes here' },
             },
